@@ -1,0 +1,26 @@
+PODS:
+  - TYPFontAwesome (4.1.0):
+    - TYPFontAwesome/EOT (= 4.1.0)
+    - TYPFontAwesome/OTF (= 4.1.0)
+    - TYPFontAwesome/SVG (= 4.1.0)
+    - TYPFontAwesome/TTF (= 4.1.0)
+    - TYPFontAwesome/WOFF (= 4.1.0)
+  - TYPFontAwesome/EOT (4.1.0)
+  - TYPFontAwesome/OTF (4.1.0)
+  - TYPFontAwesome/SVG (4.1.0)
+  - TYPFontAwesome/TTF (4.1.0)
+  - TYPFontAwesome/WOFF (4.1.0)
+
+DEPENDENCIES:
+  - TYPFontAwesome (~> 4.1)
+
+SPEC REPOS:
+  trunk:
+    - TYPFontAwesome
+
+SPEC CHECKSUMS:
+  TYPFontAwesome: 0d0766d5d412f23e3421149c1235693efcdf55f7
+
+PODFILE CHECKSUM: 115c2114f7369dd3f7347f100554f846eedaf562
+
+COCOAPODS: 1.9.1
