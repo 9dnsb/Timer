@@ -3,14 +3,17 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		3C994256C8C1A6FFBF0E9572 /* Pods_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E893264AC50A0A294F2D04D /* Pods_Timer.framework */; };
+		63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC9A9F2422E8960010C81F /* SettingView.storyboard */; };
+		63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA12422F1B10010C81F /* SettingsController.swift */; };
+		63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA32422FAEA0010C81F /* RoutinesController.swift */; };
+		63BC9AAA2422FD8A0010C81F /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA92422FD8A0010C81F /* Country.swift */; };
 		63C7CCB42422C0B200960513 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCB32422C0B200960513 /* AppDelegate.swift */; };
 		63C7CCB62422C0B200960513 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCB52422C0B200960513 /* SceneDelegate.swift */; };
-		63C7CCB82422C0B200960513 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCB72422C0B200960513 /* ViewController.swift */; };
 		63C7CCBB2422C0B200960513 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C7CCB92422C0B200960513 /* Main.storyboard */; };
 		63C7CCBE2422C0B200960513 /* Timer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCBC2422C0B200960513 /* Timer.xcdatamodeld */; };
 		63C7CCC02422C0B700960513 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 63C7CCBF2422C0B700960513 /* Assets.xcassets */; };
@@ -43,10 +46,13 @@
 		18133236CC651C4F17A218CD /* Pods-Timer-TimerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer-TimerUITests.release.xcconfig"; path = "Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		43FC5C97EFD85B66AA8E4E9A /* Pods_TimerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TimerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B931BB92E8FCFA1ED956800 /* Pods-Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.release.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.release.xcconfig"; sourceTree = "<group>"; };
+		63BC9A9F2422E8960010C81F /* SettingView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingView.storyboard; sourceTree = "<group>"; };
+		63BC9AA12422F1B10010C81F /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		63BC9AA32422FAEA0010C81F /* RoutinesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesController.swift; sourceTree = "<group>"; };
+		63BC9AA92422FD8A0010C81F /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
 		63C7CCB02422C0B200960513 /* Timer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Timer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C7CCB32422C0B200960513 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		63C7CCB52422C0B200960513 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		63C7CCB72422C0B200960513 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		63C7CCBA2422C0B200960513 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		63C7CCBD2422C0B200960513 /* Timer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Timer.xcdatamodel; sourceTree = "<group>"; };
 		63C7CCBF2422C0B700960513 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -103,8 +109,74 @@
 				F86F9CEA59E4931E17E97FAF /* Pods-TimerTests.debug.xcconfig */,
 				01542F25AF983431D699ECD2 /* Pods-TimerTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		63BC9A8D2422D2B30010C81F /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				63BC9A902422D2D20010C81F /* Controller */,
+				63BC9A8F2422D2CD0010C81F /* View */,
+				63BC9A8E2422D2C60010C81F /* Model */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		63BC9A8E2422D2C60010C81F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				63BC9AA92422FD8A0010C81F /* Country.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		63BC9A8F2422D2CD0010C81F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				63BC9A9F2422E8960010C81F /* SettingView.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		63BC9A902422D2D20010C81F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				63BC9AA12422F1B10010C81F /* SettingsController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		63BC9AA52422FCE40010C81F /* Routines */ = {
+			isa = PBXGroup;
+			children = (
+				63BC9AA82422FCF30010C81F /* Controller */,
+				63BC9AA72422FCEE0010C81F /* View */,
+				63BC9AA62422FCEA0010C81F /* Model */,
+			);
+			path = Routines;
+			sourceTree = "<group>";
+		};
+		63BC9AA62422FCEA0010C81F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		63BC9AA72422FCEE0010C81F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				63C7CCB92422C0B200960513 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		63BC9AA82422FCF30010C81F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				63BC9AA32422FAEA0010C81F /* RoutinesController.swift */,
+			);
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		63C7CCA72422C0B200960513 = {
@@ -132,10 +204,10 @@
 		63C7CCB22422C0B200960513 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				63BC9AA52422FCE40010C81F /* Routines */,
+				63BC9A8D2422D2B30010C81F /* Settings */,
 				63C7CCB32422C0B200960513 /* AppDelegate.swift */,
 				63C7CCB52422C0B200960513 /* SceneDelegate.swift */,
-				63C7CCB72422C0B200960513 /* ViewController.swift */,
-				63C7CCB92422C0B200960513 /* Main.storyboard */,
 				63C7CCBF2422C0B700960513 /* Assets.xcassets */,
 				63C7CCC12422C0B700960513 /* LaunchScreen.storyboard */,
 				63C7CCC42422C0B700960513 /* Info.plist */,
@@ -183,7 +255,7 @@
 				63C7CCAC2422C0B200960513 /* Sources */,
 				63C7CCAD2422C0B200960513 /* Frameworks */,
 				63C7CCAE2422C0B200960513 /* Resources */,
-				41A0A392506A412CDDA2643F /* [CP] Copy Pods Resources */,
+				5BA7450D0AD100F4A240DC56 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -221,7 +293,7 @@
 				63C7CCD02422C0B700960513 /* Sources */,
 				63C7CCD12422C0B700960513 /* Frameworks */,
 				63C7CCD22422C0B700960513 /* Resources */,
-				B4A54FDDBB0D7B9E33B6812F /* [CP] Copy Pods Resources */,
+				81F6AAA5C37389ECC44A1143 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -284,6 +356,7 @@
 				63C7CCC32422C0B700960513 /* LaunchScreen.storyboard in Resources */,
 				63C7CCC02422C0B700960513 /* Assets.xcassets in Resources */,
 				63C7CCBB2422C0B200960513 /* Main.storyboard in Resources */,
+				63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,21 +399,21 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		41A0A392506A412CDDA2643F /* [CP] Copy Pods Resources */ = {
+		5BA7450D0AD100F4A240DC56 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-resources-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			name = "[CP] Copy Pods Resources";
+			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-resources-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		6A0DDC453B014B837FCDDB6D /* [CP] Check Pods Manifest.lock */ = {
@@ -365,6 +438,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		81F6AAA5C37389ECC44A1143 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		87F7E81BCA95D53F110CDBC0 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -387,23 +477,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B4A54FDDBB0D7B9E33B6812F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -411,9 +484,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63C7CCB82422C0B200960513 /* ViewController.swift in Sources */,
+				63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */,
+				63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */,
 				63C7CCB42422C0B200960513 /* AppDelegate.swift in Sources */,
 				63C7CCB62422C0B200960513 /* SceneDelegate.swift in Sources */,
+				63BC9AAA2422FD8A0010C81F /* Country.swift in Sources */,
 				63C7CCBE2422C0B200960513 /* Timer.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

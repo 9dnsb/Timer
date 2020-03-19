@@ -6,7 +6,8 @@ target 'Timer' do
   use_frameworks!
 
   # Pods for Timer
-  pod 'TYPFontAwesome', '~> 4.1'
+  pod 'FontAwesome.swift'
+
 
   target 'TimerTests' do
     inherit! :search_paths

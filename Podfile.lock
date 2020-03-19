@@ -1,26 +1,16 @@
 PODS:
-  - TYPFontAwesome (4.1.0):
-    - TYPFontAwesome/EOT (= 4.1.0)
-    - TYPFontAwesome/OTF (= 4.1.0)
-    - TYPFontAwesome/SVG (= 4.1.0)
-    - TYPFontAwesome/TTF (= 4.1.0)
-    - TYPFontAwesome/WOFF (= 4.1.0)
-  - TYPFontAwesome/EOT (4.1.0)
-  - TYPFontAwesome/OTF (4.1.0)
-  - TYPFontAwesome/SVG (4.1.0)
-  - TYPFontAwesome/TTF (4.1.0)
-  - TYPFontAwesome/WOFF (4.1.0)
+  - FontAwesome.swift (1.8.3)
 
 DEPENDENCIES:
-  - TYPFontAwesome (~> 4.1)
+  - FontAwesome.swift
 
 SPEC REPOS:
   trunk:
-    - TYPFontAwesome
+    - FontAwesome.swift
 
 SPEC CHECKSUMS:
-  TYPFontAwesome: 0d0766d5d412f23e3421149c1235693efcdf55f7
+  FontAwesome.swift: 2a3235131a6caffc6b2ccba318e94d793b2fd342
 
-PODFILE CHECKSUM: 115c2114f7369dd3f7347f100554f846eedaf562
+PODFILE CHECKSUM: 329c5256c3798351e63093623d2400b90a1509e6
 
 COCOAPODS: 1.9.1
