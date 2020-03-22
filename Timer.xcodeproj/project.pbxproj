@@ -8,6 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		3C994256C8C1A6FFBF0E9572 /* Pods_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E893264AC50A0A294F2D04D /* Pods_Timer.framework */; };
+		634B9268242391CB00E82F66 /* RoutinesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B9267242391CB00E82F66 /* RoutinesModel.swift */; };
+		634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B926D2423A07600E82F66 /* RoutineEditorController.swift */; };
+		634E5CED242661070011B9ED /* RoutineEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5CEB242661070011B9ED /* RoutineEditorView.swift */; };
+		634E5CEE242661070011B9ED /* RoutineEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CEC242661070011B9ED /* RoutineEditorView.xib */; };
+		634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5CFA2426689E0011B9ED /* PlayerController.swift */; };
+		634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CFC242668AB0011B9ED /* PlayerView.storyboard */; };
+		634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5D022426944D0011B9ED /* routineTotalTime.swift */; };
+		63B61E7A242788C300CDAD88 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E79242788C300CDAD88 /* Globals.swift */; };
+		63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E7B2427A14200CDAD88 /* PlayerModel.swift */; };
 		63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC9A9F2422E8960010C81F /* SettingView.storyboard */; };
 		63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA12422F1B10010C81F /* SettingsController.swift */; };
 		63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA32422FAEA0010C81F /* RoutinesController.swift */; };
@@ -20,6 +29,7 @@
 		63C7CCC32422C0B700960513 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63C7CCC12422C0B700960513 /* LaunchScreen.storyboard */; };
 		63C7CCCE2422C0B700960513 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCCD2422C0B700960513 /* TimerTests.swift */; };
 		63C7CCD92422C0B700960513 /* TimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCD82422C0B700960513 /* TimerUITests.swift */; };
+		63E76E402425206700AA6814 /* RoutineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E76E3F2425206700AA6814 /* RoutineCell.swift */; };
 		C4CF13EFB72D343B39504771 /* Pods_Timer_TimerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E7E89F825F2BF9852C1448 /* Pods_Timer_TimerUITests.framework */; };
 		D09765643DB15C07FF65C05C /* Pods_TimerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FC5C97EFD85B66AA8E4E9A /* Pods_TimerTests.framework */; };
 /* End PBXBuildFile section */
@@ -46,6 +56,15 @@
 		18133236CC651C4F17A218CD /* Pods-Timer-TimerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer-TimerUITests.release.xcconfig"; path = "Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		43FC5C97EFD85B66AA8E4E9A /* Pods_TimerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TimerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B931BB92E8FCFA1ED956800 /* Pods-Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.release.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.release.xcconfig"; sourceTree = "<group>"; };
+		634B9267242391CB00E82F66 /* RoutinesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesModel.swift; sourceTree = "<group>"; };
+		634B926D2423A07600E82F66 /* RoutineEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineEditorController.swift; sourceTree = "<group>"; };
+		634E5CEB242661070011B9ED /* RoutineEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineEditorView.swift; sourceTree = "<group>"; };
+		634E5CEC242661070011B9ED /* RoutineEditorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoutineEditorView.xib; sourceTree = "<group>"; };
+		634E5CFA2426689E0011B9ED /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
+		634E5CFC242668AB0011B9ED /* PlayerView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlayerView.storyboard; sourceTree = "<group>"; };
+		634E5D022426944D0011B9ED /* routineTotalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routineTotalTime.swift; sourceTree = "<group>"; };
+		63B61E79242788C300CDAD88 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		63B61E7B2427A14200CDAD88 /* PlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
 		63BC9A9F2422E8960010C81F /* SettingView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingView.storyboard; sourceTree = "<group>"; };
 		63BC9AA12422F1B10010C81F /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		63BC9AA32422FAEA0010C81F /* RoutinesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesController.swift; sourceTree = "<group>"; };
@@ -64,6 +83,7 @@
 		63C7CCD42422C0B700960513 /* TimerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C7CCD82422C0B700960513 /* TimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerUITests.swift; sourceTree = "<group>"; };
 		63C7CCDA2422C0B700960513 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63E76E3F2425206700AA6814 /* RoutineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCell.swift; sourceTree = "<group>"; };
 		6E893264AC50A0A294F2D04D /* Pods_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E7E89F825F2BF9852C1448 /* Pods_Timer_TimerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer_TimerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7410C30DD56E76FE702495A /* Pods-Timer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.debug.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -112,12 +132,114 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		634B92692423A01400E82F66 /* Routine Editor */ = {
+			isa = PBXGroup;
+			children = (
+				634B926A2423A02000E82F66 /* Model */,
+				634B926B2423A02600E82F66 /* View */,
+				634B926C2423A02A00E82F66 /* Controller */,
+			);
+			path = "Routine Editor";
+			sourceTree = "<group>";
+		};
+		634B926A2423A02000E82F66 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		634B926B2423A02600E82F66 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				634E5CEB242661070011B9ED /* RoutineEditorView.swift */,
+				634E5CEC242661070011B9ED /* RoutineEditorView.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		634B926C2423A02A00E82F66 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				634B926D2423A07600E82F66 /* RoutineEditorController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		634E5CEF242661B40011B9ED /* Player */ = {
+			isa = PBXGroup;
+			children = (
+				634E5CF0242661BE0011B9ED /* Model */,
+				634E5CF1242661C40011B9ED /* View */,
+				634E5CF2242661CA0011B9ED /* Controller */,
+			);
+			path = Player;
+			sourceTree = "<group>";
+		};
+		634E5CF0242661BE0011B9ED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				63B61E7B2427A14200CDAD88 /* PlayerModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		634E5CF1242661C40011B9ED /* View */ = {
+			isa = PBXGroup;
+			children = (
+				634E5CFC242668AB0011B9ED /* PlayerView.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		634E5CF2242661CA0011B9ED /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				634E5CFA2426689E0011B9ED /* PlayerController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		634E5CFE2426940B0011B9ED /* Globals */ = {
+			isa = PBXGroup;
+			children = (
+				634E5D01242694190011B9ED /* Model */,
+				634E5D00242694150011B9ED /* View */,
+				634E5CFF242694100011B9ED /* Controller */,
+			);
+			path = Globals;
+			sourceTree = "<group>";
+		};
+		634E5CFF242694100011B9ED /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				634E5D022426944D0011B9ED /* routineTotalTime.swift */,
+				63B61E79242788C300CDAD88 /* Globals.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		634E5D00242694150011B9ED /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		634E5D01242694190011B9ED /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				634B9267242391CB00E82F66 /* RoutinesModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		63BC9A8D2422D2B30010C81F /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				63BC9A902422D2D20010C81F /* Controller */,
-				63BC9A8F2422D2CD0010C81F /* View */,
 				63BC9A8E2422D2C60010C81F /* Model */,
+				63BC9A8F2422D2CD0010C81F /* View */,
+				63BC9A902422D2D20010C81F /* Controller */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -149,9 +271,9 @@
 		63BC9AA52422FCE40010C81F /* Routines */ = {
 			isa = PBXGroup;
 			children = (
-				63BC9AA82422FCF30010C81F /* Controller */,
-				63BC9AA72422FCEE0010C81F /* View */,
 				63BC9AA62422FCEA0010C81F /* Model */,
+				63BC9AA72422FCEE0010C81F /* View */,
+				63BC9AA82422FCF30010C81F /* Controller */,
 			);
 			path = Routines;
 			sourceTree = "<group>";
@@ -175,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				63BC9AA32422FAEA0010C81F /* RoutinesController.swift */,
+				63E76E3F2425206700AA6814 /* RoutineCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -204,8 +327,11 @@
 		63C7CCB22422C0B200960513 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				634E5CFE2426940B0011B9ED /* Globals */,
+				634E5CEF242661B40011B9ED /* Player */,
 				63BC9AA52422FCE40010C81F /* Routines */,
 				63BC9A8D2422D2B30010C81F /* Settings */,
+				634B92692423A01400E82F66 /* Routine Editor */,
 				63C7CCB32422C0B200960513 /* AppDelegate.swift */,
 				63C7CCB52422C0B200960513 /* SceneDelegate.swift */,
 				63C7CCBF2422C0B700960513 /* Assets.xcassets */,
@@ -255,7 +381,7 @@
 				63C7CCAC2422C0B200960513 /* Sources */,
 				63C7CCAD2422C0B200960513 /* Frameworks */,
 				63C7CCAE2422C0B200960513 /* Resources */,
-				5BA7450D0AD100F4A240DC56 /* [CP] Embed Pods Frameworks */,
+				D105C3169D7156E7303F0291 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -293,7 +419,7 @@
 				63C7CCD02422C0B700960513 /* Sources */,
 				63C7CCD12422C0B700960513 /* Frameworks */,
 				63C7CCD22422C0B700960513 /* Resources */,
-				81F6AAA5C37389ECC44A1143 /* [CP] Embed Pods Frameworks */,
+				A92DAC47B86BD1FE27EB2E04 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -353,9 +479,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				634E5CEE242661070011B9ED /* RoutineEditorView.xib in Resources */,
 				63C7CCC32422C0B700960513 /* LaunchScreen.storyboard in Resources */,
 				63C7CCC02422C0B700960513 /* Assets.xcassets in Resources */,
 				63C7CCBB2422C0B200960513 /* Main.storyboard in Resources */,
+				634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */,
 				63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -399,23 +527,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		5BA7450D0AD100F4A240DC56 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		6A0DDC453B014B837FCDDB6D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -436,23 +547,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		81F6AAA5C37389ECC44A1143 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		87F7E81BCA95D53F110CDBC0 /* [CP] Check Pods Manifest.lock */ = {
@@ -477,6 +571,40 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		A92DAC47B86BD1FE27EB2E04 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D105C3169D7156E7303F0291 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Timer/Pods-Timer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -486,10 +614,18 @@
 			files = (
 				63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */,
 				63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */,
+				634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */,
 				63C7CCB42422C0B200960513 /* AppDelegate.swift in Sources */,
+				634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */,
 				63C7CCB62422C0B200960513 /* SceneDelegate.swift in Sources */,
+				63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */,
+				63B61E7A242788C300CDAD88 /* Globals.swift in Sources */,
+				63E76E402425206700AA6814 /* RoutineCell.swift in Sources */,
+				634B9268242391CB00E82F66 /* RoutinesModel.swift in Sources */,
 				63BC9AAA2422FD8A0010C81F /* Country.swift in Sources */,
+				634E5CED242661070011B9ED /* RoutineEditorView.swift in Sources */,
 				63C7CCBE2422C0B200960513 /* Timer.xcdatamodeld in Sources */,
+				634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

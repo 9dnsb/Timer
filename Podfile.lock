@@ -1,16 +1,20 @@
 PODS:
-  - FontAwesome.swift (1.8.3)
+  - SRCountdownTimer (1.1)
+  - SwiftReorder (7.2.0)
 
 DEPENDENCIES:
-  - FontAwesome.swift
+  - SRCountdownTimer
+  - SwiftReorder (~> 7.2)
 
 SPEC REPOS:
   trunk:
-    - FontAwesome.swift
+    - SRCountdownTimer
+    - SwiftReorder
 
 SPEC CHECKSUMS:
-  FontAwesome.swift: 2a3235131a6caffc6b2ccba318e94d793b2fd342
+  SRCountdownTimer: 9c92e444b5403c92f01dd6610299b8c634bc8562
+  SwiftReorder: d687883abf5f2327268e006b038025a6fc515e34
 
-PODFILE CHECKSUM: 329c5256c3798351e63093623d2400b90a1509e6
+PODFILE CHECKSUM: 38d6bbbc34190e9352ee420ed1cface5f083e6f5
 
 COCOAPODS: 1.9.1

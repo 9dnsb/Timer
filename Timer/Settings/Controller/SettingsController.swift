@@ -20,7 +20,7 @@ class SettingsController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.navigationBar.tintColor = .white
+        // self.navigationController?.navigationBar.tintColor = .white
         let logoutBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(logoutUser))
         self.navigationItem.rightBarButtonItem  = logoutBarButtonItem
         // Uncomment the following line to preserve selection between presentations

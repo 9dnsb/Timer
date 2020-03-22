@@ -6,7 +6,10 @@ target 'Timer' do
   use_frameworks!
 
   # Pods for Timer
-  pod 'FontAwesome.swift'
+  pod 'SwiftReorder', '~> 7.2'
+  pod 'SRCountdownTimer'
+
+
 
 
   target 'TimerTests' do
