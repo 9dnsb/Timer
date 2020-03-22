@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import SRCountdownTimer
+import AVFoundation
+
 public  typealias PXColor = UIColor
 class PlayerController: UIViewController {
     @IBOutlet weak var topView: UIView!
@@ -18,19 +21,32 @@ class PlayerController: UIViewController {
     @IBOutlet weak var backIntervalButton: UIButton!
     @IBOutlet weak var intervalNumberLabel: UILabel!
     @IBOutlet weak var intervalNameLabel: UILabel!
-    
+    @IBOutlet weak var startButton: UIButton!
+
+    @IBOutlet weak var countdownTimer: SRCountdownTimer!
     var rout: Routine = Routine(name: "", type: "", warmup: 0, intervals: [], numCycles: 0, restTime: 0, coolDown: 0, routineColor: .systemRed, totalTime: 0)
     var timerClass = Timer()
     var elapsedTimer = Timer()
     var remainingTimer = Timer()
     var model = playerModel()
+    var startButtonModel = resumeButton()
     var currInterval = currentInterval()
+    // var speechSynthesizer = AVSpeechSynthesizer()
+    // var speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: "")
 
     required init?(coder aDecoder: NSCoder) {
 
         super.init(coder: aDecoder)
     }
     override func viewDidLoad() {
+//        speechUtterance = AVSpeechUtterance(string: "This is a test. This is only a test. If this was an actual emergency, then this wouldn’t have been a test.")
+//        //Line 3. Specify the speech utterance rate. 1 = speaking extremely the higher the values the slower speech patterns. The default rate, AVSpeechUtteranceDefaultSpeechRate is 0.5
+//        speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.5
+//        // Line 4. Specify the voice. It is explicitly set to English here, but it will use the device default if not specified.
+//        speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+//        // Line 5. Pass in the urrerance to the synthesizer to actually speak.
+//        speechUtterance = AVSpeechUtterance(string: "")
+//        speechSynthesizer.speak(speechUtterance)
         model.totalTime = rout.totalTime
         super.viewDidLoad()
         self.setNavigationBar()
@@ -45,8 +61,15 @@ class PlayerController: UIViewController {
 
     func setRemainingTimer() {
         timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
-        // timeRemainingLabel.text = String(model.totalTime)
-        remainingTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateRemainingTimer), userInfo: nil, repeats: true)
+        timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
+        countdownTimer.labelTextColor = .white
+        countdownTimer.lineColor = .systemGray //UIColor.white.darker(amount: 0.1)
+        countdownTimer.trailLineColor = .white
+        countdownTimer.timerFinishingText = "End"
+        countdownTimer.lineWidth = 4
+        countdownTimer.isLabelHidden = true
+
+
     }
 
     @objc func updateRemainingTimer() {
@@ -54,15 +77,15 @@ class PlayerController: UIViewController {
         if model.totalTime < 1 {
 
             remainingTimer.invalidate()
-            elapsedTimer.invalidate()
 
         } else {
-             model.totalTime -= 1     //This will decrement(count down)the seconds.
+            model.totalTime -= 1
             timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
 
-            model.elapsedTime += 1     //This will decrement(count down)the seconds.
             timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
         }
+        // countdownTimer.labelFont = UIFont(name: "HelveticaNeue-Light", size: 50.0)
+
 
     }
 
@@ -74,6 +97,23 @@ class PlayerController: UIViewController {
         print("backInteralButtonClicked")
     }
 
+    @IBAction func startButton(_ sender: Any) {
+        if self.startButtonModel.resumeTapped == false {
+
+            timerClass.invalidate()
+            remainingTimer.invalidate()
+            countdownTimer.pause()
+            self.startButtonModel.resumeTapped = true
+            startButton.setTitle("START",for: .normal)
+        } else {
+             runTimer()
+            countdownTimer.resume()
+            startButton.setTitle("STOP",for: .normal)
+             self.startButtonModel.resumeTapped = false
+        }
+    }
+
+
     func setInitialTimer() {
         let interval = rout.intervals[model.currentIntervalCycle]
         currInterval.totalIntervalSets = interval.numSets
@@ -81,31 +121,43 @@ class PlayerController: UIViewController {
         intervalNameLabel.text = interval.intervalName
 
         if (interval.firstIntervalHigh) && currInterval.firstInterval {
-            print("starting High")
-            model.seconds = interval.highInterval.duration
-            intervalNumberLabel.text = "\(currInterval.currentIntervalSet + 1)/\(interval.numSets) - high"
-            self.view.backgroundColor = interval.highInterval.intervalColor
-            topView.backgroundColor = interval.highInterval.intervalColor
-            bottomView.backgroundColor = interval.highInterval.intervalColor.darker(amount: 0.2)
+            self.startInterval(interval: interval.highInterval, isHigh: true)
 
+        }
+        else {
+            self.startInterval(interval: interval.lowInterval, isHigh: false)
+        }
+//        if model.veryFirstInterval {}
+//        else {
+//            model.seconds -= 1
+//        }
+//        model.veryFirstInterval = false
+        // self.runTimer()
+
+
+    }
+
+    func startInterval(interval: IntervalIntensity, isHigh: Bool) {
+        if isHigh {
+            print("starting High")
+            intervalNumberLabel.text = "\(currInterval.currentIntervalSet + 1)/\(rout.intervals[model.currentIntervalCycle].numSets) - high"
         }
         else {
             print("starting Low")
-            model.seconds = rout.intervals[0].lowInterval.duration
-            intervalNumberLabel.text = "\(currInterval.currentIntervalSet + 1)/\(interval.numSets) - low"
-            self.view.backgroundColor = interval.lowInterval.intervalColor
-            topView.backgroundColor = interval.lowInterval.intervalColor
-            bottomView.backgroundColor = interval.lowInterval.intervalColor.darker(amount: 0.2)
+            intervalNumberLabel.text = "\(currInterval.currentIntervalSet + 1)/\(rout.intervals[model.currentIntervalCycle].numSets) - low"
         }
-        if model.veryFirstInterval {
+
+        model.seconds = interval.duration
+
+        countdownTimer.start(beginingValue: model.seconds, interval: 1)
+        countdownTimer.pause()
+        self.view.backgroundColor = interval.intervalColor
+        topView.backgroundColor = interval.intervalColor
+        bottomView.backgroundColor = interval.intervalColor.darker(amount: 0.2)
+        countdownTimer.backgroundColor = interval.intervalColor.darker(amount: 0.2)
+        timer.text = timeString(time: TimeInterval(interval.duration))
 
 
-        }
-        else {
-            model.seconds -= 1
-        }
-        model.veryFirstInterval = false
-        self.runTimer()
 
     }
     
@@ -130,6 +182,8 @@ class PlayerController: UIViewController {
         self.title = rout.name
     }
 
+
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -141,7 +195,9 @@ class PlayerController: UIViewController {
         super.viewWillDisappear(animated)
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.shadowImage = nil
-        self.navigationController?.navigationBar.isTranslucent = false
+
+        self.navigationController?.navigationBar.tintColor = .systemBlue
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.systemBlue]
     }
 
     @objc func closeButtonClick(){
@@ -170,37 +226,67 @@ class PlayerController: UIViewController {
         // timer.sizeToFit()
 
         timerClass = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
-
+        remainingTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateRemainingTimer), userInfo: nil, repeats: true)
     }
 
     @objc func updateTimer() {
 
-        if model.seconds < 1 {
+        if model.seconds < 2 {
+            print("here 0")
+            remainingTimer.invalidate()
              timerClass.invalidate()
+
              //Send alert to indicate "time's up!"
             // currentIntervalSet += 1
             currInterval.firstInterval.toggle()
             if currInterval.firstInterval {
+
                 print("here 1")
                 currInterval.currentIntervalSet += 1
                 if currInterval.currentIntervalSet == currInterval.totalIntervalSets {
                     print("here 2")
-                    // self.setInitialTimer(currentInterval: currentIntervalSet)
+                    timer.text = timeString(time: TimeInterval(model.seconds - 1))
+                    model.totalTime -= 1
+                    timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
+                    model.elapsedTime += 1
+                    timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
+                    
                 }
                 else {
+                    print("here 3")
+                    model.totalTime -= 1
+                    timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
+                    model.elapsedTime += 1
+                    timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
+                    runTimer()
+
                     self.setInitialTimer()
+                    countdownTimer.resume()
                 }
 
             }
             else {
-                print("here 3")
+                print("here 4")
+                model.totalTime -= 1
+
+                timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
+                model.elapsedTime += 1
+                timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
+                runTimer()
+
                 self.setInitialTimer()
+                countdownTimer.resume()
             }
 
 
         } else {
-             model.seconds -= 1     //This will decrement(count down)the seconds.
+            print("here 5")
+             model.seconds -= 1
+            model.elapsedTime += 1
+            timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
+        
              timer.text = timeString(time: TimeInterval(model.seconds))
+
         }
 
     }

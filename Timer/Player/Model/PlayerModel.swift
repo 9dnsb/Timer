@@ -24,3 +24,9 @@ struct currentInterval {
     var currentIntervalSet = 0
     var firstInterval = true
 }
+
+struct resumeButton {
+    var resumeTapped = true
+    var text = ""
+}
+
