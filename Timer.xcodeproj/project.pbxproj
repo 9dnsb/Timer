@@ -8,15 +8,37 @@
 
 /* Begin PBXBuildFile section */
 		3C994256C8C1A6FFBF0E9572 /* Pods_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6E893264AC50A0A294F2D04D /* Pods_Timer.framework */; };
+		63171650242F91AF00BC4F7E /* RoutineEditorView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6317164F242F91AF00BC4F7E /* RoutineEditorView.storyboard */; };
+		63171652242F991C00BC4F7E /* inputTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63171651242F991C00BC4F7E /* inputTextCell.swift */; };
+		63171659242FCC5900BC4F7E /* selectIntervalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63171658242FCC5900BC4F7E /* selectIntervalCell.swift */; };
+		6317165B242FD65D00BC4F7E /* addNewCycleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6317165A242FD65D00BC4F7E /* addNewCycleCell.swift */; };
+		6317165D242FE87900BC4F7E /* lowHighCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6317165C242FE87900BC4F7E /* lowHighCell.swift */; };
+		631B45A12438B46E008F61EB /* segmentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631B45A02438B46E008F61EB /* segmentController.swift */; };
+		631B45A32438B4A7008F61EB /* segmentCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 631B45A22438B4A7008F61EB /* segmentCell.xib */; };
+		631C0C5D2433626F00C06AD2 /* mainCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C5C2433626F00C06AD2 /* mainCell.swift */; };
+		631C0C632434ABC700C06AD2 /* IntervalEditorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C622434ABC700C06AD2 /* IntervalEditorVC.swift */; };
+		631C0C652434ABF700C06AD2 /* IntervalEditorVC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 631C0C642434ABF700C06AD2 /* IntervalEditorVC.storyboard */; };
+		631C0C672434AD1700C06AD2 /* basicLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 631C0C662434AD1700C06AD2 /* basicLabelCell.xib */; };
+		631C0C692434AD3200C06AD2 /* basicLabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C682434AD3200C06AD2 /* basicLabelCell.swift */; };
+		631C0C6C2434B53500C06AD2 /* selectColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C6A2434B53500C06AD2 /* selectColorCell.swift */; };
+		631C0C6D2434B53500C06AD2 /* selectColorCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 631C0C6B2434B53500C06AD2 /* selectColorCell.xib */; };
+		631C0C702434EC6400C06AD2 /* basicRightLabelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C6E2434EC6400C06AD2 /* basicRightLabelCell.swift */; };
+		631C0C712434EC6400C06AD2 /* basicRightLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 631C0C6F2434EC6400C06AD2 /* basicRightLabelCell.xib */; };
+		631C0C73243520F900C06AD2 /* picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C72243520F900C06AD2 /* picker.swift */; };
+		631C0C752435212900C06AD2 /* picker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 631C0C742435212900C06AD2 /* picker.xib */; };
+		631C0C772436983A00C06AD2 /* pickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C762436983A00C06AD2 /* pickerData.swift */; };
+		631C0C7A24369A8900C06AD2 /* soundPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C7924369A8900C06AD2 /* soundPicker.swift */; };
 		634B9268242391CB00E82F66 /* RoutinesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B9267242391CB00E82F66 /* RoutinesModel.swift */; };
 		634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B926D2423A07600E82F66 /* RoutineEditorController.swift */; };
-		634E5CED242661070011B9ED /* RoutineEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5CEB242661070011B9ED /* RoutineEditorView.swift */; };
-		634E5CEE242661070011B9ED /* RoutineEditorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CEC242661070011B9ED /* RoutineEditorView.xib */; };
 		634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5CFA2426689E0011B9ED /* PlayerController.swift */; };
 		634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CFC242668AB0011B9ED /* PlayerView.storyboard */; };
 		634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5D022426944D0011B9ED /* routineTotalTime.swift */; };
+		638E96C1242C01C300A8626C /* blank.wav in Resources */ = {isa = PBXBuildFile; fileRef = 638E96C0242C01C300A8626C /* blank.wav */; };
 		63B61E7A242788C300CDAD88 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E79242788C300CDAD88 /* Globals.swift */; };
 		63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E7B2427A14200CDAD88 /* PlayerModel.swift */; };
+		63B61E7F2428DA9400CDAD88 /* Train Honk.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B61E7E2428DA9400CDAD88 /* Train Honk.mp3 */; };
+		63B61E812428DC0500CDAD88 /* Train Whistle x2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B61E802428DC0500CDAD88 /* Train Whistle x2.mp3 */; };
+		63B8589324314C7C007FF6AA /* switchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8589224314C7C007FF6AA /* switchCell.swift */; };
 		63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC9A9F2422E8960010C81F /* SettingView.storyboard */; };
 		63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA12422F1B10010C81F /* SettingsController.swift */; };
 		63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA32422FAEA0010C81F /* RoutinesController.swift */; };
@@ -56,15 +78,38 @@
 		18133236CC651C4F17A218CD /* Pods-Timer-TimerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer-TimerUITests.release.xcconfig"; path = "Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		43FC5C97EFD85B66AA8E4E9A /* Pods_TimerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TimerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B931BB92E8FCFA1ED956800 /* Pods-Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.release.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.release.xcconfig"; sourceTree = "<group>"; };
+		6317164F242F91AF00BC4F7E /* RoutineEditorView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = RoutineEditorView.storyboard; sourceTree = "<group>"; };
+		63171651242F991C00BC4F7E /* inputTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = inputTextCell.swift; sourceTree = "<group>"; };
+		63171658242FCC5900BC4F7E /* selectIntervalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectIntervalCell.swift; sourceTree = "<group>"; };
+		6317165A242FD65D00BC4F7E /* addNewCycleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addNewCycleCell.swift; sourceTree = "<group>"; };
+		6317165C242FE87900BC4F7E /* lowHighCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lowHighCell.swift; sourceTree = "<group>"; };
+		631B45A02438B46E008F61EB /* segmentController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = segmentController.swift; sourceTree = "<group>"; };
+		631B45A22438B4A7008F61EB /* segmentCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = segmentCell.xib; sourceTree = "<group>"; };
+		631C0C5C2433626F00C06AD2 /* mainCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = mainCell.swift; sourceTree = "<group>"; };
+		631C0C622434ABC700C06AD2 /* IntervalEditorVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalEditorVC.swift; sourceTree = "<group>"; };
+		631C0C642434ABF700C06AD2 /* IntervalEditorVC.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = IntervalEditorVC.storyboard; sourceTree = "<group>"; };
+		631C0C662434AD1700C06AD2 /* basicLabelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = basicLabelCell.xib; sourceTree = "<group>"; };
+		631C0C682434AD3200C06AD2 /* basicLabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = basicLabelCell.swift; sourceTree = "<group>"; };
+		631C0C6A2434B53500C06AD2 /* selectColorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = selectColorCell.swift; sourceTree = "<group>"; };
+		631C0C6B2434B53500C06AD2 /* selectColorCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = selectColorCell.xib; sourceTree = "<group>"; };
+		631C0C6E2434EC6400C06AD2 /* basicRightLabelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = basicRightLabelCell.swift; sourceTree = "<group>"; };
+		631C0C6F2434EC6400C06AD2 /* basicRightLabelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = basicRightLabelCell.xib; sourceTree = "<group>"; };
+		631C0C72243520F900C06AD2 /* picker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = picker.swift; sourceTree = "<group>"; };
+		631C0C742435212900C06AD2 /* picker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = picker.xib; sourceTree = "<group>"; };
+		631C0C762436983A00C06AD2 /* pickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pickerData.swift; sourceTree = "<group>"; };
+		631C0C7924369A8900C06AD2 /* soundPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = soundPicker.swift; sourceTree = "<group>"; };
 		634B9267242391CB00E82F66 /* RoutinesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesModel.swift; sourceTree = "<group>"; };
 		634B926D2423A07600E82F66 /* RoutineEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineEditorController.swift; sourceTree = "<group>"; };
-		634E5CEB242661070011B9ED /* RoutineEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineEditorView.swift; sourceTree = "<group>"; };
-		634E5CEC242661070011B9ED /* RoutineEditorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoutineEditorView.xib; sourceTree = "<group>"; };
 		634E5CFA2426689E0011B9ED /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		634E5CFC242668AB0011B9ED /* PlayerView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlayerView.storyboard; sourceTree = "<group>"; };
 		634E5D022426944D0011B9ED /* routineTotalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routineTotalTime.swift; sourceTree = "<group>"; };
+		638E96C0242C01C300A8626C /* blank.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = blank.wav; sourceTree = "<group>"; };
+		638E96C3242C04BF00A8626C /* test.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.aif; sourceTree = "<group>"; };
 		63B61E79242788C300CDAD88 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		63B61E7B2427A14200CDAD88 /* PlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
+		63B61E7E2428DA9400CDAD88 /* Train Honk.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Honk.mp3"; sourceTree = "<group>"; };
+		63B61E802428DC0500CDAD88 /* Train Whistle x2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Whistle x2.mp3"; sourceTree = "<group>"; };
+		63B8589224314C7C007FF6AA /* switchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = switchCell.swift; sourceTree = "<group>"; };
 		63BC9A9F2422E8960010C81F /* SettingView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingView.storyboard; sourceTree = "<group>"; };
 		63BC9AA12422F1B10010C81F /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		63BC9AA32422FAEA0010C81F /* RoutinesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesController.swift; sourceTree = "<group>"; };
@@ -132,6 +177,51 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		631C0C5E2434AB8200C06AD2 /* Interval Editor */ = {
+			isa = PBXGroup;
+			children = (
+				631C0C612434ABA700C06AD2 /* Model */,
+				631C0C602434AB9E00C06AD2 /* View */,
+				631C0C5F2434AB9700C06AD2 /* Controller */,
+			);
+			path = "Interval Editor";
+			sourceTree = "<group>";
+		};
+		631C0C5F2434AB9700C06AD2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				631C0C622434ABC700C06AD2 /* IntervalEditorVC.swift */,
+				631C0C682434AD3200C06AD2 /* basicLabelCell.swift */,
+				631C0C6A2434B53500C06AD2 /* selectColorCell.swift */,
+				631C0C6E2434EC6400C06AD2 /* basicRightLabelCell.swift */,
+				631C0C72243520F900C06AD2 /* picker.swift */,
+				631C0C7924369A8900C06AD2 /* soundPicker.swift */,
+				631B45A02438B46E008F61EB /* segmentController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		631C0C602434AB9E00C06AD2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				631C0C642434ABF700C06AD2 /* IntervalEditorVC.storyboard */,
+				631C0C662434AD1700C06AD2 /* basicLabelCell.xib */,
+				631C0C6B2434B53500C06AD2 /* selectColorCell.xib */,
+				631C0C6F2434EC6400C06AD2 /* basicRightLabelCell.xib */,
+				631C0C742435212900C06AD2 /* picker.xib */,
+				631B45A22438B4A7008F61EB /* segmentCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		631C0C612434ABA700C06AD2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				631C0C762436983A00C06AD2 /* pickerData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		634B92692423A01400E82F66 /* Routine Editor */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,8 +242,7 @@
 		634B926B2423A02600E82F66 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				634E5CEB242661070011B9ED /* RoutineEditorView.swift */,
-				634E5CEC242661070011B9ED /* RoutineEditorView.xib */,
+				6317164F242F91AF00BC4F7E /* RoutineEditorView.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -162,6 +251,12 @@
 			isa = PBXGroup;
 			children = (
 				634B926D2423A07600E82F66 /* RoutineEditorController.swift */,
+				63171651242F991C00BC4F7E /* inputTextCell.swift */,
+				63171658242FCC5900BC4F7E /* selectIntervalCell.swift */,
+				6317165A242FD65D00BC4F7E /* addNewCycleCell.swift */,
+				6317165C242FE87900BC4F7E /* lowHighCell.swift */,
+				63B8589224314C7C007FF6AA /* switchCell.swift */,
+				631C0C5C2433626F00C06AD2 /* mainCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -196,6 +291,8 @@
 			isa = PBXGroup;
 			children = (
 				634E5CFA2426689E0011B9ED /* PlayerController.swift */,
+				638E96C0242C01C300A8626C /* blank.wav */,
+				638E96C3242C04BF00A8626C /* test.aif */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -232,6 +329,15 @@
 				634B9267242391CB00E82F66 /* RoutinesModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		63B61E7D2428DA7A00CDAD88 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				63B61E7E2428DA9400CDAD88 /* Train Honk.mp3 */,
+				63B61E802428DC0500CDAD88 /* Train Whistle x2.mp3 */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 		63BC9A8D2422D2B30010C81F /* Settings */ = {
@@ -296,8 +402,8 @@
 		63BC9AA82422FCF30010C81F /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				63BC9AA32422FAEA0010C81F /* RoutinesController.swift */,
 				63E76E3F2425206700AA6814 /* RoutineCell.swift */,
+				63BC9AA32422FAEA0010C81F /* RoutinesController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -331,7 +437,9 @@
 				634E5CEF242661B40011B9ED /* Player */,
 				63BC9AA52422FCE40010C81F /* Routines */,
 				63BC9A8D2422D2B30010C81F /* Settings */,
+				63B61E7D2428DA7A00CDAD88 /* Sounds */,
 				634B92692423A01400E82F66 /* Routine Editor */,
+				631C0C5E2434AB8200C06AD2 /* Interval Editor */,
 				63C7CCB32422C0B200960513 /* AppDelegate.swift */,
 				63C7CCB52422C0B200960513 /* SceneDelegate.swift */,
 				63C7CCBF2422C0B700960513 /* Assets.xcassets */,
@@ -479,12 +587,21 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				634E5CEE242661070011B9ED /* RoutineEditorView.xib in Resources */,
 				63C7CCC32422C0B700960513 /* LaunchScreen.storyboard in Resources */,
+				638E96C1242C01C300A8626C /* blank.wav in Resources */,
+				63B61E812428DC0500CDAD88 /* Train Whistle x2.mp3 in Resources */,
+				631C0C672434AD1700C06AD2 /* basicLabelCell.xib in Resources */,
 				63C7CCC02422C0B700960513 /* Assets.xcassets in Resources */,
+				631C0C752435212900C06AD2 /* picker.xib in Resources */,
 				63C7CCBB2422C0B200960513 /* Main.storyboard in Resources */,
+				63B61E7F2428DA9400CDAD88 /* Train Honk.mp3 in Resources */,
+				631C0C6D2434B53500C06AD2 /* selectColorCell.xib in Resources */,
 				634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */,
+				63171650242F91AF00BC4F7E /* RoutineEditorView.storyboard in Resources */,
+				631B45A32438B4A7008F61EB /* segmentCell.xib in Resources */,
 				63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */,
+				631C0C652434ABF700C06AD2 /* IntervalEditorVC.storyboard in Resources */,
+				631C0C712434EC6400C06AD2 /* basicRightLabelCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,19 +729,32 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6317165D242FE87900BC4F7E /* lowHighCell.swift in Sources */,
+				631C0C6C2434B53500C06AD2 /* selectColorCell.swift in Sources */,
 				63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */,
 				63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */,
 				634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */,
+				6317165B242FD65D00BC4F7E /* addNewCycleCell.swift in Sources */,
 				63C7CCB42422C0B200960513 /* AppDelegate.swift in Sources */,
+				631C0C702434EC6400C06AD2 /* basicRightLabelCell.swift in Sources */,
 				634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */,
+				631C0C5D2433626F00C06AD2 /* mainCell.swift in Sources */,
 				63C7CCB62422C0B200960513 /* SceneDelegate.swift in Sources */,
 				63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */,
 				63B61E7A242788C300CDAD88 /* Globals.swift in Sources */,
+				631C0C73243520F900C06AD2 /* picker.swift in Sources */,
+				631C0C692434AD3200C06AD2 /* basicLabelCell.swift in Sources */,
+				631B45A12438B46E008F61EB /* segmentController.swift in Sources */,
 				63E76E402425206700AA6814 /* RoutineCell.swift in Sources */,
+				631C0C772436983A00C06AD2 /* pickerData.swift in Sources */,
+				631C0C7A24369A8900C06AD2 /* soundPicker.swift in Sources */,
 				634B9268242391CB00E82F66 /* RoutinesModel.swift in Sources */,
+				63171659242FCC5900BC4F7E /* selectIntervalCell.swift in Sources */,
 				63BC9AAA2422FD8A0010C81F /* Country.swift in Sources */,
-				634E5CED242661070011B9ED /* RoutineEditorView.swift in Sources */,
+				63171652242F991C00BC4F7E /* inputTextCell.swift in Sources */,
+				63B8589324314C7C007FF6AA /* switchCell.swift in Sources */,
 				63C7CCBE2422C0B200960513 /* Timer.xcdatamodeld in Sources */,
+				631C0C632434ABC700C06AD2 /* IntervalEditorVC.swift in Sources */,
 				634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -800,6 +930,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -807,6 +938,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -820,6 +952,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1.1;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
@@ -827,6 +960,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftReorder
+import SwiftyStoreKit
 
 class RoutinesController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
@@ -24,7 +25,74 @@ class RoutinesController: UIViewController {
         super.viewDidLoad()
         self.setBackgroundandNavigationBar()
         self.setupTable()
+
         self.tableView.reorder.delegate = self as TableViewReorderDelegate
+        SwiftyStoreKit.retrieveProductsInfo(["db.timer.main.weekly"]) { result in
+            if let product = result.retrievedProducts.first {
+                let priceString = product.localizedPrice!
+                print("Product: \(product.localizedDescription), price: \(priceString)")
+            }
+            else if let invalidProductId = result.invalidProductIDs.first {
+                print("Invalid product identifier: \(invalidProductId)")
+            }
+            else {
+                print("Error: \(String(describing: result.error))")
+            }
+        }
+
+        
+
+        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "6685ee37760d411f8a996c5ab5a82334")
+        SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
+            switch result {
+            case .success(let receipt):
+                let productId = "db.timer.main.weekly"
+                // Verify the purchase of a Subscription
+                let purchaseResult = SwiftyStoreKit.verifySubscription(
+                    ofType: .autoRenewable, // or .nonRenewing (see below)
+                    productId: productId,
+                    inReceipt: receipt)
+
+                switch purchaseResult {
+                case .purchased(let expiryDate, let items):
+                    print("\(productId) is valid until \(expiryDate)\n\(items)\n")
+                case .expired(let expiryDate, let items):
+                    print("\(productId) is expired since \(expiryDate)\n\(items)\n")
+                case .notPurchased:
+                    print("The user has never purchased \(productId)")
+                }
+
+            case .error(let error):
+                print("Receipt verification failed: \(error)")
+            }
+        }
+//        SwiftyStoreKit.purchaseProduct("db.timer.main.weekly", quantity: 1, atomically: false) { result in
+//            switch result {
+//            case .success(let product):
+//                // fetch content from your server, then:
+//                if product.needsFinishTransaction {
+//                    SwiftyStoreKit.finishTransaction(product.transaction)
+//                }
+//                print("Purchase Success: \(product.productId)")
+//            case .error(let error):
+//                switch error.code {
+//                case .unknown: print("Unknown error. Please contact support")
+//                case .clientInvalid: print("Not allowed to make the payment")
+//                case .paymentCancelled: break
+//                case .paymentInvalid: print("The purchase identifier was invalid")
+//                case .paymentNotAllowed: print("The device is not allowed to make the payment")
+//                case .storeProductNotAvailable: print("The product is not available in the current storefront")
+//                case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+//                case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+//                case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+//                default: print((error as NSError).localizedDescription)
+//                }
+//            }
+//        }
+    }
+
+    public enum subs {
+        case weekly(item: String = "db.timer.main.weekly")
     }
 
     func setBackgroundandNavigationBar() {
@@ -41,13 +109,29 @@ class RoutinesController: UIViewController {
     }
 
     func setupTable() {
-        let newRout1 = Routine(name: "Test1", type: "Simple", warmup: 0, intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 5, intervalColor: .systemRed, sound: ""), lowInterval: IntervalIntensity(duration: 6, intervalColor: .systemGreen, sound: ""))], numCycles: 1, restTime: 0, coolDown: 0, routineColor: .systemRed, totalTime: 0)
-        let newRout2 = Routine(name: "Elbow", type: "Simple", warmup: 0, intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 1, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: ""), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: ""))], numCycles: 1, restTime: 0, coolDown: 0, routineColor: .systemRed, totalTime: 0)
+        let newRout1 = Routine(name: "Low Interval", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 4, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 2, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 4, restTime: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+        let newInter = HighLowInterval(firstIntervalHigh: true, numSets: 4, intervalName: "Interval #2", highInterval: IntervalIntensity(duration: 4, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
+        let newInter2 = HighLowInterval(firstIntervalHigh: false, numSets: 3, intervalName: "Interval #3", highInterval: IntervalIntensity(duration: 7, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 5, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
+        let newInter3 = HighLowInterval(firstIntervalHigh: true, numSets: 3, intervalName: "Interval #3", highInterval: IntervalIntensity(duration: 7, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 5, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
+        var rout3 = newRout1
+        rout3.intervals.append(newInter)
+        rout3.intervals.append(newInter2)
+        rout3.intervals.append(newInter3)
+        rout3.intervals.append(newInter)
+        rout3.intervals.append(newInter2)
+        rout3.name = "Test #3"
+        let newRout2 = Routine(name: "Elbow", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 1, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 80, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemIndigo, totalTime: 0)
+        let newRout5 = Routine(name: "High Interval", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 2, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 1, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemYellow, totalTime: 0)
+        let newRout6 = Routine(name: "Low Interval", type: "Simple", warmup: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.trainWhistle), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 5, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 8, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 1, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemYellow, totalTime: 0)
 
         rout.append(newRout1)
         rout.append(newRout2)
+        rout.append(rout3)
+
+        rout.append(newRout5)
+        rout.append(newRout6)
         for (j, aRout) in rout.enumerated() {
-            rout[j].totalTime = routineTotalTime().calctotalRoutineTime(rout: aRout)
+            rout[j].totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: aRout))
         }
 
     }
@@ -64,10 +148,21 @@ class RoutinesController: UIViewController {
 
     @objc func addRoutineClick(){
         print("addRoutineClick")
-        let storyboard = UIStoryboard(name: "SettingView", bundle: nil)
-        let myVC = storyboard.instantiateViewController(withIdentifier: "SettingView")
-        let navController = UINavigationController(rootViewController: myVC)
-        self.navigationController?.present(navController, animated: true, completion: nil)
+        //let storyboard = UIStoryboard(name: "RoutineEditorView", bundle: nil)
+        //let myVC = storyboard.instantiateViewController(withIdentifier: "RoutineEditorView")
+//        let myVC = RoutineEditorController()
+//        myVC.title = "Add Routine"
+//        self.present(myVC, animated: true, completion: nil)
+//        //let navController = UINavigationController(rootViewController: myVC)
+//
+//        //self.navigationController?.present(navController, animated: true, completion: nil)
+        if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
+            viewController.title = "Add Routine"
+            if let navigator = navigationController {
+                navigator.pushViewController(viewController, animated: true)
+            }
+        }
+
     }
     @objc func addEditButton(){
 
@@ -101,7 +196,8 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         let routine = rout[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoutineCell") as! RoutineCell
         cell.setLabels(rout: routine, edit: !self.isEditingBool)
-
+        cell.timeLabel.text =
+            globals().timeString(time: TimeInterval(rout[indexPath.row].totalTime)) 
         return cell
     }
 
@@ -116,6 +212,7 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         rout.insert(movedObject, at: destinationIndexPath.row)
 
     }
+    
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
       if editingStyle == .delete {
@@ -132,6 +229,7 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         // print("section: \(indexPath.section)")
         // print("row: \(indexPath.row)")
         if let viewController = UIStoryboard(name: "PlayerView", bundle: nil).instantiateViewController(withIdentifier: "PlayerView") as? PlayerController {
+            
             viewController.rout = rout[indexPath.row]
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)

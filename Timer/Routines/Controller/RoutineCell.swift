@@ -18,7 +18,7 @@ class RoutineCell: UITableViewCell {
     func setLabels(rout: Routine, edit: Bool) {
         titleLabel.text = rout.name
         titleLabel.textColor = rout.routineColor
-        timeLabel.text = routineTotalTime().calctotalRoutineTimeString(rout: rout)
+//        timeLabel.text = routineTotalTime().calctotalRoutineTimeString(rout: rout)
         if edit {
             chevron.isHidden = true
         }
