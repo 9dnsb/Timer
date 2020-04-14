@@ -15,6 +15,6 @@ class switchCell: UITableViewCell {
     @IBOutlet weak var switchSwitch: UISwitch!
     
     @IBAction func switchDetected(_ sender: Any) {
-        print("swtch")
+        
     }
 }

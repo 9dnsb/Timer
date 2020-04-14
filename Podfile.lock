@@ -1,15 +1,19 @@
 PODS:
   - BetterSegmentedControl (1.3.0)
+  - CoreStore (7.1.0)
   - McPicker (2.0.1)
   - MKColorPicker (1.2)
+  - PKHUD (5.3.0)
   - SRCountdownTimer (1.1)
   - SwiftReorder (7.2.0)
   - SwiftyStoreKit (0.15.0)
 
 DEPENDENCIES:
   - BetterSegmentedControl (~> 1.3)
+  - CoreStore (~> 7.0)
   - McPicker
   - MKColorPicker
+  - PKHUD (~> 5.0)
   - SRCountdownTimer
   - SwiftReorder (~> 7.2)
   - SwiftyStoreKit
@@ -17,20 +21,24 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - BetterSegmentedControl
+    - CoreStore
     - McPicker
     - MKColorPicker
+    - PKHUD
     - SRCountdownTimer
     - SwiftReorder
     - SwiftyStoreKit
 
 SPEC CHECKSUMS:
   BetterSegmentedControl: 85d1b0343a09603b098884d527f550dfc8e6cdd9
+  CoreStore: 7bab47bb4189c116ea4491802313613a98c12882
   McPicker: a0a6b8ece8f1642e05401a29867463aba501188b
   MKColorPicker: 8998b2ab977e4f240fdf254db27a18b810da3cfc
+  PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   SRCountdownTimer: 9c92e444b5403c92f01dd6610299b8c634bc8562
   SwiftReorder: d687883abf5f2327268e006b038025a6fc515e34
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
 
-PODFILE CHECKSUM: 6acbdb9b91de2e9fedd2259b036b518e8dce8bb3
+PODFILE CHECKSUM: 0810e6f313c5460419f9b8b4df9ca9335ea442ef
 
 COCOAPODS: 1.9.1

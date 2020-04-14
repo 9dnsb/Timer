@@ -12,6 +12,8 @@ target 'Timer' do
   pod 'McPicker'
   pod 'MKColorPicker'
   pod 'BetterSegmentedControl', '~> 1.3'
+  pod 'CoreStore', '~> 7.0'
+  pod 'PKHUD', '~> 5.0'
 
 
 

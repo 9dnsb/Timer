@@ -31,23 +31,40 @@ class Favourite: NSManagedObject {
      }
 }
 
-struct HighLowInterval {
+struct HighLowInterval: Equatable {
     var firstIntervalHigh: Bool
     var numSets: Int
     var intervalName: String
     var highInterval: IntervalIntensity
     var lowInterval: IntervalIntensity
     var HighLowIntervalColor: UIColor
+    var highLowId: String!
 }
 
-struct IntervalIntensity {
+struct IntervalIntensity: Equatable {
     var duration: Int
     var intervalColor: UIColor
     var sound: sounds = sounds.none
 }
 
 
-struct Routine {
+struct Routine: Equatable {
+    static func == (lhs: Routine, rhs: Routine) -> Bool {
+        let a = lhs.name == rhs.name
+        let b = lhs.type == rhs.type
+        let c = lhs.warmup == rhs.warmup
+        let d = lhs.intervals == rhs.intervals
+        let e = lhs.numCycles == rhs.numCycles
+        let f = lhs.restTime == rhs.restTime
+        let g = lhs.coolDown == rhs.coolDown
+        let h = lhs.routineColor == rhs.routineColor
+
+        if a && b && c && d && e && f && g && h  {
+            return true
+        }
+        return false
+    }
+
     var name: String
     var type: String
     var warmup: IntervalIntensity
@@ -57,7 +74,8 @@ struct Routine {
     var coolDown: IntervalIntensity
     var routineColor: UIColor
     var totalTime: Int
-
+    var routineID: String!
+    var routineIndex: Int!
 
 }
 
@@ -80,8 +98,20 @@ enum intervalOptions: Int {
 
 enum sounds: String, CaseIterable {
     case none = "None"
+    case airhorn = "Air Horn"
+    case alarm = "Alarm"
+    case gong = "Bell2"
+    case churchBell = "Church Bell"
+    case completed = "Completed"
+    case ding = "Ding"
+    case foghorn = "Foghorn"
+    case keysCling = "Keys Clinging"
+    case pencilCheck = "Pencil Check"
+    case phoneVibrate = "Phone Vibration"
     case trainHonk = "Train Honk"
-    case trainWhistle = "Train Whistle x2"
+    case trainHorn = "Train Horn"
+    case trainWhistle = "Train Whistle"
+    case watchAlarm = "Watch Alarm"
 }
 
 extension CaseIterable where Self: Equatable {

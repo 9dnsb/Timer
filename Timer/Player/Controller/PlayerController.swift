@@ -10,9 +10,20 @@ import UIKit
 import SRCountdownTimer
 import AVFoundation
 
+protocol ModalDelegate3 {
+    func getRoutine(value: Routine)
+}
 
 public  typealias PXColor = UIColor
-class PlayerController: UIViewController {
+class PlayerController: UIViewController, ModalDelegate3{
+    func getRoutine(value: Routine) {
+        self.rout = value
+
+
+    }
+
+
+
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var timer: UILabel!
@@ -47,37 +58,13 @@ class PlayerController: UIViewController {
     
     override func viewDidLoad() {
         // playVoice(voice: "This is a test. This is only a test. If this was an actual emergency, then this wouldn’t have been a test.")
-        routArrayPlayer = routineTotalTime().buildArray(rout: rout)
 
-
-        let session = AVAudioSession.sharedInstance()
-
-        try? session.setCategory(.playback, options: .mixWithOthers)
-        try? session.setActive(true, options: [])
-        if timer2 == nil {
-            timer2 = Timer.scheduledTimer(withTimeInterval: 2, repeats: true,
-                                          block: {_ in _ = 0})
-        }
-        if player == nil {
-            player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "blank", withExtension: "wav")!)
-            player?.numberOfLoops = -1
-            player?.play()
-        }
-
-
-
-        model.totalIntervalCycles = rout.intervals.count
-        model.totalCycles = rout.numCycles
-        super.viewDidLoad()
-
-        self.setRemainingTimer()
-        self.changeInterval(runSound: false)
-        // self.playAudioFile()
 
     }
 
+ 
+
     func playVoice(voice: String) {
-        print("HERE")
         speechUtterance = AVSpeechUtterance(string: voice)
         //Line 3. Specify the speech utterance rate. 1 = speaking extremely the higher the values the slower speech patterns. The default rate, AVSpeechUtteranceDefaultSpeechRate is 0.5
         speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.5
@@ -90,7 +77,7 @@ class PlayerController: UIViewController {
     
 
     func setRemainingTimer() {
-        print("rout.totalTime", rout.totalTime)
+        self.rout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: self.routArrayPlayer)
         model.totalTime = rout.totalTime
         model.elapsedTime = 0
         timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
@@ -104,13 +91,13 @@ class PlayerController: UIViewController {
         countdownTimer.lineWidth = 4
         countdownTimer.isLabelHidden = true
 
+
     }
 
 //    @objc func updateRemainingTimer() {
 //    }
 
     @IBAction func forwardInteralButtonClicked(_ sender: Any) {
-        print("forwardInteralButtonClicked")
         self.elapsedRemainingUpdate(timeChange: model.seconds - 1)
         model.seconds = 1
 //        self.updateTimer(toAdd: 1)
@@ -118,91 +105,15 @@ class PlayerController: UIViewController {
     }
 
     @IBAction func backInteralButtonClicked(_ sender: Any) {
-        print("backInteralButtonClicked")
         if currIndex == 0 {
             return
         }
-//        print("forwardInteralButtonClicked")
         self.elapsedRemainingUpdate(timeChange: ((routArrayPlayer[currIndex - 1].interval.duration) * -1) - 1)
                 model.seconds = 1
-        //        self.updateTimer(toAdd: 1)
                 updateTimer(toAdd: -1, playSound: true)
-//        print("currInterval.firstInterval", currInterval.firstInterval)
-//        print("currInterval.currentIntervalSet", currInterval.currentIntervalSet)
-//        print("currInterval.totalIntervalSets", currInterval.totalIntervalSets)
-//        print("model.currentIntervalCycle", model.currentIntervalCycle)
-//        print("model.totalIntervalCycles", model.totalIntervalCycles)
-//
-//        print("model.currentCycle", model.currentCycle)
-//        print("model.totalCycles", model.totalCycles)
-//
-////        print(currInterval.currentIntervalSet)
-//        if (currInterval.currentIntervalSet > 0 && currInterval.firstInterval) {
-//            print("here 11")
-//            currInterval.currentIntervalSet -= 1
-//            // model.seconds += 2
-//            self.backButtonTimeChange()
-//
-//        }
-//
-//        else if (!(currInterval.currentIntervalSet == 0) && !(currInterval.firstInterval)) {
-//            print("here 12")
-//            print(currInterval.currentIntervalSet)
-//            print(model.currentIntervalCycle)
-//            print(currInterval.totalIntervalSets)
-//            print("------")
-//            currInterval.currentIntervalSet += 1
-//            self.backButtonTimeChange()
-//
-//        }
-//        else if !((currInterval.currentIntervalSet == 0) && currInterval.firstInterval) {
-//            print("here 13")
-//            self.backButtonTimeChange()
-//        }
-//        else if ((currInterval.currentIntervalSet == 0) && (currInterval.firstInterval) && (model.currentIntervalCycle > 0)) {
-//            print("here 14")
-//            model.currentIntervalCycle = model.currentIntervalCycle - 1
-//            self.setCurrentIntervalTotalSets()
-//            currInterval.currentIntervalSet = currInterval.totalIntervalSets - 1
-//            self.backButtonTimeChange()
-//        }
-//        else if ((currInterval.currentIntervalSet == 0) && (currInterval.firstInterval) && (model.currentIntervalCycle == 0) && (currInterval.firstInterval) && (model.currentCycle == 0)) {
-//            print("here 15")
-//            // currInterval.currentIntervalSet -= 1
-//            //self.backButtonTimeChange()
-//        }
-//        else if ((currInterval.currentIntervalSet == 0) && (currInterval.firstInterval) && (model.currentIntervalCycle == 0) && (currInterval.firstInterval) && (model.currentCycle > 0) && (model.totalIntervalCycles > 1)) {
-//            print("here 17")
-//            model.currentCycle -= 1
-//
-//
-//            model.currentIntervalCycle = model.totalIntervalCycles - 1
-//            self.setCurrentIntervalTotalSets()
-//            currInterval.currentIntervalSet = currInterval.totalIntervalSets - 1
-////            print(currInterval.currentIntervalSet)
-////            print(model.currentIntervalCycle)
-////            print(currInterval.totalIntervalSets)
-////            print("------")
-//            // currInterval.currentIntervalSet -= 1
-//            self.backButtonTimeChange()
-//        }
-//        else if ((currInterval.currentIntervalSet == 0) && (currInterval.firstInterval) && (model.currentIntervalCycle == 0) && (currInterval.firstInterval) && (model.currentCycle > 0)) {
-//            print("here 16")
-//            model.currentCycle -= 1
-//
-//            currInterval.currentIntervalSet = currInterval.totalIntervalSets - 1
-////            print(currInterval.currentIntervalSet)
-////            print(model.currentIntervalCycle)
-////            print(currInterval.totalIntervalSets)
-////            print("------")
-//            // currInterval.currentIntervalSet -= 1
-//            self.backButtonTimeChange()
-//        }
-
     }
 
     func backButtonTimeChange() {
-        // print("previous second", model.prevSecond)
 
         model.seconds = 1
         self.updateTimer(toAdd: -1)
@@ -231,73 +142,6 @@ class PlayerController: UIViewController {
 
     func setCurrentIntervalTotalSets() {
         currInterval.totalIntervalSets = rout.intervals[model.currentIntervalCycle].numSets
-    }
-
-    func setInitialTimer() {
-        let interval = rout.intervals[model.currentIntervalCycle]
-        // print("interval", interval)
-        self.setCurrentIntervalTotalSets()
-        intervalNameLabel.text = interval.intervalName
-        print("interval.firstIntervalHigh", interval.firstIntervalHigh)
-        print("currInterval.firstInterval", currInterval.firstInterval)
-        print("currInterval.currentIntervalSet", currInterval.currentIntervalSet)
-        if (interval.firstIntervalHigh) && currInterval.firstInterval {
-            print("here 20")
-            self.startInterval(interval: interval.highInterval, isHigh: true)
-
-        }
-        else if (!interval.firstIntervalHigh) && currInterval.firstInterval {
-            print("here 21")
-            self.startInterval(interval: interval.lowInterval, isHigh: false)
-
-        }
-        else if (interval.firstIntervalHigh) && !currInterval.firstInterval {
-            print("here 22")
-            self.startInterval(interval: interval.lowInterval, isHigh: false)
-        }
-//        else if (!interval.firstIntervalHigh) && !currInterval.firstInterval && model.currentIntervalCycle > 1 && currInterval.currentIntervalSet == 0 {
-//            print("here 23")
-//            self.startInterval(interval: interval.lowInterval, isHigh: false)
-//            // currInterval.firstInterval.toggle()
-//
-//        }
-//        else if (!interval.firstIntervalHigh) && currInterval.firstInterval && model.currentIntervalCycle > 1 && currInterval.currentIntervalSet == 0 {
-//            print("here 24")
-//            self.startInterval(interval: interval.highInterval, isHigh: true)
-//            // currInterval.firstInterval.toggle()
-//
-//        }
-        else if (!interval.firstIntervalHigh) && !currInterval.firstInterval {
-            print("here 25")
-            self.startInterval(interval: interval.highInterval, isHigh: true)
-
-        }
-
-
-    }
-
-    func startInterval(interval: IntervalIntensity, isHigh: Bool) {
-        if isHigh {
-            print("starting High")
-            intervalNumberLabel.text = "\(currInterval.currentIntervalSet + 1)/\(rout.intervals[model.currentIntervalCycle].numSets) - high"
-        }
-        else {
-            print("starting Low")
-            intervalNumberLabel.text = "\(currInterval.currentIntervalSet + 1)/\(rout.intervals[model.currentIntervalCycle].numSets) - low"
-        }
-
-        model.seconds = interval.duration
-
-        countdownTimer.start(beginingValue: model.seconds - 0, interval: 1)
-        if self.startButtonModel.resumeTapped {
-            countdownTimer.pause()
-        }
-
-        self.view.backgroundColor = interval.intervalColor
-        topView.backgroundColor = interval.intervalColor
-        bottomView.backgroundColor = interval.intervalColor.darker(amount: 0.2)
-        countdownTimer.backgroundColor = interval.intervalColor.darker(amount: 0.2)
-        timer.text = timeString(time: TimeInterval(interval.duration))
     }
 
     func changeInterval(runSound: Bool = true) {
@@ -364,9 +208,36 @@ class PlayerController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        //let oo = globals().loadCoreData2(rout1: rout)
+        //print("oo", oo)
+        self.currIndex = 0
         self.setNavigationBar()
-        print("being appeared")
+        
+        routArrayPlayer = routineTotalTime().buildArray(rout: rout)
+
+        let session = AVAudioSession.sharedInstance()
+
+        try? session.setCategory(.playback, options: .mixWithOthers)
+        try? session.setActive(true, options: [])
+        if timer2 == nil {
+            timer2 = Timer.scheduledTimer(withTimeInterval: 2, repeats: true,
+                                          block: {_ in _ = 0})
+        }
+        if player == nil {
+            player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "blank", withExtension: "wav")!)
+            player?.numberOfLoops = -1
+            player?.play()
+        }
+
+
+
+        model.totalIntervalCycles = rout.intervals.count
+        model.totalCycles = rout.numCycles
+        super.viewDidLoad()
+
+        self.setRemainingTimer()
+        self.changeInterval(runSound: false)
+        // self.playAudioFile()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -378,20 +249,27 @@ class PlayerController: UIViewController {
         timerClass.invalidate()
         remainingTimer.invalidate()
         timer2?.invalidate()
+        self.stopTimer()
+        countdownTimer.end()
+
     }
 
     @objc func closeButtonClick(){
-        print("closeButtonClick")
         self.navigationController?.popViewController(animated: true)
 
     }
 
     @objc func editButtonClick(){
-        print("editButtonClick")
+
+        if !self.startButtonModel.resumeTapped {
+            print("playing")
+        }
 
         if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
             viewController.rout = rout
+            //viewController.currObjId = rout.objectID
             viewController.title = "Edit Routine"
+            viewController.passClubDelegate = self
 
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
@@ -420,14 +298,17 @@ class PlayerController: UIViewController {
     }
     func playSound() {
         player?.stop()
-        let alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: "Train Honk", ofType: "mp3")!)
-        try! player = AVAudioPlayer(contentsOf: alertSound)
-        player?.prepareToPlay()
-        player?.play()
+        //print("routArrayPlayer[currIndex].interval.sound.rawValue", routArrayPlayer[currIndex].interval.sound.rawValue)
+        if !(routArrayPlayer[currIndex].interval.sound == sounds.none) {
+            let alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: routArrayPlayer[currIndex].interval.sound.rawValue, ofType: "mp3")!)
+            try! player = AVAudioPlayer(contentsOf: alertSound)
+            player?.prepareToPlay()
+            player?.play()
+        }
+
     }
 
     func elapsedRemainingUpdate(timeChange: Int) {
-        // print("time change", timeChange)
         model.totalTime -= timeChange
         timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
         model.elapsedTime += timeChange
@@ -441,92 +322,19 @@ class PlayerController: UIViewController {
     func updateTimer(toAdd: Int, playSound: Bool = true) {
         self.elapsedRemainingUpdate(timeChange: 1)
         if model.seconds < 2 {
-            // end of interval
-            print("here 0")
 
             currIndex += toAdd
             if playSound {
 
             }
             self.changeInterval()
-            //self.timerMinusSecond()
         }
         else {
-            print("here 5")
             self.timerMinusSecond()
         }
 
     }
 
-    func updateTimer2(toAdd: Int) {
-        self.elapsedRemainingUpdate(timeChange: 1)
-        if model.seconds < 2 {
-            // end of interval
-            print("here 0")
-            self.playSound()
-            currInterval.firstInterval.toggle()
-            if currInterval.firstInterval {
-                // end of interval. end of current interval. not end of interval cycle
-                print("here 1")
-                if !((currInterval.currentIntervalSet == 0) && toAdd == -1) {
-                    currInterval.currentIntervalSet += toAdd
-                }
-
-                if currInterval.currentIntervalSet == currInterval.totalIntervalSets {
-                    print("here 2")
-
-                    if !((model.currentIntervalCycle + toAdd) == model.totalIntervalCycles) {
-                        // end of current interval. end of current interval cycle
-                        print("here 2.1")
-                        model.currentIntervalCycle += toAdd
-                        currInterval.currentIntervalSet = 0
-                        currInterval.totalIntervalSets = rout.intervals[model.currentIntervalCycle].numSets
-                        print("rout.intervals[model.currentIntervalCycle]", rout.intervals[model.currentIntervalCycle])
-                        // currInterval.firstInterval = rout.intervals[model.currentIntervalCycle].firstIntervalHigh
-                        print(currInterval.firstInterval)
-                        self.setInitialTimer()
-                    }
-                        
-                    else {
-                        if ((model.currentCycle + toAdd) == model.totalCycles) {
-                            print("here 2.2")
-                            self.timerMinusSecond()
-                            self.startButtonModel.resumeTapped = true
-                            model.currentCycle = 0
-                            currInterval.currentIntervalSet = 0
-                            model.currentIntervalCycle = 0
-                            currInterval.totalIntervalSets = rout.intervals[model.currentIntervalCycle].numSets
-                            timerClass.invalidate()
-
-                            runAlert()
-                        }
-                            
-                        else {
-                            print("here 2.3")
-                            model.currentCycle += toAdd
-                            currInterval.currentIntervalSet = 0
-                            model.currentIntervalCycle = 0
-                            currInterval.totalIntervalSets = rout.intervals[model.currentIntervalCycle].numSets
-                            self.setInitialTimer()
-                        }
-                    }
-                }
-                else {
-                    print("here 3")
-                    self.setInitialTimer()
-                }
-            }
-            else {
-                print("here 4")
-                
-                self.setInitialTimer()
-            }
-        }
-        else {
-            print("here 5")
-            self.timerMinusSecond()
-        }
-    }
 
     func runAlert() {
         let alert = UIAlertController(title: "Completed", message: "You have completed your routine", preferredStyle: .alert)

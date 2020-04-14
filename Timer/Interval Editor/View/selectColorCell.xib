@@ -40,6 +40,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="colorCircle" destination="Xxt-TN-drS" id="kRr-de-Mfy"/>
+                <outlet property="colorLabel" destination="X4V-7z-QAx" id="em8-Jt-gtZ"/>
             </connections>
             <point key="canvasLocation" x="21.739130434782609" y="-46.205357142857139"/>
         </tableViewCell>

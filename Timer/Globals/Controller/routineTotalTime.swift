@@ -58,6 +58,7 @@ public class routineTotalTime  {
             }
             if rout.numCycles > 1 && rout.restTime.duration > 0 {
                 let warmupRout = routArray(interval: IntervalIntensity(duration: rout.restTime.duration, intervalColor: rout.restTime.intervalColor, sound: rout.restTime.sound), currInterval: 999, totalInterval: 999, isHigh: intervalOptions.rest.rawValue, intervalName: "Warm Up")
+                print("ADD REST TIME")
                 routArrayPlayer.append(warmupRout)
             }
         }
@@ -79,8 +80,7 @@ public class routineTotalTime  {
             let warmupRout = routArray(interval: IntervalIntensity(duration: rout.coolDown.duration, intervalColor: rout.coolDown.intervalColor, sound: rout.coolDown.sound), currInterval: 999, totalInterval: 999, isHigh: intervalOptions.cooldown.rawValue, intervalName: "Cool Down")
             routArrayPlayer.append(warmupRout)
         }
-        print(routArrayPlayer)
-        print(routArrayPlayer.count)
+        
         return routArrayPlayer
     }
 

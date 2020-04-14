@@ -1,4 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19D76" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+    <entity name="CDHighLowInterval" representedClassName="CDHighLowInterval" syncable="YES" codeGenerationType="class">
+        <attribute name="cdfirstIntervalHigh" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="cdHighLowId" optional="YES" attributeType="String"/>
+        <attribute name="cdHighLowIntervalColor" optional="YES" attributeType="String"/>
+        <attribute name="cdIntervalIndex" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cdintervalName" optional="YES" attributeType="String"/>
+        <attribute name="cdnumSets" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="highInterval" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDIntervalIntensity" inverseName="ofHighLowisHigh" inverseEntity="CDIntervalIntensity"/>
+        <relationship name="lowInterval" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="CDIntervalIntensity" inverseName="ofHighLowisLow" inverseEntity="CDIntervalIntensity"/>
+        <relationship name="ofRoutine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDRoutine" inverseName="cDHighLowInterval" inverseEntity="CDRoutine"/>
+    </entity>
+    <entity name="CDIntervalIntensity" representedClassName="CDIntervalIntensity" syncable="YES" codeGenerationType="class">
+        <attribute name="cdduration" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cdintervalColor" optional="YES" attributeType="String"/>
+        <attribute name="cdIntervalType" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cdIntIntensId" optional="YES" attributeType="String"/>
+        <attribute name="cdsound" optional="YES" attributeType="String"/>
+        <relationship name="ofCDRoutine" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDRoutine" inverseName="cDIntervalIntensity" inverseEntity="CDRoutine"/>
+        <relationship name="ofcoolDown" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDRoutine" inverseName="coolDown" inverseEntity="CDRoutine"/>
+        <relationship name="ofHighLowisHigh" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDHighLowInterval" inverseName="highInterval" inverseEntity="CDHighLowInterval"/>
+        <relationship name="ofHighLowisLow" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDHighLowInterval" inverseName="lowInterval" inverseEntity="CDHighLowInterval"/>
+        <relationship name="ofrest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDRoutine" inverseName="rest" inverseEntity="CDRoutine"/>
+        <relationship name="ofwarmup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDRoutine" inverseName="warmup" inverseEntity="CDRoutine"/>
+    </entity>
+    <entity name="CDRoutine" representedClassName="CDRoutine" syncable="YES" codeGenerationType="class">
+        <attribute name="cdName" optional="YES" attributeType="String"/>
+        <attribute name="cdNumCycles" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cdRoutineColor" optional="YES" attributeType="String"/>
+        <attribute name="cdRoutineIndex" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cdTotalTime" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cdType" optional="YES" attributeType="String"/>
+        <attribute name="cdUUID" optional="YES" attributeType="String"/>
+        <relationship name="cDHighLowInterval" optional="YES" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CDHighLowInterval" inverseName="ofRoutine" inverseEntity="CDHighLowInterval"/>
+        <relationship name="cDIntervalIntensity" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="CDIntervalIntensity" inverseName="ofCDRoutine" inverseEntity="CDIntervalIntensity"/>
+        <relationship name="coolDown" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDIntervalIntensity" inverseName="ofcoolDown" inverseEntity="CDIntervalIntensity"/>
+        <relationship name="rest" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDIntervalIntensity" inverseName="ofrest" inverseEntity="CDIntervalIntensity"/>
+        <relationship name="warmup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDIntervalIntensity" inverseName="ofwarmup" inverseEntity="CDIntervalIntensity"/>
+    </entity>
+    <elements>
+        <element name="CDHighLowInterval" positionX="-45" positionY="36" width="128" height="178"/>
+        <element name="CDIntervalIntensity" positionX="-36" positionY="54" width="128" height="208"/>
+        <element name="CDRoutine" positionX="-45" positionY="0" width="128" height="223"/>
+    </elements>
 </model>

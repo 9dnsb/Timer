@@ -18,7 +18,6 @@ class soundPicker: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
     var butt : UIButton!
     var player : AVAudioPlayer?
     var labelValue: UILabel?
-    var studentDelegate: ModalDelegate2?
     var intervalVC : IntervalEditorVC?
 
     func initializeButt() {
@@ -48,7 +47,6 @@ class soundPicker: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
     }
 
     @objc func buttonAction(sender: UIButton!) {
-      print("Button tapped")
 
         self.playSound()
     }
@@ -79,7 +77,6 @@ class soundPicker: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
         else {
             butt.isHidden = false
         }
-        print("here10")
         self.intervalVC?.changeValue(value: picker_values[row])
         // myDelegate?.changeValue(value: picker_values[row])
         //interval?.sound = picker_values[row]

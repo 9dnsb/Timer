@@ -10,6 +10,7 @@ import UIKit
 
 class selectColorCell: UITableViewCell {
 
+    @IBOutlet weak var colorLabel: UILabel!
     @IBOutlet weak var colorCircle: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()

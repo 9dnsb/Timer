@@ -9,34 +9,64 @@
 import UIKit
 import McPicker
 import CoreData
+import CoreStore
+import MKColorPicker
+import PKHUD
 
 protocol ModalDelegate {
     func changeValue(value: [IntervalIntensity], highlowInt: HighLowInterval)
 }
 
+protocol SecondVCDelegate {
+    func didFinishSecondVC(controller: RoutineEditorController)
+}
+
 class RoutineEditorController: UIViewController, ModalDelegate {
     @IBOutlet weak var tableView: UITableView!
+    var people: [NSManagedObject] = []
+    var colorPicker = ColorPickerViewController()
+    let dataStack = DataStack(xcodeModelName: "Timer")
     var testValue: String = ""
     var intervalChanged = intervalOptions(rawValue: 0)
     var incomingData:Routine!
+    var currObjId : CDRoutine!
+    var passClubDelegate: ModalDelegate3?
     var presetInterval: HighLowInterval = HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)
     var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
-    var totalSections = 6
-    var indexSection = 2
+    var totalSections = 7
+    var indexSection = 3
     var switchClicked = false
     var colorReceived : UIColor?
     var intervalGettingChanged : IntervalIntensity?
     var intervalChangeIndex = 0
+    var origName = ""
+    var origRout : Routine!
+
+
 
     override func viewDidLoad() {
+
+        self.origName = rout.name
+        let colors = globals().setAllColorsArray()
+        //print("rout.routineIndex", rout.routineIndex!)
+        let count = colors.count - 1
+        let number = Int.random(in: 0 ... count)
+        if rout.name == "" {
+            rout.routineColor = colors[number]
+        }
+        // print("rout.routineID", rout.routineID)
         super.viewDidLoad()
+        do {
+            try dataStack.addStorageAndWait(SQLiteStore())
+
+        }
+        catch { // ...
+            print("error")
+        }
         if rout.numCycles > 1 {
             switchClicked = true
         }
-        print(rout.intervals.count)
         totalSections = totalSections + 1
-        print(totalSections)
-        //print(incomingData!)
         self.tableView.backgroundColor = .systemGroupedBackground
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
 
@@ -48,7 +78,8 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         self.tableView.isEditing = true
         self.tableView.allowsSelectionDuringEditing = true
         self.setNavigationBar()
-
+        self.tableView.register(UINib(nibName: "selectColorCell", bundle: nil), forCellReuseIdentifier: "selectColorCell")
+        origRout = self.rout
     }
 
     func setNavigationBar() {
@@ -69,21 +100,162 @@ class RoutineEditorController: UIViewController, ModalDelegate {
 
     @objc func closeButtonClick(){
         print("closeButtonClick")
-        presentActionSheet()
+        if origRout == rout {
+            print("here 30")
+            self.navigationController?.popViewController(animated: true)
+        }
+        else {
+            print("here 31")
+            presentActionSheet()
+        }
+
+
         //self.disappear()
 
     }
 
-    @objc func saveButton(){
-        print("closeButtonClick")
-        //presentActionSheet(ifSaving: true)
+    func save3() {
+        //print("here5")
+        let dataStack = self.dataStack
+
+        dataStack.perform(
+                    asynchronous: { (transaction) -> Bool in
+                        let person = transaction.create(Into<CDRoutine>())
+                        self.doSaveAction(person: person, transaction: transaction)
+                        return transaction.hasChanges
+                    },
+                    completion: { (result) -> Void in
+                        switch result {
+                        case .success(let hasChanges):
+                            print("success! Has changes? \(hasChanges)")
+                            HUD.flash(.success, delay: 1.0)
+
+                            self.navigationController?.popViewController(animated: true)
+                        case .failure(let error): print(error)
+                        }
+                        //
+                    }
+                )
+    }
+
+    func setHighLow(highLow: CDHighLowInterval, j: Int) {
+        highLow.cdfirstIntervalHigh = self.rout.intervals[j].firstIntervalHigh
+        highLow.cdHighLowIntervalColor = self.rout.intervals[j].HighLowIntervalColor.hexString(.d6)
+        highLow.cdintervalName = self.rout.intervals[j].intervalName
+        highLow.cdnumSets = Int32(self.rout.intervals[j].numSets)
+        highLow.cdIntervalIndex = Int32(j)
+    }
+
+    func doSaveAction(person: CDRoutine, transaction: AsynchronousDataTransaction, isEdit: Bool = false) {
+        //print("here4")
+//        if rout.routineIndex == nil {
+//            do {
+//                let objects = try self.dataStack.fetchAll(From<CDRoutine> ())
+//                rout.routineIndex = objects.count
+//            }
+//            catch {
+//                print("err")
+//            }
+//        }
+        
+        if self.rout.routineID == nil {
+            person.cdUUID = UUID().uuidString
+        }
+        else {
+            person.cdUUID = self.rout.routineID
+        }
+        person.cdName = self.rout.name
+        person.cdNumCycles = Int32(self.rout.numCycles)
+        person.cdRoutineColor = self.rout.routineColor.hexString(.d6)
+        //print("self.rout.routineIndex", self.rout.routineIndex)
+        person.cdRoutineIndex = Int32(self.rout.routineIndex)
+    for (j, _) in self.rout.intervals.enumerated() {
+
+        let highLow = transaction.create(Into<CDHighLowInterval>())
+        self.setHighLow(highLow: highLow, j: j)
+
+        highLow.lowInterval = self.addHighLowCD(transaction: transaction, interval: self.rout.intervals[j].lowInterval)
+        highLow.highInterval = self.addHighLowCD(transaction: transaction, interval: self.rout.intervals[j].highInterval)
+        person.addToCDHighLowInterval(highLow)
+        person.warmup = self.addHighLowCD(transaction: transaction, interval: self.rout.warmup)
+        person.rest = self.addHighLowCD(transaction: transaction, interval: self.rout.restTime)
+        person.coolDown = self.addHighLowCD(transaction: transaction, interval: self.rout.coolDown)
+
+    }
+    }
+
+    func saveData2() {
+
+        let dataStack = self.dataStack
+        dataStack.perform(
+            asynchronous: { (transaction) -> Void in
+                let person = try transaction.fetchOne(
+                    From<CDRoutine>()
+                        .where(\.cdUUID == self.rout.routineID)
+                )
+                
+                let sr = SaveRoutine()
+                sr.dataStack = dataStack
+                sr.rout = self.rout
+                if person == nil {
+                    //print("here1")
+
+                    sr.save3()
+                }
+                else {
+                    //print("here2")
+                    transaction.delete(person)
+                    sr.save3()
+
+                }
+            },
+
+            completion: { (result) in
+                switch result {
+                case .success:
+                    HUD.flash(.success, delay: 1.0)
+                    //print("Done")
+                    //self.navigationController?.popViewController(animated: true)
+
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // Change `2.0` to the desired number of seconds. // Code you want to be delayed }
+                        self.passClubDelegate?.getRoutine(value: self.rout)
+
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                case .failure(let error):
+                    //print("here3")
+                    print(error)
+                    //self.save3()
+                }
+            }
+
+        )
 
 
     }
 
-    @objc func buttonAction(sender: UIButton!) {
-      print("Button tapped")
-        //self.playSound()
+    func addHighLowCD(transaction: AsynchronousDataTransaction, interval: IntervalIntensity, isEdit: Bool = false) -> CDIntervalIntensity {
+        let cd = transaction.create(Into<CDIntervalIntensity>())
+        cd.cdduration = Int32(interval.duration)
+        cd.cdintervalColor = interval.intervalColor.hexString(.d6)
+        cd.cdsound = interval.sound.rawValue
+        return cd
+
+    }
+
+    @objc func saveButton(){
+        tableView.reloadData()
+        print("closeButtonClick")
+        self.saveData2()
+
+
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+
     }
 
     func presentActionSheet(ifSaving: Bool = false) {
@@ -116,8 +288,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
 
     func changeValue(value: [IntervalIntensity], highlowInt: HighLowInterval) {
-//        print("value", value)
-//        print("intervalChanged", intervalChanged)
+
         if intervalChanged == intervalOptions.warmUp {
             rout.warmup = value[0]
         }
@@ -128,33 +299,29 @@ class RoutineEditorController: UIViewController, ModalDelegate {
             rout.restTime = value[0]
         }
         if intervalChanged == intervalOptions.highLowInt {
-            print("change1")
             rout.intervals[intervalChangeIndex] = highlowInt
             if rout.intervals[intervalChangeIndex].firstIntervalHigh {
-                print("change2")
 
                 rout.intervals[intervalChangeIndex].highInterval = value[0]
                 rout.intervals[intervalChangeIndex].lowInterval = value[1]
 
             }
             else{
-                print("change3")
                 rout.intervals[intervalChangeIndex].highInterval = value[1]
                 rout.intervals[intervalChangeIndex].lowInterval = value[0]
             }
         }
-        print(rout.intervals[intervalChangeIndex].lowInterval.intervalColor)
         //rout.warmup.intervalColor = value
         tableView.beginUpdates()
         tableView.endUpdates()
         tableView.reloadData()
-         //print(testValue)
-        //print("HERE")
+
     }
 
     @objc func dismissKeyboard() {
         //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
+
     }
 
     func ifIntervalSectionsStart(indexP: IndexPath, row: Int) -> Bool {
@@ -167,24 +334,32 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
 
     @objc private func switchValueDidChange(_ sender: UISwitch) { // needed to treat switch changes as if the cell was selected/unselected
-        print("switch")
-        // let rowPoint = sender.convert(sender.bounds.origin, to: self.tableView)
-        //let indexPath = self.tableView.indexPathForRow(at: rowPoint)
-        //print(indexPath)
+
         switchClicked.toggle()
         if !switchClicked {
             rout.numCycles = 1
+        }
+        else {
+            rout.numCycles = 2
         }
         globals().animationTableChange(tableView: self.tableView)
 
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    func textField(_ textField: UITextField,
+        shouldChangeCharactersIn range: NSRange,
+        replacementString string: String) -> Bool {
 
-        print("being appeared editor")
+        //print("Event Triggered")
+        return true
     }
 
+
+    @objc func textFieldDidChange(textField: UITextField){
+
+        //print("Text changed")
+        rout.name = textField.text!
+    }
 
     
 
@@ -203,7 +378,10 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
     else if section == 1 {
         return 1
     }
-    if section == 2 {
+    else if section == 2 {
+        return 1
+    }
+    if section == indexSection {
         return rout.intervals.count
     }
     else if section == totalSections - 4 {
@@ -230,29 +408,31 @@ func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> 
     return 1
 }
 func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    print("hererr")
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell1") as! inputTextCell
-    print(cell.returnInputString())
     if cell.returnInputString() != "" {
-        print("here1")
         rout.name = cell.returnInputString()
     }
-    print("rout.name1", rout.name)
     if (indexPath.section == 0) && indexPath.row == 0{
-        print("here2")
-        print("rout.name", rout.name)
         cell.inputString.text = rout.name
+        cell.inputString.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+
         return cell
     }
     let cell2 = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
-    if indexPath.section == (1) && indexPath.row == 0 {
+    if indexPath.section == (2) && indexPath.row == 0 {
         cell2.intervalName.text = "Warm Up"
         cell2.setImageColor(color: rout.warmup.intervalColor)
         cell2.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.warmup.duration)))
         return cell2
     }
+    let cell27 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
+    if indexPath.section == (1) && indexPath.row == 0 {
+        cell27.colorLabel.text = "Routine Color"
+        cell27.colorCircle.tintColor = rout.routineColor
+        return cell27
+    }
     let cell24 = tableView.dequeueReusableCell(withIdentifier: "mainCell") as! mainCell
-    if indexPath.section == (2)  {
+    if indexPath.section == (indexSection)  {
         cell24.setEditing(true, animated: true)
         cell24.contentView.frame = cell24.contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
         cell24.intervalName.text = rout.intervals[indexPath.row].intervalName
@@ -281,43 +461,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
         }
         return cell24
     }
-//    if self.ifIntervalSectionsStart(indexP: indexPath, row: 0)  {
-//        print("here1")
-//        let currInterval = self.getCurrInterval(indexP: indexPath)
-//        cell2.setImageColor(color: .systemRed)
-//        cell2.intervalName.text = currInterval.intervalName
-//        cell2.totalTime.text = "\(currInterval.numSets) Sets"
-//        //cell2.setImageColor(color: rout.intervals[currIndexPath].) =
-//        return cell2
-//    }
-//    let cell22 = tableView.dequeueReusableCell(withIdentifier: "lowHighCell") as! lowHighCell
-//    if self.ifIntervalSectionsStart(indexP: indexPath, row: 1) {
-//        print("here2")
-//        let currInterval = self.getCurrInterval(indexP: indexPath)
-//        if (currInterval.firstIntervalHigh) {
-//            cell22.leftLabelName.text = "High"
-//            cell22.rightLabelName.text = "Low"
-//            cell22.leftLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.highInterval.duration)))
-//            cell22.rightLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.lowInterval.duration)))
-//            cell22.leftLabelName.textColor = currInterval.highInterval.intervalColor
-//            cell22.leftLabelValue.textColor = currInterval.highInterval.intervalColor
-//            cell22.rightLabelName.textColor = currInterval.lowInterval.intervalColor
-//            cell22.rightLabelValue.textColor = currInterval.lowInterval.intervalColor
-//
-//        }
-//        else {
-//            cell22.leftLabelName.text = "Low"
-//            cell22.rightLabelName.text = "High"
-//            cell22.leftLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.lowInterval.duration)))
-//            cell22.rightLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.highInterval.duration)))
-//            cell22.leftLabelName.textColor = currInterval.lowInterval.intervalColor
-//            cell22.leftLabelValue.textColor = currInterval.lowInterval.intervalColor
-//            cell22.rightLabelName.textColor = currInterval.highInterval.intervalColor
-//            cell22.rightLabelValue.textColor = currInterval.highInterval.intervalColor
-//        }
-//
-//        return cell22
-//    }
+
     let cell3 = tableView.dequeueReusableCell(withIdentifier: "addNewCycle") as! addNewCycleCell
     if indexPath.section == totalSections - 4 {
         return cell3
@@ -339,7 +483,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     if indexPath.section == totalSections - 3 && indexPath.row == 1 {
         cell2.theImage.isHidden = true
         cell2.totalTime.text = "2"
-        cell2.setIntervalName(intervalName: "Number of Cycles")
+        cell2.setIntervalName(intervalName: "Number of Routine Cycles")
         if rout.numCycles > 1 {
             cell2.totalTime.text = String(rout.numCycles)
         }
@@ -365,23 +509,33 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        // print("section: \(indexPath.section)")
-        // print("row: \(indexPath.row)")
-        if indexPath.section == totalSections - 4 {
+        if indexPath.section == 1 {
+            self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
+
+            self.present(colorPicker, animated: true, completion: nil)
+            colorPicker.selectedColor = { color in
+                self.rout.routineColor = color
+                print(color)
+                print(self.rout.routineColor)
+                self.tableView.reloadData()
+            }
+        }
+
+        if indexPath.section == indexSection + 1 {
             // totalSections += 1
             presetInterval.intervalName = "Interval Cycle #\(rout.intervals.count + 1)"
             rout.intervals.append(presetInterval)
             // let indexSet = IndexSet(integer: rout.intervals.count)
             tableView.performBatchUpdates({
                 // tableView.insertSections(indexSet, with: .none)
-                tableView.insertRows(at: [IndexPath(row: rout.intervals.count - 1, section: 2)], with: .none)
+                tableView.insertRows(at: [IndexPath(row: rout.intervals.count - 1, section: indexSection)], with: .none)
             }) { (update) in
                 print("Update SUccess1")
                 //self.tableView.setEditing(true, animated: true)
             }
         }
 
-        if indexPath.section == 1 {
+        if indexPath.section == indexSection - 1 {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
@@ -418,12 +572,23 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             let mcPicker = McPicker(data: stringArray)
 
 
-            mcPicker.backgroundColor = .secondarySystemGroupedBackground
-            mcPicker.pickerBackgroundColor = .secondarySystemGroupedBackground
-            mcPicker.pickerSelectRowsForComponents = [
-                0: [rout.numCycles: true],
+            globals().setMcPickerDetails(mcPicker: mcPicker)
+            if rout.numCycles == 2 {
 
-            ]
+            }
+            else if rout.numCycles == 3 {
+                mcPicker.pickerSelectRowsForComponents = [
+                    0: [rout.numCycles - 2: true],
+
+                ]
+            }
+            else if rout.numCycles > 3 {
+                mcPicker.pickerSelectRowsForComponents = [
+                    0: [rout.numCycles - 2: true],
+
+                ]
+            }
+
 
 
             mcPicker.show(doneHandler: { [weak self] (selections: [Int : String]) -> Void in
@@ -434,14 +599,12 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
             }, cancelHandler: {
                 print("Canceled Styled Picker")
             }, selectionChangedHandler: { (selections: [Int:String], componentThatChanged: Int) -> Void  in
-                let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
-                print("Component \(componentThatChanged) changed value to \(newSelection)")
-
+                //let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
+                
             })
         }
 
-        if indexPath.section == 2 {
-            print("section2")
+        if indexPath.section == indexSection {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
@@ -503,7 +666,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
         if indexPath.section == totalSections - 2 && !switchClicked {
             return 0
         }
-        if indexPath.section == 2 {
+        if indexPath.section == indexSection {
             return 84.5
         }
         return tableView.rowHeight
@@ -511,23 +674,84 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
 
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
 
-        if indexPath.section == 2 && editingStyle == .delete && rout.intervals.count > 1 {
-        print("Deleted")
-        print(indexPath.section - indexSection)
-            print(indexPath.section)
-            print(indexSection)
-            rout.intervals.remove(at: indexPath.row)
-            let indexSet = IndexSet(integer: indexPath.section)
-            // totalSections -= 1
-            print(indexSet)
-            // self.tableView.deleteSections(indexSet, with: .none)
-            self.tableView.deleteRows(at: [indexPath], with: .none)
+        if indexPath.section == indexSection && editingStyle == .delete && rout.intervals.count > 1 {
+
+            //self.tableView.deleteRows(at: [indexPath], with: .none)
+            let alert = UIAlertController(title: "Are you sure you want to delete this interval? This can't be undone", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { action in
+                  switch action.style{
+                  case .default:
+                        print("default")
+
+                  case .cancel:
+                        print("cancel")
+
+                  case .destructive:
+                        print("destructive")
+                        self.rout.intervals.remove(at: indexPath.row)
+                        self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//                    do {
+//                        try self.dataStack.addStorageAndWait(SQLiteStore())
+//
+//                    }
+//                    catch { // ...
+//                        print("error")
+//                    }
+//                    do {
+//                        let objects = try self.dataStack.fetchAll(From<CDHighLowInterval> ())
+//                        self.dataStack.perform(
+//                            asynchronous: { (transaction) -> Void in
+//                                transaction.delete(objects[indexPath.row])
+//                            },
+//
+//                            completion: { (result) in
+//                                switch result {
+//                                case .success:
+//                                    print("succes")
+//                                    self.rout.intervals.remove(at: indexPath.row)
+//                                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
+//                                                                   // self.tableView.reloadData()
+//                                case .failure(let error):
+//                                    //print("here3")
+//                                    print(error)
+//                                    //self.save3()
+//                                }
+//                            }
+//
+//
+//
+//                        )
+//                    }
+//                    catch {
+//                        print("error")
+//                    }
+//
+
+                  @unknown default:
+                    print("error")
+                }}))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { action in
+                  switch action.style{
+                  case .default:
+                        print("default")
+
+                  case .cancel:
+                        print("cancel")
+
+                  case .destructive:
+                        print("destructive")
+
+
+                  @unknown default:
+                    print("error")
+                }}))
+            self.present(alert, animated: true, completion: nil)
 
       }
     }
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
     {
-        if indexPath.section == 2 && rout.intervals.count > 1 {
+        if indexPath.section == indexSection && rout.intervals.count > 1 {
         return UITableViewCell.EditingStyle.delete
         } else {
 
@@ -543,7 +767,7 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     }
 
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == 2 && rout.intervals.count > 1 {
+        if indexPath.section == indexSection && rout.intervals.count > 1 {
             return true
         }
         return false
@@ -576,9 +800,61 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
     
 
 func numberOfSections(in tableView: UITableView) -> Int {
-    print("totalSections", totalSections)
     return totalSections
 }
 
 
+}
+
+extension UIColor {
+    enum HexFormat {
+        case RGB
+        case ARGB
+        case RGBA
+        case RRGGBB
+        case AARRGGBB
+        case RRGGBBAA
+    }
+
+    enum HexDigits {
+        case d3, d4, d6, d8
+    }
+
+    func hexString(_ format: HexFormat = .RRGGBBAA) -> String {
+        let maxi = [.RGB, .ARGB, .RGBA].contains(format) ? 16 : 256
+
+        func toI(_ f: CGFloat) -> Int {
+            return min(maxi - 1, Int(CGFloat(maxi) * f))
+        }
+
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+
+        self.getRed(&r, green: &g, blue: &b, alpha: &a)
+
+        let ri = toI(r)
+        let gi = toI(g)
+        let bi = toI(b)
+        let ai = toI(a)
+
+        switch format {
+        case .RGB:       return String(format: "#%X%X%X", ri, gi, bi)
+        case .ARGB:      return String(format: "#%X%X%X%X", ai, ri, gi, bi)
+        case .RGBA:      return String(format: "#%X%X%X%X", ri, gi, bi, ai)
+        case .RRGGBB:    return String(format: "#%02X%02X%02X", ri, gi, bi)
+        case .AARRGGBB:  return String(format: "#%02X%02X%02X%02X", ai, ri, gi, bi)
+        case .RRGGBBAA:  return String(format: "#%02X%02X%02X%02X", ri, gi, bi, ai)
+        }
+    }
+
+    func hexString(_ digits: HexDigits) -> String {
+        switch digits {
+        case .d3: return hexString(.RGB)
+        case .d4: return hexString(.RGBA)
+        case .d6: return hexString(.RRGGBB)
+        case .d8: return hexString(.RRGGBBAA)
+        }
+    }
 }

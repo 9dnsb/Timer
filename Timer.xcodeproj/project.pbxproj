@@ -34,10 +34,23 @@
 		634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CFC242668AB0011B9ED /* PlayerView.storyboard */; };
 		634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5D022426944D0011B9ED /* routineTotalTime.swift */; };
 		638E96C1242C01C300A8626C /* blank.wav in Resources */ = {isa = PBXBuildFile; fileRef = 638E96C0242C01C300A8626C /* blank.wav */; };
+		63B24DA92445444B00EC48F3 /* Train Whistle.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D992445444200EC48F3 /* Train Whistle.mp3 */; };
+		63B24DAA2445444B00EC48F3 /* Alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9A2445444200EC48F3 /* Alarm.mp3 */; };
+		63B24DAB2445444B00EC48F3 /* Train Horn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9B2445444300EC48F3 /* Train Horn.mp3 */; };
+		63B24DAC2445444B00EC48F3 /* Ding.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9C2445444300EC48F3 /* Ding.mp3 */; };
+		63B24DAD2445444B00EC48F3 /* Watch Alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9D2445444400EC48F3 /* Watch Alarm.mp3 */; };
+		63B24DAE2445444B00EC48F3 /* Train Honk.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9E2445444400EC48F3 /* Train Honk.mp3 */; };
+		63B24DAF2445444B00EC48F3 /* Church Bell.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9F2445444500EC48F3 /* Church Bell.mp3 */; };
+		63B24DB02445444B00EC48F3 /* Keys Clinging.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA02445444500EC48F3 /* Keys Clinging.mp3 */; };
+		63B24DB12445444B00EC48F3 /* Completed.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA12445444600EC48F3 /* Completed.mp3 */; };
+		63B24DB22445444B00EC48F3 /* Foghorn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA22445444700EC48F3 /* Foghorn.mp3 */; };
+		63B24DB32445444B00EC48F3 /* Pencil Check.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA32445444700EC48F3 /* Pencil Check.mp3 */; };
+		63B24DB42445444B00EC48F3 /* Phone Vibration.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA42445444800EC48F3 /* Phone Vibration.mp3 */; };
+		63B24DB52445444B00EC48F3 /* Bell2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA52445444900EC48F3 /* Bell2.mp3 */; };
+		63B24DB62445444C00EC48F3 /* Police Siren.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA62445444A00EC48F3 /* Police Siren.mp3 */; };
+		63B24DB82445444C00EC48F3 /* Air Horn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA82445444B00EC48F3 /* Air Horn.mp3 */; };
 		63B61E7A242788C300CDAD88 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E79242788C300CDAD88 /* Globals.swift */; };
 		63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E7B2427A14200CDAD88 /* PlayerModel.swift */; };
-		63B61E7F2428DA9400CDAD88 /* Train Honk.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B61E7E2428DA9400CDAD88 /* Train Honk.mp3 */; };
-		63B61E812428DC0500CDAD88 /* Train Whistle x2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B61E802428DC0500CDAD88 /* Train Whistle x2.mp3 */; };
 		63B8589324314C7C007FF6AA /* switchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8589224314C7C007FF6AA /* switchCell.swift */; };
 		63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63BC9A9F2422E8960010C81F /* SettingView.storyboard */; };
 		63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BC9AA12422F1B10010C81F /* SettingsController.swift */; };
@@ -52,6 +65,7 @@
 		63C7CCCE2422C0B700960513 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCCD2422C0B700960513 /* TimerTests.swift */; };
 		63C7CCD92422C0B700960513 /* TimerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C7CCD82422C0B700960513 /* TimerUITests.swift */; };
 		63E76E402425206700AA6814 /* RoutineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E76E3F2425206700AA6814 /* RoutineCell.swift */; };
+		63EEB01124412DCB0013B5A6 /* SaveRoutine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EEB01024412DCB0013B5A6 /* SaveRoutine.swift */; };
 		C4CF13EFB72D343B39504771 /* Pods_Timer_TimerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5E7E89F825F2BF9852C1448 /* Pods_Timer_TimerUITests.framework */; };
 		D09765643DB15C07FF65C05C /* Pods_TimerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FC5C97EFD85B66AA8E4E9A /* Pods_TimerTests.framework */; };
 /* End PBXBuildFile section */
@@ -105,10 +119,23 @@
 		634E5D022426944D0011B9ED /* routineTotalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routineTotalTime.swift; sourceTree = "<group>"; };
 		638E96C0242C01C300A8626C /* blank.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = blank.wav; sourceTree = "<group>"; };
 		638E96C3242C04BF00A8626C /* test.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.aif; sourceTree = "<group>"; };
+		63B24D992445444200EC48F3 /* Train Whistle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Whistle.mp3"; sourceTree = "<group>"; };
+		63B24D9A2445444200EC48F3 /* Alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Alarm.mp3; sourceTree = "<group>"; };
+		63B24D9B2445444300EC48F3 /* Train Horn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Horn.mp3"; sourceTree = "<group>"; };
+		63B24D9C2445444300EC48F3 /* Ding.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Ding.mp3; sourceTree = "<group>"; };
+		63B24D9D2445444400EC48F3 /* Watch Alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Watch Alarm.mp3"; sourceTree = "<group>"; };
+		63B24D9E2445444400EC48F3 /* Train Honk.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Honk.mp3"; sourceTree = "<group>"; };
+		63B24D9F2445444500EC48F3 /* Church Bell.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Church Bell.mp3"; sourceTree = "<group>"; };
+		63B24DA02445444500EC48F3 /* Keys Clinging.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Keys Clinging.mp3"; sourceTree = "<group>"; };
+		63B24DA12445444600EC48F3 /* Completed.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Completed.mp3; sourceTree = "<group>"; };
+		63B24DA22445444700EC48F3 /* Foghorn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Foghorn.mp3; sourceTree = "<group>"; };
+		63B24DA32445444700EC48F3 /* Pencil Check.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Pencil Check.mp3"; sourceTree = "<group>"; };
+		63B24DA42445444800EC48F3 /* Phone Vibration.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Phone Vibration.mp3"; sourceTree = "<group>"; };
+		63B24DA52445444900EC48F3 /* Bell2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Bell2.mp3; sourceTree = "<group>"; };
+		63B24DA62445444A00EC48F3 /* Police Siren.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Police Siren.mp3"; sourceTree = "<group>"; };
+		63B24DA82445444B00EC48F3 /* Air Horn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Air Horn.mp3"; sourceTree = "<group>"; };
 		63B61E79242788C300CDAD88 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		63B61E7B2427A14200CDAD88 /* PlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
-		63B61E7E2428DA9400CDAD88 /* Train Honk.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Honk.mp3"; sourceTree = "<group>"; };
-		63B61E802428DC0500CDAD88 /* Train Whistle x2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Whistle x2.mp3"; sourceTree = "<group>"; };
 		63B8589224314C7C007FF6AA /* switchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = switchCell.swift; sourceTree = "<group>"; };
 		63BC9A9F2422E8960010C81F /* SettingView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SettingView.storyboard; sourceTree = "<group>"; };
 		63BC9AA12422F1B10010C81F /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
@@ -129,6 +156,7 @@
 		63C7CCD82422C0B700960513 /* TimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerUITests.swift; sourceTree = "<group>"; };
 		63C7CCDA2422C0B700960513 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63E76E3F2425206700AA6814 /* RoutineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCell.swift; sourceTree = "<group>"; };
+		63EEB01024412DCB0013B5A6 /* SaveRoutine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveRoutine.swift; sourceTree = "<group>"; };
 		6E893264AC50A0A294F2D04D /* Pods_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5E7E89F825F2BF9852C1448 /* Pods_Timer_TimerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer_TimerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7410C30DD56E76FE702495A /* Pods-Timer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.debug.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -312,6 +340,7 @@
 			children = (
 				634E5D022426944D0011B9ED /* routineTotalTime.swift */,
 				63B61E79242788C300CDAD88 /* Globals.swift */,
+				63EEB01024412DCB0013B5A6 /* SaveRoutine.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -334,8 +363,21 @@
 		63B61E7D2428DA7A00CDAD88 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
-				63B61E7E2428DA9400CDAD88 /* Train Honk.mp3 */,
-				63B61E802428DC0500CDAD88 /* Train Whistle x2.mp3 */,
+				63B24DA82445444B00EC48F3 /* Air Horn.mp3 */,
+				63B24D9A2445444200EC48F3 /* Alarm.mp3 */,
+				63B24DA52445444900EC48F3 /* Bell2.mp3 */,
+				63B24D9F2445444500EC48F3 /* Church Bell.mp3 */,
+				63B24DA12445444600EC48F3 /* Completed.mp3 */,
+				63B24D9C2445444300EC48F3 /* Ding.mp3 */,
+				63B24DA22445444700EC48F3 /* Foghorn.mp3 */,
+				63B24DA02445444500EC48F3 /* Keys Clinging.mp3 */,
+				63B24DA32445444700EC48F3 /* Pencil Check.mp3 */,
+				63B24DA42445444800EC48F3 /* Phone Vibration.mp3 */,
+				63B24DA62445444A00EC48F3 /* Police Siren.mp3 */,
+				63B24D9E2445444400EC48F3 /* Train Honk.mp3 */,
+				63B24D9B2445444300EC48F3 /* Train Horn.mp3 */,
+				63B24D992445444200EC48F3 /* Train Whistle.mp3 */,
+				63B24D9D2445444400EC48F3 /* Watch Alarm.mp3 */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -587,21 +629,34 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63B24DB22445444B00EC48F3 /* Foghorn.mp3 in Resources */,
 				63C7CCC32422C0B700960513 /* LaunchScreen.storyboard in Resources */,
+				63B24DAB2445444B00EC48F3 /* Train Horn.mp3 in Resources */,
 				638E96C1242C01C300A8626C /* blank.wav in Resources */,
-				63B61E812428DC0500CDAD88 /* Train Whistle x2.mp3 in Resources */,
 				631C0C672434AD1700C06AD2 /* basicLabelCell.xib in Resources */,
+				63B24DB82445444C00EC48F3 /* Air Horn.mp3 in Resources */,
 				63C7CCC02422C0B700960513 /* Assets.xcassets in Resources */,
+				63B24DAF2445444B00EC48F3 /* Church Bell.mp3 in Resources */,
+				63B24DAE2445444B00EC48F3 /* Train Honk.mp3 in Resources */,
+				63B24DB52445444B00EC48F3 /* Bell2.mp3 in Resources */,
 				631C0C752435212900C06AD2 /* picker.xib in Resources */,
 				63C7CCBB2422C0B200960513 /* Main.storyboard in Resources */,
-				63B61E7F2428DA9400CDAD88 /* Train Honk.mp3 in Resources */,
+				63B24DAA2445444B00EC48F3 /* Alarm.mp3 in Resources */,
 				631C0C6D2434B53500C06AD2 /* selectColorCell.xib in Resources */,
+				63B24DA92445444B00EC48F3 /* Train Whistle.mp3 in Resources */,
+				63B24DB42445444B00EC48F3 /* Phone Vibration.mp3 in Resources */,
+				63B24DB02445444B00EC48F3 /* Keys Clinging.mp3 in Resources */,
 				634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */,
+				63B24DB32445444B00EC48F3 /* Pencil Check.mp3 in Resources */,
 				63171650242F91AF00BC4F7E /* RoutineEditorView.storyboard in Resources */,
+				63B24DB62445444C00EC48F3 /* Police Siren.mp3 in Resources */,
 				631B45A32438B4A7008F61EB /* segmentCell.xib in Resources */,
 				63BC9AA02422E8960010C81F /* SettingView.storyboard in Resources */,
+				63B24DAC2445444B00EC48F3 /* Ding.mp3 in Resources */,
+				63B24DB12445444B00EC48F3 /* Completed.mp3 in Resources */,
 				631C0C652434ABF700C06AD2 /* IntervalEditorVC.storyboard in Resources */,
 				631C0C712434EC6400C06AD2 /* basicRightLabelCell.xib in Resources */,
+				63B24DAD2445444B00EC48F3 /* Watch Alarm.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -734,6 +789,7 @@
 				63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */,
 				63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */,
 				634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */,
+				63EEB01124412DCB0013B5A6 /* SaveRoutine.swift in Sources */,
 				6317165B242FD65D00BC4F7E /* addNewCycleCell.swift in Sources */,
 				63C7CCB42422C0B200960513 /* AppDelegate.swift in Sources */,
 				631C0C702434EC6400C06AD2 /* basicRightLabelCell.swift in Sources */,

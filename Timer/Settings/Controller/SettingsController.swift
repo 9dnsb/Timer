@@ -32,7 +32,6 @@ class SettingsController: UITableViewController {
 
     // MARK: - Table view data source
     @objc func logoutUser(){
-         print("clicked")
         self.dismiss(animated: true, completion: nil)
     }
     override func numberOfSections(in tableView: UITableView) -> Int {
