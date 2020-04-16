@@ -11,46 +11,47 @@ import UIKit
 import MKColorPicker
 import McPicker
 import CoreStore
+import AVFoundation
 
 public class globals  {
     var dataStack = DataStack(xcodeModelName: "Timer")
     func setAllArrays(rout: Routine) -> [Int] {
-
+        
         return [0]
     }
-
+    
     func timeString(time:TimeInterval) -> String {
-
+        
         let minutes = Int(time) / 60
         let seconds = Int(time)  % 3600 % 60
         return String(format: "%02i:%02i ", minutes, seconds)
     }
-
+    
     func secondsToHoursMinutesSeconds (seconds : Int) -> (Int, Int, Int) {
-      return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
+        return (seconds / 3600, (seconds % 3600) / 60, (seconds % 3600) % 60)
     }
-
+    
     func keyboardClick(view: UIView) {
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
-
+        
         //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
         //tap.cancelsTouchesInView = false
-
+        
         view.addGestureRecognizer(tap)
         tap.cancelsTouchesInView = false
     }
-
+    
     func animationTableChange(tableView: UITableView) {
         UIView.transition(with: tableView,
-        duration: 0.2,
-        options: .transitionCrossDissolve,
-        animations: { tableView.reloadData() })
+                          duration: 0.2,
+                          options: .transitionCrossDissolve,
+                          animations: { tableView.reloadData() })
     }
-
+    
     func setAllColorsArray() -> [UIColor] {
         return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemIndigo, .systemPurple]
     }
-
+    
     func createColorPopover(tableView: UITableView, indexPath: IndexPath) -> ColorPickerViewController{
         let colorPicker = ColorPickerViewController()
         if let popoverController = colorPicker.popoverPresentationController{
@@ -62,29 +63,29 @@ public class globals  {
             //            popoverVC.delegate = self
             popoverController.sourceView = tableView
             popoverController.sourceRect = tableView.cellForRow(at: indexPath)!.frame
-
+            
         }
         return colorPicker
     }
-
+    
     func setMcPickerDetails(mcPicker: McPicker) {
         mcPicker.backgroundColor = .secondarySystemGroupedBackground
         mcPicker.pickerBackgroundColor = .secondarySystemGroupedBackground
         mcPicker.toolbarBarTintColor = .systemGroupedBackground
     }
-
+    
     func loadCoreData2(rout1: Routine) {
         let dataStack = self.dataStack
         do {
             try dataStack.addStorageAndWait(SQLiteStore())
-
+            
         }
         catch { // ...
             print("error")
         }
         do {
-
-
+            
+            
             dataStack.perform(
                 asynchronous: { (transaction) -> Routine in
                     let i : CDRoutine = try transaction.fetchOne(
@@ -97,7 +98,7 @@ public class globals  {
                     //print("i", i)
                     //rout.objectID = i
                     //print(i.cdName)
-
+                    
                     rout.name = i.cdName!
                     rout.numCycles = Int(i.cdNumCycles)
                     rout.routineColor =  hexStringToUIColor(hex: i.cdRoutineColor!)
@@ -108,8 +109,8 @@ public class globals  {
                     rout.coolDown = self.setIntIntesity(cdInt: i.coolDown!)
                     rout.routineID = i.cdUUID!
                     rout.routineIndex = Int(i.cdRoutineIndex)
-
-
+                    
+                    
                     for (j, elem) in i.cDHighLowInterval!.enumerated() {
                         //print("j", j)
                         let elem = elem as! CDHighLowInterval
@@ -127,29 +128,48 @@ public class globals  {
                         return rout
                     }
                     return rout
-                },
-
+            },
+                
                 completion: { _ in
-
+                    
             }
             )
-
-
-
-
-
-        }
-        catch { // ...
-            print("error")
+            
+            
+            
+            
+            
         }
     }
-
+    
     func setIntIntesity(cdInt: CDIntervalIntensity) -> IntervalIntensity {
         let x = IntervalIntensity(duration: Int(cdInt.cdduration), intervalColor: hexStringToUIColor(hex: cdInt.cdintervalColor!), sound: sounds(rawValue: cdInt.cdsound!)!)
-
+        
         return x
     }
 
-    
+    func playSound(sound: String, setSession: Bool = true) -> AVAudioPlayer{
+        var player2 = AVAudioPlayer()
+        if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false || sound == sounds.none.rawValue {
+            //print("is false")
+            return player2
+        }
+        //print("playSound")
+        if setSession {
+            let session = AVAudioSession.sharedInstance()
+            try? session.setCategory(.playback, options: .mixWithOthers)
+            try? session.setActive(true, options: [])
+        }
+        let alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: sound, ofType: "mp3")!)
 
+        player2 = try! AVAudioPlayer(contentsOf: alertSound)
+        player2.prepareToPlay()
+        player2.volume =  UserDefaults.standard.float(forKey: settings.soundVolume.rawValue) / 10
+        player2.play()
+        return player2
+
+    }
+    
+    
+    
 }

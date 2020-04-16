@@ -14,8 +14,7 @@ target 'Timer' do
   pod 'BetterSegmentedControl', '~> 1.3'
   pod 'CoreStore', '~> 7.0'
   pod 'PKHUD', '~> 5.0'
-
-
+  pod 'Eureka'
 
 
   target 'TimerTests' do

@@ -21,7 +21,7 @@ struct playerModel {
     var elapsedTime = 0
     var veryFirstInterval = true
     var prevSecond = 0
-
+    
 }
 
 struct currentInterval {
@@ -57,24 +57,24 @@ enum SerializationError: Error {
 extension StructDecoder {
     func toCoreData(context: NSManagedObjectContext) throws -> NSManagedObject {
         let entityName = type(of:self).EntityName
-
+        
         // Create the Entity Description
         guard let desc = NSEntityDescription.entity(forEntityName: entityName, in: context)
             else { throw SerializationError.unknownEntity(name: entityName) }
-
+        
         // Create the NSManagedObject
         let managedObject = NSManagedObject(entity: desc, insertInto: context)
-
+        
         // Create a Mirror
         let mirror = Mirror(reflecting: self)
-
+        
         // Make sure we're analyzing a struct
         guard mirror.displayStyle == .some(.struct) else { throw SerializationError.structRequired }
-
+        
         for case let (label?, anyValue) in mirror.children {
             managedObject.setValue(anyValue, forKey: label)
         }
-
+        
         return managedObject
     }
 }

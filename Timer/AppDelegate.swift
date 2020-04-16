@@ -17,6 +17,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
+        if UserDefaults.standard.object(forKey: settings.soundVolume.rawValue) == nil {
+            UserDefaults.standard.set(5, forKey: settings.soundVolume.rawValue)
+
+
+
+        }
+        if UserDefaults.standard.object(forKey: settings.enableSound.rawValue) == nil {
+            UserDefaults.standard.set(true, forKey: settings.enableSound.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.vibration.rawValue) == nil {
+            UserDefaults.standard.set(true, forKey: settings.vibration.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.backgroundWork.rawValue) == nil {
+            UserDefaults.standard.set(true, forKey: settings.backgroundWork.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.lockPlayer.rawValue) == nil {
+            UserDefaults.standard.set(false, forKey: settings.lockPlayer.rawValue)
+        }
+        
 
 
         // Override point for customization after application launch.

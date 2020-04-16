@@ -11,24 +11,24 @@ import UIKit
 import CoreData
 
 struct Stop {
-   var name: String;
-   var id: String;
+    var name: String;
+    var id: String;
 }
 
 class Favourite: NSManagedObject {
-
+    
     @NSManaged var name: String
     @NSManaged var id: String
-
+    
     var stop : Stop {
-       get {
+        get {
             return Stop(name: self.name, id: self.id)
         }
         set {
             self.name = newValue.name
             self.id = newValue.id
         }
-     }
+    }
 }
 
 struct HighLowInterval: Equatable {
@@ -58,13 +58,13 @@ struct Routine: Equatable {
         let f = lhs.restTime == rhs.restTime
         let g = lhs.coolDown == rhs.coolDown
         let h = lhs.routineColor == rhs.routineColor
-
+        
         if a && b && c && d && e && f && g && h  {
             return true
         }
         return false
     }
-
+    
     var name: String
     var type: String
     var warmup: IntervalIntensity
@@ -76,7 +76,7 @@ struct Routine: Equatable {
     var totalTime: Int
     var routineID: String!
     var routineIndex: Int!
-
+    
 }
 
 struct routArray {
@@ -115,7 +115,7 @@ enum sounds: String, CaseIterable {
 }
 
 extension CaseIterable where Self: Equatable {
-
+    
     var index: Self.AllCases.Index? {
         return Self.allCases.firstIndex { self == $0 }
     }

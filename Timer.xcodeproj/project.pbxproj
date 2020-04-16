@@ -49,6 +49,9 @@
 		63B24DB52445444B00EC48F3 /* Bell2.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA52445444900EC48F3 /* Bell2.mp3 */; };
 		63B24DB62445444C00EC48F3 /* Police Siren.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA62445444A00EC48F3 /* Police Siren.mp3 */; };
 		63B24DB82445444C00EC48F3 /* Air Horn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DA82445444B00EC48F3 /* Air Horn.mp3 */; };
+		63B24DBD244615AF00EC48F3 /* FormSettingView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63B24DBC244615AF00EC48F3 /* FormSettingView.storyboard */; };
+		63B24DBF244615DF00EC48F3 /* FormSettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B24DBE244615DF00EC48F3 /* FormSettingVC.swift */; };
+		63B24DC124461C1A00EC48F3 /* FormSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B24DC024461C1A00EC48F3 /* FormSettingModel.swift */; };
 		63B61E7A242788C300CDAD88 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E79242788C300CDAD88 /* Globals.swift */; };
 		63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B61E7B2427A14200CDAD88 /* PlayerModel.swift */; };
 		63B8589324314C7C007FF6AA /* switchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B8589224314C7C007FF6AA /* switchCell.swift */; };
@@ -134,6 +137,9 @@
 		63B24DA52445444900EC48F3 /* Bell2.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Bell2.mp3; sourceTree = "<group>"; };
 		63B24DA62445444A00EC48F3 /* Police Siren.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Police Siren.mp3"; sourceTree = "<group>"; };
 		63B24DA82445444B00EC48F3 /* Air Horn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Air Horn.mp3"; sourceTree = "<group>"; };
+		63B24DBC244615AF00EC48F3 /* FormSettingView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FormSettingView.storyboard; sourceTree = "<group>"; };
+		63B24DBE244615DF00EC48F3 /* FormSettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSettingVC.swift; sourceTree = "<group>"; };
+		63B24DC024461C1A00EC48F3 /* FormSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormSettingModel.swift; sourceTree = "<group>"; };
 		63B61E79242788C300CDAD88 /* Globals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		63B61E7B2427A14200CDAD88 /* PlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
 		63B8589224314C7C007FF6AA /* switchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = switchCell.swift; sourceTree = "<group>"; };
@@ -360,6 +366,16 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		63B24DBB2446158E00EC48F3 /* FormSetting */ = {
+			isa = PBXGroup;
+			children = (
+				63B24DC024461C1A00EC48F3 /* FormSettingModel.swift */,
+				63B24DBC244615AF00EC48F3 /* FormSettingView.storyboard */,
+				63B24DBE244615DF00EC48F3 /* FormSettingVC.swift */,
+			);
+			path = FormSetting;
+			sourceTree = "<group>";
+		};
 		63B61E7D2428DA7A00CDAD88 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
@@ -475,6 +491,7 @@
 		63C7CCB22422C0B200960513 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				63B24DBB2446158E00EC48F3 /* FormSetting */,
 				634E5CFE2426940B0011B9ED /* Globals */,
 				634E5CEF242661B40011B9ED /* Player */,
 				63BC9AA52422FCE40010C81F /* Routines */,
@@ -644,6 +661,7 @@
 				63B24DAA2445444B00EC48F3 /* Alarm.mp3 in Resources */,
 				631C0C6D2434B53500C06AD2 /* selectColorCell.xib in Resources */,
 				63B24DA92445444B00EC48F3 /* Train Whistle.mp3 in Resources */,
+				63B24DBD244615AF00EC48F3 /* FormSettingView.storyboard in Resources */,
 				63B24DB42445444B00EC48F3 /* Phone Vibration.mp3 in Resources */,
 				63B24DB02445444B00EC48F3 /* Keys Clinging.mp3 in Resources */,
 				634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */,
@@ -786,6 +804,8 @@
 			files = (
 				6317165D242FE87900BC4F7E /* lowHighCell.swift in Sources */,
 				631C0C6C2434B53500C06AD2 /* selectColorCell.swift in Sources */,
+				63B24DC124461C1A00EC48F3 /* FormSettingModel.swift in Sources */,
+				63B24DBF244615DF00EC48F3 /* FormSettingVC.swift in Sources */,
 				63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */,
 				63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */,
 				634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */,

@@ -11,11 +11,9 @@ import MKColorPicker
 import AVFoundation
 import McPicker
 import BetterSegmentedControl
-
+import PKHUD
 
 class IntervalEditorVC: UIViewController {
-
-    
 
     var player : AVAudioPlayer?
     var colorPicker = ColorPickerViewController()
@@ -35,7 +33,6 @@ class IntervalEditorVC: UIViewController {
     var sections = 1
     var origArray : [IntervalIntensity]!
     var timerClass: Timer!
-
 
     override func viewDidLoad() {
         globals().keyboardClick(view: self.view)
@@ -73,24 +70,6 @@ class IntervalEditorVC: UIViewController {
         tableView.register(UINib(nibName: "selectColorCell", bundle: nil), forCellReuseIdentifier: "selectColorCell")
         tableView.register(UINib(nibName: "basicRightLabelCell", bundle: nil), forCellReuseIdentifier: "basicRightLabelCell")
         tableView.register(UINib(nibName: "segmentCell", bundle: nil), forCellReuseIdentifier: "segmentCell")
-        // Do any additional setup after loading the view.
-        // self.myPicker = UIPickerView(frame: CGRectMake(0, 40, 0, 0))
-        
-//        let screenSize: CGRect = UIScreen.main.bounds
-//        
-//        myPicker = soundPicker(frame: CGRect(x: 0, y: UIScreen.main.bounds.height - 300, width: screenSize.width, height: 250))
-//
-////        butt = UIButton(frame: CGRect(x: screenSize.width - 30, y: UIScreen.main.bounds.height - 189, width: 30, height: 30))
-////        // butt.backgroundColor = .systemTeal
-////        butt.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-////        butt.setImage(UIImage(systemName: "play.circle"), for: .normal)
-////        butt.tintColor = .systemGray
-//
-//        myPicker.backgroundColor = .secondarySystemGroupedBackground
-//        self.myPicker.delegate = self.myPicker.self
-//        self.myPicker.dataSource = self.myPicker.self
-
-        
         let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
         self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
         let saveButtonB = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButton))
@@ -103,8 +82,6 @@ class IntervalEditorVC: UIViewController {
         tableView.reloadData()
     }
 
-
-
     @objc func closeButtonClick(){
         print("closeButtonClick")
         if origArray == intervalArray {
@@ -115,13 +92,21 @@ class IntervalEditorVC: UIViewController {
             print("here 31")
             presentActionSheet()
         }
-
     }
 
     @objc func saveButton(){
         //presentActionSheet(ifSaving: true)
-        self.disappear()
+        if intervalArray.count > 1 {
+            if intervalArray[0].duration == 0 && intervalArray[1].duration == 0 {
+                let alert = UIAlertController(title: "Error", message: "High or Low Interval must have duration greater than 0", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+                return
+            }
+        }
 
+
+        self.disappear()
 
     }
 
@@ -139,17 +124,17 @@ class IntervalEditorVC: UIViewController {
         actionSheetControllerIOS8.addAction(cancelActionButton)
 
         let saveActionButton = UIAlertAction(title: "Discard Changes", style: .destructive)
-            { _ in
-               print("Discard Changes")
-                self.dismiss(animated: true, completion: nil)
+        { _ in
+            print("Discard Changes")
+            self.dismiss(animated: true, completion: nil)
 
         }
         actionSheetControllerIOS8.addAction(saveActionButton)
         if ifSaving {
             let deleteActionButton = UIAlertAction(title: "Save Changes", style: .default)
-                { _ in
-                    print("Save Changes")
-                    self.disappear()
+            { _ in
+                print("Save Changes")
+                self.disappear()
             }
             actionSheetControllerIOS8.addAction(deleteActionButton)
         }
@@ -157,8 +142,6 @@ class IntervalEditorVC: UIViewController {
 
         self.present(actionSheetControllerIOS8, animated: true, completion: nil)
     }
-
-
 
     func disappear() {
         if isHighLow {
@@ -172,8 +155,13 @@ class IntervalEditorVC: UIViewController {
             }
         }
         self.sendDataDelegate()
-        self.dismiss(animated: true, completion: nil)
+        HUD.flash(.success, delay: 1.0)
+        //print("Done")
+        //self.navigationController?.popViewController(animated: true)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // Change `2.0` to the desired number of seconds. // Code you want to be delayed }
 
+            self.dismiss(animated: true, completion: nil)
+        }
     }
 
     func sendDataDelegate() {
@@ -187,7 +175,6 @@ class IntervalEditorVC: UIViewController {
 
     func playSound(sound: String) {
         let session = AVAudioSession.sharedInstance()
-
         try? session.setCategory(.playback, options: .mixWithOthers)
         try? session.setActive(true, options: [])
         player?.stop()
@@ -196,22 +183,10 @@ class IntervalEditorVC: UIViewController {
         player?.prepareToPlay()
         player?.play()
 
-        //timerClass = Timer.scheduledTimer(timeInterval: 3.0, target: self, selector: #selector(updateTimer1), userInfo: nil, repeats: false)
-
     }
-
-    @objc func updateTimer1() {
-        self.player?.stop()
-        timerClass.invalidate()
-    }
-
 
     func detectHighLowSection(indexP: IndexPath) -> Bool {
         return indexP.section == sections - 1 || indexP.section == sections - 2
-    }
-
-    func ifNotHighLow() {
-
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -230,11 +205,7 @@ class IntervalEditorVC: UIViewController {
             intervalArray.swapAt(0, 1)
             globals().animationTableChange(tableView: self.tableView)
         }
-
-
     }
-    
-
 
 }
 
@@ -242,86 +213,84 @@ class IntervalEditorVC: UIViewController {
 
 extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
 
-
-
-func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    if isHighLow {
-        if section == 0 {
-            return 1
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isHighLow {
+            if section == 0 {
+                return 1
+            }
+            if section == 1 {
+                return 2
+            }
         }
-        if section == 1 {
-            return 2
-        }
+
+        return 3
     }
 
-    return 3
-}
-func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "basicLabelCell") as! basicLabelCell
-    cell.labelLeft!.text = "Routine Name"
-    cell.textInput.text = intervalHighLow?.intervalName
-    cell.textInput.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "basicLabelCell") as! basicLabelCell
+        cell.labelLeft!.text = "Routine Name"
+        cell.textInput.text = intervalHighLow?.intervalName
+        cell.textInput.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 
-    if indexPath.section == 1 && isHighLow && indexPath.row == 0 {
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
-        cell2.leftLabel.text = "Number of Sets"
-        cell2.rightLabel.text = String(intervalHighLow!.numSets)
-        return cell2
+        if indexPath.section == 1 && isHighLow && indexPath.row == 0 {
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
+            cell2.leftLabel.text = "Number of Sets"
+            cell2.rightLabel.text = String(intervalHighLow!.numSets)
+            return cell2
+        }
+
+        if indexPath.section == 1 && isHighLow && indexPath.row == 1 {
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "segmentCell") as! segmentController
+            cell2.leftLabel.text = "First Interval"
+            // cell2.segment.backgroundColor = .secondarySystemBackground
+            cell2.segment.segments = LabelSegment.segments(withTitles: ["Low", "High"])
+
+            cell2.segment.alwaysAnnouncesValue = true
+            cell2.segment.announcesValueImmediately = false
+            if intervalHighLow!.firstIntervalHigh {
+                cell2.segment.setIndex(1)
+            }
+            cell2.segment.addTarget(self, action: #selector(controlValueChanged(_:)), for: .valueChanged)
+            return cell2
+        }
+
+        if detectHighLowSection(indexP: indexPath) && indexPath.row == 0 {
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
+            cell2.leftLabel.text = "Duration"
+            if (!isHighLow) {
+                cell2.rightLabel.text =  globals().timeString(time: TimeInterval(Int(intervalArray[indexPath.section].duration)))
+            }
+            else {
+                cell2.rightLabel.text =  globals().timeString(time: TimeInterval(Int(intervalArray[indexPath.section - 2].duration)))
+            }
+            return cell2
+        }
+        if detectHighLowSection(indexP: indexPath) && indexPath.row == 1 {
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
+            cell2.leftLabel.text = "Sound"
+            if (!isHighLow) {
+                cell2.rightLabel.text = String(intervalArray[indexPath.section].sound.rawValue)
+            }
+            else {
+                cell2.rightLabel.text = String(intervalArray[indexPath.section - 2].sound.rawValue)
+            }
+
+
+            return cell2
+        }
+        if detectHighLowSection(indexP: indexPath) && indexPath.row == 2 {
+            let cell2 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
+            cell2.colorLabel.text = "Interval Color"
+            if (!isHighLow) {
+                cell2.colorCircle.tintColor = intervalArray[indexPath.section].intervalColor
+            }
+            else {
+                cell2.colorCircle.tintColor = intervalArray[indexPath.section - 2].intervalColor
+            }
+            return cell2
+        }
+        return cell
     }
-
-    if indexPath.section == 1 && isHighLow && indexPath.row == 1 {
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "segmentCell") as! segmentController
-        cell2.leftLabel.text = "First Interval"
-        // cell2.segment.backgroundColor = .secondarySystemBackground
-        cell2.segment.segments = LabelSegment.segments(withTitles: ["Low", "High"])
-
-        cell2.segment.alwaysAnnouncesValue = true
-        cell2.segment.announcesValueImmediately = false
-        if intervalHighLow!.firstIntervalHigh {
-            cell2.segment.setIndex(1)
-        }
-        cell2.segment.addTarget(self, action: #selector(controlValueChanged(_:)), for: .valueChanged)
-        return cell2
-    }
-
-
-    if detectHighLowSection(indexP: indexPath) && indexPath.row == 0 {
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
-        cell2.leftLabel.text = "Duration"
-        if (!isHighLow) {
-            cell2.rightLabel.text =  globals().timeString(time: TimeInterval(Int(intervalArray[indexPath.section].duration)))
-        }
-        else {
-            cell2.rightLabel.text =  globals().timeString(time: TimeInterval(Int(intervalArray[indexPath.section - 2].duration)))
-        }
-        return cell2
-    }
-    if detectHighLowSection(indexP: indexPath) && indexPath.row == 1 {
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
-        cell2.leftLabel.text = "Sound"
-        if (!isHighLow) {
-            cell2.rightLabel.text = String(intervalArray[indexPath.section].sound.rawValue)
-        }
-        else {
-            cell2.rightLabel.text = String(intervalArray[indexPath.section - 2].sound.rawValue)
-        }
-
-
-        return cell2
-    }
-    if detectHighLowSection(indexP: indexPath) && indexPath.row == 2 {
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
-        cell2.colorLabel.text = "Interval Color"
-        if (!isHighLow) {
-            cell2.colorCircle.tintColor = intervalArray[indexPath.section].intervalColor
-        }
-        else {
-            cell2.colorCircle.tintColor = intervalArray[indexPath.section - 2].intervalColor
-        }
-        return cell2
-    }
-    return cell
-}
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         var indexPathSection = 0
@@ -333,24 +302,15 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
 
         if indexPath.section == 1 && isHighLow && indexPath.row == 0 {
             let data = [Array(01...999)]
-
             var stringArray = Array<Array<String>>()
-
             for array in data {
                 var subArray = Array<String>()
-
                 for item in array {
-
                     subArray.append(String(item))
-
-
                 }
-
                 stringArray.append(subArray)
             }
             let mcPicker = McPicker(data: stringArray)
-
-
             globals().setMcPickerDetails(mcPicker: mcPicker)
             print(intervalHighLow!.numSets)
             if intervalHighLow!.numSets == 1 {
@@ -368,40 +328,32 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
 
                 ]
             }
-
-
             mcPicker.show(doneHandler: { [weak self] (selections: [Int : String]) -> Void in
                 if let hours = selections[0] {
                     self?.intervalHighLow!.numSets = Int(hours)!
                     self?.tableView.reloadData()
                 }
-            }, cancelHandler: {
-                print("Canceled Styled Picker")
+                }, cancelHandler: {
+                    print("Canceled Styled Picker")
             }, selectionChangedHandler: { (selections: [Int:String], componentThatChanged: Int) -> Void  in
                 let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
                 print("Component \(componentThatChanged) changed value to \(newSelection)")
-
             })
         }
 
         if self.detectHighLowSection(indexP: indexPath) && indexPath.row == 2 {
             self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
-
             self.present(colorPicker, animated: true, completion: nil)
             colorPicker.selectedColor = { color in
                 self.intervalArray[indexPathSection].intervalColor = color
                 tableView.reloadData()
             }
         }
-
         if self.detectHighLowSection(indexP: indexPath) && indexPath.row == 0 {
             let data = [Array(00...9), Array(00...59), Array(00...59)]
-
             var stringArray = Array<Array<String>>()
-
             for array in data {
                 var subArray = Array<String>()
-
                 for item in array {
                     if 0...9 ~= item {
                         subArray.append(String("0" + String(item)))
@@ -409,14 +361,10 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                     else {
                         subArray.append(String(item))
                     }
-
                 }
-
                 stringArray.append(subArray)
             }
             let mcPicker = McPicker(data: stringArray)
-
-
             globals().setMcPickerDetails(mcPicker: mcPicker)
             let (h,m,s) = globals().secondsToHoursMinutesSeconds(seconds: self.intervalArray[indexPathSection].duration)
             mcPicker.pickerSelectRowsForComponents = [
@@ -424,8 +372,6 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                 1: [m: true],
                 2: [s: true],
             ]
-
-
             mcPicker.show(doneHandler: { [weak self] (selections: [Int : String]) -> Void in
                 if let second = selections[2], let minutes = selections[1], let hours = selections[0] {
                     let hours1 = Int(hours)! * 3600
@@ -435,8 +381,8 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                     self?.intervalArray[indexPathSection].duration = totalDur
                     self?.tableView.reloadData()
                 }
-            }, cancelHandler: {
-                print("Canceled Styled Picker")
+                }, cancelHandler: {
+                    print("Canceled Styled Picker")
             }, selectionChangedHandler: { (selections: [Int:String], componentThatChanged: Int) -> Void  in
                 let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
                 print("Component \(componentThatChanged) changed value to \(newSelection)")
@@ -447,7 +393,6 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
         if self.detectHighLowSection(indexP: indexPath) && indexPath.row == 1 {
             let data: [[String]] = [picker_values]
             let mcPicker = McPicker(data: data)
-
             globals().setMcPickerDetails(mcPicker: mcPicker)
             mcPicker.pickerSelectRowsForComponents = [
                 0: [self.intervalArray[indexPathSection].sound.index!: true],
@@ -458,68 +403,25 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                     self?.intervalArray[indexPathSection].sound = sounds(rawValue: prefix)!
                     self?.tableView.reloadData()
                 }
-            }, cancelHandler: {
-                print("Canceled Styled Picker")
+                }, cancelHandler: {
+                    print("Canceled Styled Picker")
             }, selectionChangedHandler: { (selections: [Int:String], componentThatChanged: Int) -> Void  in
                 let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
                 self.player?.stop()
                 if newSelection != "None" {
-                    self.playSound(sound: newSelection)
+                    //self.playSound(sound: newSelection)
+                    self.player = globals().playSound(sound: newSelection)
                 }
             })
-
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) { // Change `2.0` to the desired number of seconds. // Code you want to be delayed }
-                //self.view.addSubview(self.butt)
-                //self.view.bringSubviewToFront(self.butt)
-                //self.view.layer.zPosition = 1
-            }
-
-
-//            myPicker.picker_values = self.picker_values
-//
-//            myPicker.reloadAllComponents()
-//            myPicker.intervalVC = self
-//            myPicker.initializeButt()
-//            picker = UIView(frame: CGRect(x: 0, y: view.frame.height - 290, width: view.frame.width, height: 260))
-//
-//
-//
-//            let btnDone = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(sayHello))
-//
-//            let spaceButton = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-//            let cancelButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(sayHello))
-//
-//            let barAccessory = UIToolbar(frame: CGRect(x: 0, y: 0, width: (myPicker.frame.width), height: 44))
-//            barAccessory.barStyle = .default
-//            barAccessory.isTranslucent = false
-//            barAccessory.items = [cancelButton, spaceButton, btnDone]
-//            picker.addSubview(barAccessory)
-//            view.addSubview(picker)
-//            view.addSubview(myPicker)
-//            view.addSubview(myPicker.butt)
-//            if !(interval!.sound.index! == 0) {
-//                myPicker.selectRow((interval?.sound.index!)!, inComponent: 0, animated: true)
-//                myPicker.butt.isHidden = false
-//            }
-//            else {
-//                myPicker.selectRow((interval?.sound.index!)!, inComponent: 0, animated: true)
-//                myPicker.butt.isHidden = true
-//            }
-
-
         }
 
     }
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections
+    }
 
-
-
-
-func numberOfSections(in tableView: UITableView) -> Int {
-    return sections
-}
-
-     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if isHighLow {
             if section == 2 && intervalHighLow!.firstIntervalHigh {
                 return "High Interval"
@@ -537,14 +439,10 @@ func numberOfSections(in tableView: UITableView) -> Int {
         return ""
     }
 
-
 }
 
 extension IntervalEditorVC: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
-
-
         self.closeButtonClick()
-        //self.dismiss(animated: true, completion: nil)
     }
 }

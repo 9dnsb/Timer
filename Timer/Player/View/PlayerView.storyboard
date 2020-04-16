@@ -184,6 +184,30 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ImN-Ik-6l7" userLabel="Bottom View">
                                 <rect key="frame" x="0.0" y="498" width="414" height="398"/>
                                 <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vXM-OW-pi2" userLabel="Left of circle">
+                                        <rect key="frame" x="24" y="141.5" width="50" height="50"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PRo-fp-d8F" userLabel="Butt">
+                                                <rect key="frame" x="10" y="10.5" width="30" height="28.5"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="30" id="97s-fy-ugK"/>
+                                                    <constraint firstAttribute="height" constant="30" id="if6-4f-8ZS"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="48"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <state key="normal" backgroundImage="lock.open" catalog="system"/>
+                                                <connections>
+                                                    <action selector="lockButtonClicked:" destination="xvv-jH-Hmq" eventType="touchUpInside" id="uRu-i8-m3h"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="JHQ-1C-WKF"/>
+                                            <constraint firstItem="PRo-fp-d8F" firstAttribute="centerY" secondItem="vXM-OW-pi2" secondAttribute="centerY" id="JUT-3T-PSK"/>
+                                            <constraint firstAttribute="height" constant="50" id="pPW-XT-iPO"/>
+                                            <constraint firstItem="PRo-fp-d8F" firstAttribute="centerX" secondItem="vXM-OW-pi2" secondAttribute="centerX" id="zIx-NQ-j3T"/>
+                                        </constraints>
+                                    </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FJ1-bX-HHr" userLabel="Circle" customClass="SRCountdownTimer" customModule="SRCountdownTimer">
                                         <rect key="frame" x="80" y="5" width="254" height="323"/>
                                         <subviews>
@@ -217,8 +241,10 @@
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstItem="FJ1-bX-HHr" firstAttribute="leading" secondItem="ImN-Ik-6l7" secondAttribute="leading" constant="80" id="332-o4-zWj"/>
+                                    <constraint firstItem="vXM-OW-pi2" firstAttribute="centerY" secondItem="FJ1-bX-HHr" secondAttribute="centerY" id="3wP-wd-VxK"/>
                                     <constraint firstItem="E2T-Y8-FYq" firstAttribute="leading" secondItem="ImN-Ik-6l7" secondAttribute="leading" id="72C-kM-Rvn"/>
                                     <constraint firstItem="FJ1-bX-HHr" firstAttribute="top" secondItem="ImN-Ik-6l7" secondAttribute="top" constant="5" id="C0c-Eb-icZ"/>
+                                    <constraint firstItem="vXM-OW-pi2" firstAttribute="leading" secondItem="FJ1-bX-HHr" secondAttribute="leading" multiplier="0.3" id="Hc6-oX-ods"/>
                                     <constraint firstItem="E2T-Y8-FYq" firstAttribute="top" secondItem="FJ1-bX-HHr" secondAttribute="bottom" id="KQb-Xu-nTh"/>
                                     <constraint firstAttribute="trailing" secondItem="E2T-Y8-FYq" secondAttribute="trailing" id="T2Q-gy-AMR"/>
                                     <constraint firstAttribute="trailing" secondItem="FJ1-bX-HHr" secondAttribute="trailing" constant="80" id="YuE-3p-QAq"/>
@@ -246,6 +272,8 @@
                         <outlet property="forwardIntervalButton" destination="0MR-vf-aVu" id="BYq-BH-ePn"/>
                         <outlet property="intervalNameLabel" destination="Gjh-ho-G5S" id="Ys6-lh-C5f"/>
                         <outlet property="intervalNumberLabel" destination="m64-LV-2kP" id="7GJ-2d-dSh"/>
+                        <outlet property="lockButton" destination="PRo-fp-d8F" id="Xjt-JA-smn"/>
+                        <outlet property="lockbuttonView" destination="vXM-OW-pi2" id="bgT-le-0ry"/>
                         <outlet property="startButton" destination="aCp-z5-Qql" id="d5i-Wh-VAN"/>
                         <outlet property="timeElapsedLabel" destination="Fjr-Hj-uu2" id="Pew-FL-mV4"/>
                         <outlet property="timeRemainingLabel" destination="9h6-06-oWk" id="F8u-Hw-Tz0"/>
@@ -261,5 +289,6 @@
     <resources>
         <image name="chevron.left" catalog="system" width="96" height="128"/>
         <image name="chevron.right" catalog="system" width="96" height="128"/>
+        <image name="lock.open" catalog="system" width="128" height="112"/>
     </resources>
 </document>
