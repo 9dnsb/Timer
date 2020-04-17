@@ -9,9 +9,10 @@
 import Foundation
 
 enum settings: String {
-    case enableSound = "EnableSound"
-    case soundVolume = "SoundVolume"
-    case vibration = "Vibration"
-    case backgroundWork = "backgroundWork"
-    case lockPlayer = "lockPlayer"
+    case enableSound
+    case soundVolume
+    case vibration
+    case backgroundWork
+    case lockPlayer
+    case enableDarkMode
 }

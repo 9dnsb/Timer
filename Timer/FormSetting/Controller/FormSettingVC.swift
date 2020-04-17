@@ -11,8 +11,12 @@ import Eureka
 
 class FormSettingVC: FormViewController {
 
+    var settingDel : settingDelegate?
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
+        self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
         form +++
 
             Section("General")
@@ -23,6 +27,17 @@ class FormSettingVC: FormViewController {
             }.onChange { cell in
                 UserDefaults.standard.set(cell.value, forKey: settings.lockPlayer.rawValue)
             }
+
+//            <<< SwitchRow() {
+//                $0.title = "Enable Dark Mode"
+//
+//                $0.value = UserDefaults.standard.bool(forKey: settings.enableDarkMode.rawValue)
+//            }.onChange { cell in
+//                UserDefaults.standard.set(cell.value, forKey: settings.enableDarkMode.rawValue)
+//                if let settingDel = self.settingDel {
+//                    settingDel.changeValue(darkMode: true)
+//                }
+//            }
             
 
             +++ Section("Sounds")
@@ -81,6 +96,11 @@ class FormSettingVC: FormViewController {
             }
 
         }
+    }
+
+    @objc func closeButtonClick(){
+        self.dismiss(animated: true, completion: nil)
+
     }
 
 

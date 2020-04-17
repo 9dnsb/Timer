@@ -35,31 +35,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.object(forKey: settings.lockPlayer.rawValue) == nil {
             UserDefaults.standard.set(false, forKey: settings.lockPlayer.rawValue)
         }
-        
+        if UserDefaults.standard.object(forKey: settings.enableDarkMode.rawValue) == nil {
+            UserDefaults.standard.set(false, forKey: settings.enableDarkMode.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: subscription.isSubsribed.rawValue) == nil {
+            UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
+        }
+        //UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
 
 
         // Override point for customization after application launch.
         // UIBarButtonItem.appearance().tintColor = .systemGray
-        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
-            for purchase in purchases {
-                switch purchase.transaction.transactionState {
-                case .purchased, .restored:
-                    if purchase.needsFinishTransaction {
-                        // Deliver content from server, then:
-                        SwiftyStoreKit.finishTransaction(purchase.transaction)
-                    }
-                    // Unlock content
-                case .failed, .purchasing, .deferred:
-                    break // do nothing
-                @unknown default:
-                    print("unkown")
-                }
-            }
-        }
+        setupIAP()
         return true
     }
 
-    
+    func setupIAP() {
+
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+
+            for purchase in purchases {
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
+                    let downloads = purchase.transaction.downloads
+                    if !downloads.isEmpty {
+                        SwiftyStoreKit.start(downloads)
+                    } else if purchase.needsFinishTransaction {
+                        // Deliver content from server, then:
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
+                    }
+                    print("\(purchase.transaction.transactionState.debugDescription): \(purchase.productId)")
+                case .failed, .purchasing, .deferred:
+                    break // do nothing
+                @unknown default:
+                    break // do nothing
+                }
+            }
+        }
+
+        SwiftyStoreKit.updatedDownloadsHandler = { downloads in
+
+            // contentURL is not nil if downloadState == .finished
+            let contentURLs = downloads.compactMap { $0.contentURL }
+            if contentURLs.count == downloads.count {
+                print("Saving: \(contentURLs)")
+                SwiftyStoreKit.finishTransaction(downloads[0].transaction)
+            }
+        }
+    }
 
     // MARK: UISceneSession Lifecycle
 

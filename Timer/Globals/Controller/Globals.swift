@@ -169,7 +169,20 @@ public class globals  {
         return player2
 
     }
-    
+
+    func returnDefaultRout(setTitle: Bool = false) -> Routine {
+        var name = ""
+        if setTitle {
+            name = "Default Routine"
+        }
+
+        var aRout = Routine(name: name, type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.bell), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.alarm), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.ding), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.bell), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.completed), routineColor: .systemRed, totalTime: 0)
+        aRout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: aRout))
+        return aRout
+    }
+
+
+
     
     
 }

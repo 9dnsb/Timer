@@ -12,7 +12,25 @@ import SwiftyStoreKit
 import CoreData
 import CoreStore
 
-class RoutinesController: UIViewController {
+protocol settingDelegate {
+    func changeValue(darkMode: Bool)
+}
+let check = DarkModeEnable()
+
+class RoutinesController: UIViewController, settingDelegate {
+    func changeValue(darkMode: Bool) {
+        //print("changeVal")
+        if !darkMode {
+            let storyboard = UIStoryboard(name: "SubscribeView", bundle: nil)
+            let myVC = storyboard.instantiateViewController(withIdentifier: "SubscribeView") as! SubscribeViewController
+            myVC.title = "Subscription Settings"
+            let navController = UINavigationController(rootViewController: myVC)
+            self.navigationController?.present(navController, animated: true, completion: nil)
+        
+        }
+        //self.overrideUserInterfaceStyle = check.checkForDarkMode()
+    }
+
     @IBOutlet weak var tableView: UITableView!
     
     let dataStack = DataStack(xcodeModelName: "Timer")
@@ -25,7 +43,18 @@ class RoutinesController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let sg = SubscribeGlobal()
+        sg.setDel = self
+        sg.verifySubscriptions([.weekly, .monthly, .yearly])
         
+//        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
+//            let storyboard = UIStoryboard(name: "SubscribeView", bundle: nil)
+//            let myVC = storyboard.instantiateViewController(withIdentifier: "SubscribeView") as! SubscribeViewController
+//            myVC.title = "Subscription Settings"
+//            let navController = UINavigationController(rootViewController: myVC)
+//            self.navigationController?.present(navController, animated: true, completion: nil)
+//        }
         self.setBackgroundandNavigationBar()
         self.setupTable()
         
@@ -37,68 +66,49 @@ class RoutinesController: UIViewController {
         catch { // ...
             print("error")
         }
-        //        SwiftyStoreKit.retrieveProductsInfo(["db.timer.main.weekly"]) { result in
-        //            if let product = result.retrievedProducts.first {
-        //                let priceString = product.localizedPrice!
-        //                print("Product: \(product.localizedDescription), price: \(priceString)")
-        //            }
-        //            else if let invalidProductId = result.invalidProductIDs.first {
-        //                print("Invalid product identifier: \(invalidProductId)")
-        //            }
-        //            else {
-        //                //print("Error: \(String(describing: result.error))")
-        //            }
-        //        }
-        //
-        //        
-        //
-        //        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "6685ee37760d411f8a996c5ab5a82334")
-        //        SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
-        //            switch result {
-        //            case .success(let receipt):
-        //                let productId = "db.timer.main.weekly"
-        //                // Verify the purchase of a Subscription
-        //                let purchaseResult = SwiftyStoreKit.verifySubscription(
-        //                    ofType: .autoRenewable, // or .nonRenewing (see below)
-        //                    productId: productId,
-        //                    inReceipt: receipt)
-        //
-        //                switch purchaseResult {
-        //                case .purchased(let expiryDate, let items):
-        //                    print("\(productId) is valid until \(expiryDate)\n\(items)\n")
-        //                case .expired(let expiryDate, let items):
-        //                    print("\(productId) is expired since \(expiryDate)\n\(items)\n")
-        //                case .notPurchased:
-        //                    print("The user has never purchased \(productId)")
-        //                }
-        //
-        //            case .error(let error):
-        //                print("Receipt verification failed: \(error)")
-        //            }
-        //        }
-        //        SwiftyStoreKit.purchaseProduct("db.timer.main.weekly", quantity: 1, atomically: false) { result in
-        //            switch result {
-        //            case .success(let product):
-        //                // fetch content from your server, then:
-        //                if product.needsFinishTransaction {
-        //                    SwiftyStoreKit.finishTransaction(product.transaction)
-        //                }
-        //                print("Purchase Success: \(product.productId)")
-        //            case .error(let error):
-        //                switch error.code {
-        //                case .unknown: print("Unknown error. Please contact support")
-        //                case .clientInvalid: print("Not allowed to make the payment")
-        //                case .paymentCancelled: break
-        //                case .paymentInvalid: print("The purchase identifier was invalid")
-        //                case .paymentNotAllowed: print("The device is not allowed to make the payment")
-        //                case .storeProductNotAvailable: print("The product is not available in the current storefront")
-        //                case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
-        //                case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
-        //                case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
-        //                default: print((error as NSError).localizedDescription)
-        //                }
-        //            }
-        //        }
+//                SwiftyStoreKit.retrieveProductsInfo(["db.timer.main.weekly"]) { result in
+//                    if let product = result.retrievedProducts.first {
+//                        let priceString = product.localizedPrice!
+//                        print("Product: \(product.localizedDescription), price: \(priceString)")
+//                    }
+//                    else if let invalidProductId = result.invalidProductIDs.first {
+//                        print("Invalid product identifier: \(invalidProductId)")
+//                    }
+//                    else {
+//                        //print("Error: \(String(describing: result.error))")
+//                    }
+//                }
+//
+//
+//
+                
+//                SwiftyStoreKit.purchaseProduct("db.timer.main.weekly", quantity: 1, atomically: false) { result in
+//                    switch result {
+//                    case .success(let product):
+//                        // fetch content from your server, then:
+//                        if product.needsFinishTransaction {
+//                            SwiftyStoreKit.finishTransaction(product.transaction)
+//                        }
+//                        print("Purchase Success: \(product.productId)")
+//                    case .error(let error):
+//                        switch error.code {
+//                        case .unknown: print("Unknown error. Please contact support")
+//                        case .clientInvalid: print("Not allowed to make the payment")
+//                        case .paymentCancelled: break
+//                        case .paymentInvalid: print("The purchase identifier was invalid")
+//                        case .paymentNotAllowed: print("The device is not allowed to make the payment")
+//                        case .storeProductNotAvailable: print("The product is not available in the current storefront")
+//                        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+//                        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+//                        case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+//                        default: print((error as NSError).localizedDescription)
+//                        }
+//                    }
+//                }
+    }
+
+    func addDefaultRout() {
+        self.rout.append(globals().returnDefaultRout(setTitle: true))
     }
     
     func loadCoreData2() {
@@ -107,46 +117,50 @@ class RoutinesController: UIViewController {
             self.rout.removeAll()
             let objects = try self.dataStack.fetchAll(From<CDRoutine> ().orderBy(.ascending(\.cdRoutineIndex)))
             
-            
-            
-            
-            //print("count", objects.count)
-            for (_, i) in objects.enumerated() {
-                var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
-                //print("i", i)
-                //rout.objectID = i
-                //print(i.cdName)
-                
-                rout.name = i.cdName!
-                rout.numCycles = Int(i.cdNumCycles)
-                rout.routineColor =  hexStringToUIColor(hex: i.cdRoutineColor!)
-                //print(i.cdRoutineColor!)
-                //print(rout.routineColor)
-                rout.warmup = self.setIntIntesity(cdInt: i.warmup!)
-                rout.restTime = self.setIntIntesity(cdInt: i.rest!)
-                rout.coolDown = self.setIntIntesity(cdInt: i.coolDown!)
-                rout.routineID = i.cdUUID!
-                rout.routineIndex = Int(i.cdRoutineIndex)
-                
-                
-                for (j, elem) in i.cDHighLowInterval!.enumerated() {
-                    //print("j", j)
-                    let elem = elem as! CDHighLowInterval
-                    if !rout.intervals.indices.contains(j) {
-                        rout.intervals.append(HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed))
+            if objects.count == 0 {
+
+                self.addDefaultRout()
+
+            }
+            else {
+                //print("count", objects.count)
+                for (_, i) in objects.enumerated() {
+                    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+                    //print("i", i)
+                    //rout.objectID = i
+                    //print(i.cdName)
+
+                    rout.name = i.cdName!
+                    rout.numCycles = Int(i.cdNumCycles)
+                    rout.routineColor =  hexStringToUIColor(hex: i.cdRoutineColor!)
+                    //print(i.cdRoutineColor!)
+                    //print(rout.routineColor)
+                    rout.warmup = self.setIntIntesity(cdInt: i.warmup!)
+                    rout.restTime = self.setIntIntesity(cdInt: i.rest!)
+                    rout.coolDown = self.setIntIntesity(cdInt: i.coolDown!)
+                    rout.routineID = i.cdUUID!
+                    rout.routineIndex = Int(i.cdRoutineIndex)
+
+
+                    for (j, elem) in i.cDHighLowInterval!.enumerated() {
+                        //print("j", j)
+                        let elem = elem as! CDHighLowInterval
+                        if !rout.intervals.indices.contains(j) {
+                            rout.intervals.append(HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed))
+                        }
+                        rout.intervals[j].firstIntervalHigh = elem.cdfirstIntervalHigh
+                        rout.intervals[j].HighLowIntervalColor = hexStringToUIColor(hex: elem.cdHighLowIntervalColor!)
+                        rout.intervals[j].intervalName = elem.cdintervalName!
+                        rout.intervals[j].highLowId = elem.cdHighLowId
+                        //print(Int(elem.cdnumSets))
+                        rout.intervals[j].numSets = Int(elem.cdnumSets)
+                        rout.intervals[j].lowInterval = self.setIntIntesity(cdInt: elem.lowInterval!)
+                        rout.intervals[j].highInterval = self.setIntIntesity(cdInt: elem.highInterval!)
+
                     }
-                    rout.intervals[j].firstIntervalHigh = elem.cdfirstIntervalHigh
-                    rout.intervals[j].HighLowIntervalColor = hexStringToUIColor(hex: elem.cdHighLowIntervalColor!)
-                    rout.intervals[j].intervalName = elem.cdintervalName!
-                    rout.intervals[j].highLowId = elem.cdHighLowId
-                    //print(Int(elem.cdnumSets))
-                    rout.intervals[j].numSets = Int(elem.cdnumSets)
-                    rout.intervals[j].lowInterval = self.setIntIntesity(cdInt: elem.lowInterval!)
-                    rout.intervals[j].highInterval = self.setIntIntesity(cdInt: elem.highInterval!)
-                    
+                    rout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: rout))
+                    self.rout.append(rout)
                 }
-                rout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: rout))
-                self.rout.append(rout)
             }
             self.tableView.reloadData()
             
@@ -186,6 +200,17 @@ class RoutinesController: UIViewController {
     public enum subs {
         case weekly(item: String = "db.timer.main.weekly")
     }
+
+    func setRightBarItem() {
+        addRoutineButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRoutineClick))
+        addEditClick = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(addEditButton))
+        if rout.count > 1 {
+            self.navigationItem.setRightBarButtonItems([addRoutineButton, addEditClick], animated: true)
+        }
+        else {
+            self.navigationItem.setRightBarButtonItems([addRoutineButton], animated: true)
+        }
+    }
     
     func setBackgroundandNavigationBar() {
         self.tableView.backgroundColor = .systemGroupedBackground
@@ -196,14 +221,9 @@ class RoutinesController: UIViewController {
         settingButton.addTarget(self, action: #selector(settingClicked), for: .touchUpInside)
         let item1 = UIBarButtonItem(customView: settingButton)
         self.navigationItem.setLeftBarButtonItems([item1], animated: true)
-        addRoutineButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRoutineClick))
-        addEditClick = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(addEditButton))
-        if rout.count > 0 {
-            self.navigationItem.setRightBarButtonItems([addRoutineButton, addEditClick], animated: true)
-        }
-        else {
-            self.navigationItem.setRightBarButtonItems([addRoutineButton], animated: true)
-        }
+        self.setRightBarItem()
+
+        
     }
     
     
@@ -240,8 +260,9 @@ class RoutinesController: UIViewController {
     // MARK: - Table view data source
     @objc func settingClicked(){
         let storyboard = UIStoryboard(name: "FormSettingView", bundle: nil)
-        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView")
+        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView") as! FormSettingVC
         myVC.title = "Settings"
+        myVC.settingDel = self
         let navController = UINavigationController(rootViewController: myVC)
         self.navigationController?.present(navController, animated: true, completion: nil)
     }
@@ -308,6 +329,7 @@ class RoutinesController: UIViewController {
                     sr.save3()
                     self.tableView.reloadData()
                 }
+
         }
         )
     }
@@ -325,6 +347,8 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         let routine = rout[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoutineCell") as! RoutineCell
         cell.setLabels(rout: routine, edit: !self.isEditingBool)
+        print(rout[indexPath.row])
+        print("rout[indexPath.row].totalTime", rout[indexPath.row].totalTime)
         cell.timeLabel.text =
             globals().timeString(time: TimeInterval(rout[indexPath.row].totalTime)) 
         return cell
@@ -338,10 +362,24 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         self.movedRout(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
     }
+
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
+    {
+        if rout.count > 1 {
+            self.setRightBarItem()
+            return UITableViewCell.EditingStyle.delete
+
+        } else {
+            self.setRightBarItem()
+            return .none
+
+        }
+    }
     
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+
+        if rout.count > 1 && editingStyle == .delete {
             
             
             print("deleting")
@@ -392,15 +430,20 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         
+//        if let viewController = UIStoryboard(name: "PlayerView", bundle: nil).instantiateViewController(withIdentifier: "PlayerView") as? PlayerController {
+//
+//            viewController.rout = rout[indexPath.row]
+//
+//            if let navigator = navigationController {
+//                navigator.pushViewController(viewController, animated: true)
+//            }
+//        }
         if let viewController = UIStoryboard(name: "PlayerView", bundle: nil).instantiateViewController(withIdentifier: "PlayerView") as? PlayerController {
-            
             viewController.rout = rout[indexPath.row]
-            
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
             }
         }
-        
     }
 }
 

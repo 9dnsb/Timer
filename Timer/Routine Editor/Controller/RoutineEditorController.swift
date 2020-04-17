@@ -32,7 +32,8 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     var currObjId : CDRoutine!
     var passClubDelegate: ModalDelegate3?
     var presetInterval: HighLowInterval = HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)
-    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.alarm), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.airhorn), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+    var rout: Routine = globals().returnDefaultRout()
+
     var totalSections = 7
     var indexSection = 3
     var switchClicked = false
@@ -356,12 +357,14 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             
             return cell
         }
-        let cell2 = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
+        let cell2a = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
         if indexPath.section == (2) && indexPath.row == 0 {
-            cell2.intervalName.text = "Warm Up"
-            cell2.setImageColor(color: rout.warmup.intervalColor)
-            cell2.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.warmup.duration)))
-            return cell2
+            cell2a.intervalName.text = "Warm Up"
+            cell2a.setImageColor(color: rout.warmup.intervalColor)
+            cell2a.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.warmup.duration)))
+            cell2a.theImage.isHidden = false
+            cell2a.labelLeftContrain.constant = 10
+            return cell2a
         }
         let cell27 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
         if indexPath.section == (1) && indexPath.row == 0 {
@@ -418,30 +421,34 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             }
             return cell33
         }
+        let cell2b = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
         if indexPath.section == totalSections - 3 && indexPath.row == 1 {
-            cell2.theImage.isHidden = true
-            cell2.totalTime.text = "2"
-            cell2.setIntervalName(intervalName: "Number of Routine Cycles")
+            cell2b.theImage.isHidden = true
+            cell2b.totalTime.text = "2"
+            cell2b.setIntervalName(intervalName: "Number of Routine Cycles")
             if rout.numCycles > 1 {
-                cell2.totalTime.text = String(rout.numCycles)
+                cell2b.totalTime.text = String(rout.numCycles)
             }
-            cell2.labelLeftContrain.constant = -20
+            cell2b.labelLeftContrain.constant = -20
+            return cell2b
             
         }
+        let cell2c = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
         if indexPath.section == totalSections - 2 {
-            cell2.setImageColor(color: rout.restTime.intervalColor)
-            cell2.setIntervalName(intervalName: "Rest Time")
-            cell2.totalTime.text = String(rout.numCycles)
-            cell2.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.restTime.duration)))
-            return cell2
+            cell2c.setImageColor(color: rout.restTime.intervalColor)
+            cell2c.setIntervalName(intervalName: "Rest Time")
+            cell2c.totalTime.text = String(rout.numCycles)
+            cell2c.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.restTime.duration)))
+            return cell2c
         }
+        let cell2d = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
         if indexPath.section == totalSections - 1 {
-            cell2.setImageColor(color: rout.coolDown.intervalColor)
-            cell2.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.coolDown.duration)))
-            cell2.setIntervalName(intervalName: "Cool Down")
-            return cell2
+            cell2d.setImageColor(color: rout.coolDown.intervalColor)
+            cell2d.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.coolDown.duration)))
+            cell2d.setIntervalName(intervalName: "Cool Down")
+            return cell2d
         }
-        return cell2
+        return cell2d
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -473,12 +480,10 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
-            
             let navController = UINavigationController(rootViewController: myVC!)
             myVC!.title = "Warm Up"
             myVC!.interval = rout.warmup
             navController.presentationController?.delegate = myVC
-            
             intervalChanged = intervalOptions.warmUp
             myVC?.delegate = self
             self.navigationController?.present(navController, animated: true, completion: nil)
@@ -564,9 +569,9 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         
     }
     
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return 1
-    }
+//    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+//        return 1
+//    }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == totalSections - 3 && indexPath.row == 1 && !switchClicked && rout.numCycles < 2 {

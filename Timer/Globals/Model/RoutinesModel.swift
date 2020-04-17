@@ -96,11 +96,15 @@ enum intervalOptions: Int {
     case highLowInt = 6
 }
 
+struct constants {
+    static let appBundle: String = "db.timer.main"
+}
+
 enum sounds: String, CaseIterable {
     case none = "None"
     case airhorn = "Air Horn"
     case alarm = "Alarm"
-    case gong = "Bell2"
+    case bell = "Bell"
     case churchBell = "Church Bell"
     case completed = "Completed"
     case ding = "Ding"

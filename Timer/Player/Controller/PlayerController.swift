@@ -17,6 +17,7 @@ protocol ModalDelegate3 {
 public  typealias PXColor = UIColor
 class PlayerController: UIViewController, ModalDelegate3{
     func getRoutine(value: Routine) {
+
         self.rout = value
         
         
@@ -38,7 +39,7 @@ class PlayerController: UIViewController, ModalDelegate3{
     @IBOutlet weak var lockButton: UIButton!
     @IBOutlet weak var lockbuttonView: UIView!
 
-    @IBOutlet weak var countdownTimer: SRCountdownTimer!
+    //@IBOutlet weak var countdownTimer: SRCountdownTimer!
     var player : AVAudioPlayer?
     var timer2 : Timer?
     let audioLimit: TimeInterval = 1
@@ -61,11 +62,54 @@ class PlayerController: UIViewController, ModalDelegate3{
     
     override func viewDidLoad() {
         // playVoice(voice: "This is a test. This is only a test. If this was an actual emergency, then this wouldn’t have been a test.")
-
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         
     }
     
-    
+    @objc func applicationDidBecomeActive(notification: NSNotification) {
+        print("ACTIVE")
+    }
+    @objc func applicationDidEnterBackground(notification: NSNotification) {
+        print("BACKGROUND")
+        if  !(UserDefaults.standard.bool(forKey: settings.backgroundWork.rawValue)) && !self.startButtonModel.resumeTapped {
+
+            self.stopTimer()
+            let alert = UIAlertController(title: "Background Work is disabled", message: "Timer will not run in background because it is disabled. Would you like to enable Background Work", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+                switch action.style{
+                case .default:
+                    print("default")
+                    UserDefaults.standard.set(true, forKey: settings.backgroundWork.rawValue)
+                    self.playerBlank()
+                case .cancel:
+                    print("cancel")
+
+                case .destructive:
+                    print("destructive")
+
+                @unknown default:
+                    print("error")
+                }}))
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: { action in
+                switch action.style{
+                case .default:
+                    print("default")
+
+                case .cancel:
+                    print("cancel")
+
+                case .destructive:
+                    print("destructive")
+
+
+                @unknown default:
+                    print("error")
+                }}))
+            self.present(alert, animated: true, completion: nil)
+        }
+
+    }
     
     func playVoice(voice: String) {
         if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false {
@@ -91,12 +135,12 @@ class PlayerController: UIViewController, ModalDelegate3{
         timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
         timeRemainingLabel.text = timeString(time: TimeInterval(model.totalTime))
         timeElapsedLabel.text = timeString(time: TimeInterval(model.elapsedTime))
-        countdownTimer.labelTextColor = .white
-        countdownTimer.lineColor = .systemGray //UIColor.white.darker(amount: 0.1)
-        countdownTimer.trailLineColor = .white
-        countdownTimer.timerFinishingText = "End"
-        countdownTimer.lineWidth = 4
-        countdownTimer.isLabelHidden = true
+//        countdownTimer.labelTextColor = .white
+//        countdownTimer.lineColor = .systemGray //UIColor.white.darker(amount: 0.1)
+//        countdownTimer.trailLineColor = .white
+//        countdownTimer.timerFinishingText = "End"
+//        countdownTimer.lineWidth = 4
+//        countdownTimer.isLabelHidden = true
         
         
     }
@@ -116,20 +160,22 @@ class PlayerController: UIViewController, ModalDelegate3{
     }
 
     @IBAction func backInteralButtonClicked(_ sender: Any) {
+        print("backInteralButtonClicked")
+        var timeToChange = 1
         if currIndex == 0 {
             return
         }
-        self.elapsedRemainingUpdate(timeChange: ((routArrayPlayer[currIndex - 1].interval.duration) * -1) - 1)
+        if !self.startButtonModel.resumeTapped {
+            print("here")
+            print("currIndex", currIndex)
+            print("model.seconds", model.seconds)
+            timeToChange = 1// + currIndex
+        }
+        self.elapsedRemainingUpdate(timeChange: (((routArrayPlayer[currIndex - 1].interval.duration) + (routArrayPlayer[currIndex - 1].interval.duration - model.seconds) ) * -1) - timeToChange)
         model.seconds = 1
         updateTimer(toAdd: -1, playSound: true)
     }
-    
-    func backButtonTimeChange() {
-        
-        model.seconds = 1
-        self.updateTimer(toAdd: -1)
-        self.elapsedRemainingUpdate(timeChange: (model.seconds + 1) * -1)
-    }
+
     
     @IBAction func startButton(_ sender: Any) {
 
@@ -138,8 +184,9 @@ class PlayerController: UIViewController, ModalDelegate3{
             
         } else {
             runTimer()
-            countdownTimer.resume()
-            startButton.setTitle("STOP",for: .normal)
+            //countdownTimer.resume()
+            //startButton.setTitle("STOP",for: .normal)
+            startButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
             self.startButtonModel.resumeTapped = false
             if UserDefaults.standard.bool(forKey: settings.lockPlayer.rawValue) {
                 self.disableButtons()
@@ -150,9 +197,10 @@ class PlayerController: UIViewController, ModalDelegate3{
     func stopTimer() {
         timerClass.invalidate()
         // remainingTimer.invalidate()
-        countdownTimer.pause()
+        //countdownTimer.pause()
         self.startButtonModel.resumeTapped = true
-        startButton.setTitle("START",for: .normal)
+        //startButton.setTitle("START",for: .normal)
+        startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
     }
     
     func setCurrentIntervalTotalSets() {
@@ -165,6 +213,7 @@ class PlayerController: UIViewController, ModalDelegate3{
             self.startButtonModel.resumeTapped = true
             self.currIndex = 0
             timerClass.invalidate()
+            //countdownTimer.end()
             playVoice(voice: "Activity Completed.")
             runAlert()
             return
@@ -184,15 +233,15 @@ class PlayerController: UIViewController, ModalDelegate3{
         
         model.seconds = routArrayPlayer[currIndex].interval.duration
         
-        countdownTimer.start(beginingValue: model.seconds - 0, interval: 1)
-        if self.startButtonModel.resumeTapped {
-            countdownTimer.pause()
-        }
+//        countdownTimer.start(beginingValue: model.seconds - 0, interval: 1)
+//        if self.startButtonModel.resumeTapped {
+//            countdownTimer.pause()
+//        }
         intervalNameLabel.text = routArrayPlayer[currIndex].intervalName
         self.view.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor
         topView.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor
         bottomView.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
-        countdownTimer.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
+        //countdownTimer.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
         timer.text = timeString(time: TimeInterval(routArrayPlayer[currIndex].interval.duration))
         if routArrayPlayer[currIndex].isHigh == intervalOptions.cooldown.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.warmUp.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.rest.rawValue {
             intervalNumberLabel.text = ""
@@ -233,6 +282,7 @@ class PlayerController: UIViewController, ModalDelegate3{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+
         //let oo = globals().loadCoreData2(rout1: rout)
         //print("oo", oo)
         self.currIndex = 0
@@ -251,6 +301,8 @@ class PlayerController: UIViewController, ModalDelegate3{
         if player == nil {
             self.playerBlank()
         }
+
+
         
         
         
@@ -271,6 +323,7 @@ class PlayerController: UIViewController, ModalDelegate3{
         player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "blank", withExtension: "wav")!)
         player?.numberOfLoops = -1
         player?.play()
+        //print("here")
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -283,7 +336,8 @@ class PlayerController: UIViewController, ModalDelegate3{
         remainingTimer.invalidate()
         timer2?.invalidate()
         self.stopTimer()
-        countdownTimer.end()
+        print("diss")
+
         
     }
     
@@ -316,6 +370,7 @@ class PlayerController: UIViewController, ModalDelegate3{
         
         if !self.startButtonModel.resumeTapped {
             print("playing")
+
         }
         
         if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
@@ -404,7 +459,8 @@ class PlayerController: UIViewController, ModalDelegate3{
             switch action.style{
             case .default:
                 print("default")
-                self.startButton.setTitle("START",for: .normal)
+                //self.startButton.setTitle("START",for: .normal)
+                self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
                 self.setRemainingTimer()
                 self.changeInterval(runSound: false)
                 
