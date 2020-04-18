@@ -22,7 +22,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="324"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:30" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xOB-yC-19l">
-                                                <rect key="frame" x="5" y="99" width="404" height="126.5"/>
+                                                <rect key="frame" x="5" y="15" width="404" height="294"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="106"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
@@ -32,8 +32,8 @@
                                         <constraints>
                                             <constraint firstItem="xOB-yC-19l" firstAttribute="leading" secondItem="Kyj-NS-iVm" secondAttribute="leading" constant="5" id="40g-et-fzA"/>
                                             <constraint firstItem="xOB-yC-19l" firstAttribute="centerY" secondItem="Kyj-NS-iVm" secondAttribute="centerY" id="4nG-Br-7Xq"/>
+                                            <constraint firstItem="xOB-yC-19l" firstAttribute="top" secondItem="Kyj-NS-iVm" secondAttribute="top" constant="15" id="JAB-nP-CCe"/>
                                             <constraint firstAttribute="trailing" secondItem="xOB-yC-19l" secondAttribute="trailing" constant="5" id="e3B-3R-Gef"/>
-                                            <constraint firstItem="xOB-yC-19l" firstAttribute="centerX" secondItem="Kyj-NS-iVm" secondAttribute="centerX" id="y2M-L6-1aZ"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="GCf-66-6pV" userLabel="Below Timer">
@@ -169,7 +169,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="GCf-66-6pV" secondAttribute="trailing" id="3HQ-n4-hVo"/>
                                     <constraint firstAttribute="bottom" secondItem="GCf-66-6pV" secondAttribute="bottom" id="7Q8-gN-c2y"/>
@@ -208,7 +207,7 @@
                                             <constraint firstItem="PRo-fp-d8F" firstAttribute="centerX" secondItem="vXM-OW-pi2" secondAttribute="centerX" id="bm4-uF-ek8"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FJ1-bX-HHr" userLabel="Circle">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FJ1-bX-HHr" userLabel="Circle" customClass="SRCountdownTimer" customModule="SRCountdownTimer">
                                         <rect key="frame" x="80" y="5" width="254" height="323"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aCp-z5-Qql" userLabel="Start Button">
@@ -237,7 +236,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstItem="FJ1-bX-HHr" firstAttribute="leading" secondItem="ImN-Ik-6l7" secondAttribute="leading" constant="80" id="332-o4-zWj"/>
                                     <constraint firstItem="E2T-Y8-FYq" firstAttribute="leading" secondItem="ImN-Ik-6l7" secondAttribute="leading" id="72C-kM-Rvn"/>
@@ -253,7 +251,6 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="ImN-Ik-6l7" firstAttribute="trailing" secondItem="3Xw-Eh-4zb" secondAttribute="trailing" id="1FO-4G-b5A"/>
                             <constraint firstItem="vzi-Wb-7zo" firstAttribute="trailing" secondItem="3Xw-Eh-4zb" secondAttribute="trailing" id="1xX-Vk-dee"/>
@@ -269,6 +266,7 @@
                     <connections>
                         <outlet property="backIntervalButton" destination="Ss1-re-VIH" id="a2I-I3-UpR"/>
                         <outlet property="bottomView" destination="ImN-Ik-6l7" id="aMb-bw-gB6"/>
+                        <outlet property="countdownTimer" destination="FJ1-bX-HHr" id="fsM-jJ-zrL"/>
                         <outlet property="forwardIntervalButton" destination="0MR-vf-aVu" id="BYq-BH-ePn"/>
                         <outlet property="intervalNameLabel" destination="Gjh-ho-G5S" id="Ys6-lh-C5f"/>
                         <outlet property="intervalNumberLabel" destination="m64-LV-2kP" id="7GJ-2d-dSh"/>
