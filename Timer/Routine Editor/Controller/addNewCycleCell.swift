@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 class addNewCycleCell: UITableViewCell {
-
+    @IBOutlet weak var addInterval: UIImageView!
+    
 
 }

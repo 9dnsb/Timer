@@ -25,7 +25,7 @@
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="135.9375"/>
         </scene>
-        <!--Routines-->
+        <!--Timers-->
         <scene sceneID="PSc-kf-x3E">
             <objects>
                 <viewController id="zQ1-VA-YLl" customClass="RoutinesController" customModule="Interval_Timer" sceneMemberID="viewController">
@@ -37,23 +37,15 @@
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RoutineCell" id="9Pv-tC-X5J" customClass="RoutineCell" customModule="Timer" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="RoutineCell" id="9Pv-tC-X5J" customClass="RoutineCell" customModule="Interval_Timer" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="55.5" width="414" height="69"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9Pv-tC-X5J" id="ouu-WX-Yth">
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="69"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" image="chevron.right" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="fFM-Ca-ezF">
-                                                    <rect key="frame" x="381" y="26.5" width="13" height="16.5"/>
-                                                    <color key="tintColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="13" id="Q4h-YK-glt"/>
-                                                        <constraint firstAttribute="height" constant="20" id="TqV-cz-Zpk"/>
-                                                    </constraints>
-                                                </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NbC-i5-TfG">
-                                                    <rect key="frame" x="21" y="10" width="355" height="25.5"/>
+                                                    <rect key="frame" x="15" y="10" width="44.5" height="25.5"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25.5" id="nfc-RJ-Fo1"/>
                                                     </constraints>
@@ -62,26 +54,21 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OoZ-6R-9i2">
-                                                    <rect key="frame" x="22" y="40.5" width="392" height="18.5"/>
+                                                    <rect key="frame" x="15" y="40.5" width="34" height="18.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                                                     <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="NbC-i5-TfG" firstAttribute="leading" secondItem="ouu-WX-Yth" secondAttribute="leadingMargin" constant="1" id="BAI-LS-5zl"/>
-                                                <constraint firstItem="fFM-Ca-ezF" firstAttribute="leading" secondItem="NbC-i5-TfG" secondAttribute="trailing" constant="5" id="UGq-7G-9lb"/>
-                                                <constraint firstAttribute="trailing" secondItem="fFM-Ca-ezF" secondAttribute="trailing" constant="20" id="aMz-dh-Qon"/>
+                                                <constraint firstItem="OoZ-6R-9i2" firstAttribute="leading" secondItem="ouu-WX-Yth" secondAttribute="leading" constant="15" id="Evm-hc-iJU"/>
+                                                <constraint firstItem="NbC-i5-TfG" firstAttribute="leading" secondItem="ouu-WX-Yth" secondAttribute="leading" constant="15" id="bB8-dA-68W"/>
                                                 <constraint firstAttribute="bottom" secondItem="OoZ-6R-9i2" secondAttribute="bottom" constant="10" id="dvZ-Oi-vi9"/>
-                                                <constraint firstItem="OoZ-6R-9i2" firstAttribute="leading" secondItem="ouu-WX-Yth" secondAttribute="leadingMargin" constant="2" id="iNQ-yb-qmU"/>
-                                                <constraint firstItem="fFM-Ca-ezF" firstAttribute="centerY" secondItem="ouu-WX-Yth" secondAttribute="centerY" id="mIf-7c-uxX"/>
-                                                <constraint firstAttribute="trailing" secondItem="OoZ-6R-9i2" secondAttribute="trailing" id="sxj-1P-C0O"/>
                                                 <constraint firstItem="NbC-i5-TfG" firstAttribute="top" secondItem="ouu-WX-Yth" secondAttribute="topMargin" constant="-1" id="uBg-Iz-SqZ"/>
                                                 <constraint firstItem="OoZ-6R-9i2" firstAttribute="top" secondItem="NbC-i5-TfG" secondAttribute="bottom" constant="5" id="xNA-Rq-znS"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="chevron" destination="fFM-Ca-ezF" id="OAs-cp-Vhh"/>
                                             <outlet property="timeLabel" destination="OoZ-6R-9i2" id="fo1-Ds-S5v"/>
                                             <outlet property="titleLabel" destination="NbC-i5-TfG" id="Dtn-eh-8eK"/>
                                         </connections>
@@ -102,7 +89,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qgJ-pk-6vT"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Routines" id="xae-R0-Pcd"/>
+                    <navigationItem key="navigationItem" title="Timers" id="xae-R0-Pcd"/>
                     <connections>
                         <outlet property="tableView" destination="aBs-UP-Jqd" id="QfC-Um-C8f"/>
                     </connections>
@@ -112,7 +99,4 @@
             <point key="canvasLocation" x="1018.840579710145" y="126.5625"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="chevron.right" catalog="system" width="96" height="128"/>
-    </resources>
 </document>

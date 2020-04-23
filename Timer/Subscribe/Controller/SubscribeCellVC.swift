@@ -58,10 +58,10 @@ class SubscribeCellVC: UITableViewCell {
                 self.subPrice.text = priceString
                 //print(priceString)
                 //return priceString
-            } else if let invalidProductId = result.invalidProductIDs.first {
+            } else if result.invalidProductIDs.first != nil {
                 //return invalidProductId
             } else {
-                let errorString = result.error?.localizedDescription ?? "Unknown error. Please contact support"
+                _ = result.error?.localizedDescription ?? "Unknown error. Please contact support"
                 //return errorString
             }
         }

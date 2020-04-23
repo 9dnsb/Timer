@@ -15,6 +15,8 @@ target 'Timer' do
   pod 'CoreStore', '~> 7.0'
   pod 'PKHUD', '~> 5.0'
   pod 'Eureka'
+  pod 'Google-Mobile-Ads-SDK'
+  pod 'ColorCompatibility'
 
 
   target 'TimerTests' do

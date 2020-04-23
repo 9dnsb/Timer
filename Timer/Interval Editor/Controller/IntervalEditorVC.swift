@@ -12,6 +12,8 @@ import AVFoundation
 import McPicker
 import BetterSegmentedControl
 import PKHUD
+import ColorCompatibility
+
 
 class IntervalEditorVC: UIViewController {
 
@@ -33,10 +35,11 @@ class IntervalEditorVC: UIViewController {
     var sections = 1
     var origArray : [IntervalIntensity]!
     var timerClass: Timer!
+    var closeButton : UIBarButtonItem!
 
     override func viewDidLoad() {
         globals().keyboardClick(view: self.view)
-        self.tableView.backgroundColor = .systemGroupedBackground
+        globals().setTableViewBackground(tableView: self.tableView)
         super.viewDidLoad()
         if interval == nil {
             sections = 4
@@ -55,13 +58,19 @@ class IntervalEditorVC: UIViewController {
         else {
             intervalArray.append(interval!)
         }
-        isModalInPresentation = true
-        let screenSize: CGRect = UIScreen.main.bounds
-        butt = UIButton(frame: CGRect(x: screenSize.width - 30, y: UIScreen.main.bounds.height - 189, width: 30, height: 30))
-        // butt.backgroundColor = .systemTeal
-        butt.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        butt.setImage(UIImage(systemName: "play.circle"), for: .normal)
-        butt.tintColor = .systemGray
+        if #available(iOS 13.0, *) {
+            isModalInPresentation = true
+        } else {
+            // Fallback on earlier versions
+        }
+//        let screenSize: CGRect = UIScreen.main.bounds
+//        butt = UIButton(frame: CGRect(x: screenSize.width - 30, y: UIScreen.main.bounds.height - 189, width: 30, height: 30))
+//        // butt.backgroundColor = .systemTeal
+//        butt.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+//        //butt.setImage(UIImage(systemName: "play.circle"), for: .normal)
+//        butt.setImage(UIImage(named: "play.circle.fill"), for: .normal)
+//
+//        butt.tintColor = .systemGray
 
         for value in sounds.allCases {
             picker_values.append(value.rawValue)
@@ -70,7 +79,7 @@ class IntervalEditorVC: UIViewController {
         tableView.register(UINib(nibName: "selectColorCell", bundle: nil), forCellReuseIdentifier: "selectColorCell")
         tableView.register(UINib(nibName: "basicRightLabelCell", bundle: nil), forCellReuseIdentifier: "basicRightLabelCell")
         tableView.register(UINib(nibName: "segmentCell", bundle: nil), forCellReuseIdentifier: "segmentCell")
-        let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
+        closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
         self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
         let saveButtonB = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButton))
         self.navigationItem.setRightBarButtonItems([saveButtonB], animated: true)
@@ -86,11 +95,11 @@ class IntervalEditorVC: UIViewController {
         print("closeButtonClick")
         if origArray == intervalArray {
             self.dismiss(animated: true, completion: nil)
-            print("here 30")
+            //print("here 30")
         }
         else {
-            print("here 31")
-            presentActionSheet()
+            //print("here 31")
+            presentActionSheet(sender: closeButton)
         }
     }
 
@@ -114,7 +123,7 @@ class IntervalEditorVC: UIViewController {
         //self.playSound()
     }
 
-    func presentActionSheet(ifSaving: Bool = false) {
+    func presentActionSheet(sender: UIBarButtonItem, ifSaving: Bool = false) {
         let actionSheetControllerIOS8: UIAlertController = UIAlertController()
 
         let cancelActionButton = UIAlertAction(title: "Continue Editing", style: .cancel) { _ in
@@ -136,9 +145,12 @@ class IntervalEditorVC: UIViewController {
                 print("Save Changes")
                 self.disappear()
             }
+
             actionSheetControllerIOS8.addAction(deleteActionButton)
         }
-
+        if let popoverController = actionSheetControllerIOS8.popoverPresentationController {
+          popoverController.barButtonItem = sender
+        }
 
         self.present(actionSheetControllerIOS8, animated: true, completion: nil)
     }
@@ -228,13 +240,13 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "basicLabelCell") as! basicLabelCell
-        cell.labelLeft!.text = "Routine Name"
+        cell.labelLeft!.text = "Interval Name"
         cell.textInput.text = intervalHighLow?.intervalName
         cell.textInput.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 
         if indexPath.section == 1 && isHighLow && indexPath.row == 0 {
             let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell
-            cell2.leftLabel.text = "Number of Sets"
+            cell2.leftLabel.text = "Number of Interval Sets"
             cell2.rightLabel.text = String(intervalHighLow!.numSets)
             return cell2
         }
@@ -242,6 +254,7 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == 1 && isHighLow && indexPath.row == 1 {
             let cell2 = tableView.dequeueReusableCell(withIdentifier: "segmentCell") as! segmentController
             cell2.leftLabel.text = "First Interval"
+            cell2.selectionStyle = .none
             // cell2.segment.backgroundColor = .secondarySystemBackground
             cell2.segment.segments = LabelSegment.segments(withTitles: ["Low", "High"])
 
@@ -282,9 +295,11 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
             let cell2 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
             cell2.colorLabel.text = "Interval Color"
             if (!isHighLow) {
+                cell2.colorCircle.image = cell2.colorCircle.image?.withRenderingMode(.alwaysTemplate)
                 cell2.colorCircle.tintColor = intervalArray[indexPath.section].intervalColor
             }
             else {
+                cell2.colorCircle.image = cell2.colorCircle.image?.withRenderingMode(.alwaysTemplate)
                 cell2.colorCircle.tintColor = intervalArray[indexPath.section - 2].intervalColor
             }
             return cell2
@@ -336,8 +351,8 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
                 }, cancelHandler: {
                     print("Canceled Styled Picker")
             }, selectionChangedHandler: { (selections: [Int:String], componentThatChanged: Int) -> Void  in
-                let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
-                print("Component \(componentThatChanged) changed value to \(newSelection)")
+                _ = selections[componentThatChanged] ?? "Failed to get new selection!"
+                //print("Component \(componentThatChanged) changed value to \(newSelection)")
             })
         }
 

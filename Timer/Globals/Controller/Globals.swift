@@ -12,6 +12,8 @@ import MKColorPicker
 import McPicker
 import CoreStore
 import AVFoundation
+import ColorCompatibility
+
 
 public class globals  {
     var dataStack = DataStack(xcodeModelName: "Timer")
@@ -49,13 +51,13 @@ public class globals  {
     }
     
     func setAllColorsArray() -> [UIColor] {
-        return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemIndigo, .systemPurple]
+        return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, ColorCompatibility.systemIndigo, .systemPurple]
     }
     
     func createColorPopover(tableView: UITableView, indexPath: IndexPath) -> ColorPickerViewController{
         let colorPicker = ColorPickerViewController()
         if let popoverController = colorPicker.popoverPresentationController{
-            let colors : [UIColor] = [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemIndigo, .systemPurple]
+            let colors : [UIColor] = [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, ColorCompatibility.systemIndigo, .systemPurple]
             colorPicker.allColors = colors
             colorPicker.pickerSize = CGSize(width: UIScreen.main.bounds.width - 120, height: 125) //default 250, 250
             popoverController.delegate = colorPicker
@@ -69,9 +71,10 @@ public class globals  {
     }
     
     func setMcPickerDetails(mcPicker: McPicker) {
-        mcPicker.backgroundColor = .secondarySystemGroupedBackground
-        mcPicker.pickerBackgroundColor = .secondarySystemGroupedBackground
-        mcPicker.toolbarBarTintColor = .systemGroupedBackground
+        mcPicker.backgroundColor = ColorCompatibility.secondarySystemGroupedBackground
+        mcPicker.pickerBackgroundColor = ColorCompatibility.secondarySystemGroupedBackground
+        
+        mcPicker.toolbarBarTintColor = ColorCompatibility.systemGroupedBackground
     }
     
     func loadCoreData2(rout1: Routine) {
@@ -93,8 +96,8 @@ public class globals  {
                             .where(\.cdUUID == rout1.routineID)
                         )!
                     //person.age = person.age + 1
-                    print("person", i)
-                    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+                    //print("person", i)
+                    var rout: Routine = globals().returnDefaultRout()
                     //print("i", i)
                     //rout.objectID = i
                     //print(i.cdName)
@@ -165,6 +168,7 @@ public class globals  {
         player2 = try! AVAudioPlayer(contentsOf: alertSound)
         player2.prepareToPlay()
         player2.volume =  UserDefaults.standard.float(forKey: settings.soundVolume.rawValue) / 10
+        //print("volume", player2.volume)
         player2.play()
         return player2
 
@@ -173,16 +177,17 @@ public class globals  {
     func returnDefaultRout(setTitle: Bool = false) -> Routine {
         var name = ""
         if setTitle {
-            name = "Default Routine"
+            name = "Default Timer" //
         }
 
-        var aRout = Routine(name: name, type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.bell), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.alarm), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.ding), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.bell), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.completed), routineColor: .systemRed, totalTime: 0)
+        var aRout = Routine(name: name, type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.bell), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.alarm), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.ding), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 5, intervalColor: .systemYellow, sound: sounds.bell), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.completed), routineColor: .systemRed, totalTime: 0, intervalRestTime: IntervalIntensity(duration: 5, intervalColor: .systemYellow, sound: sounds.bell))
         aRout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: aRout))
+//        var aRout = Routine(name: name, type: "Leg Workout", warmup: IntervalIntensity(duration: 5, intervalColor: .systemYellow, sound: sounds.bell), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 2, intervalName: "Calf Stretch", highInterval: IntervalIntensity(duration: 40, intervalColor: .systemRed, sound: sounds.alarm), lowInterval: IntervalIntensity(duration: 15, intervalColor: .systemGreen, sound: sounds.ding), HighLowIntervalColor: .systemRed), HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Quad Stretch", highInterval: IntervalIntensity(duration: 20, intervalColor: .systemRed, sound: sounds.alarm), lowInterval: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.ding), HighLowIntervalColor: .systemRed), HighLowInterval(firstIntervalHigh: true, numSets: 6, intervalName: "Hamstring Stretch", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.alarm), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.ding), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 5, intervalColor: .systemYellow, sound: sounds.bell), coolDown: IntervalIntensity(duration: 5, intervalColor: .systemBlue, sound: sounds.completed), routineColor: .systemRed, totalTime: 0, intervalRestTime: IntervalIntensity(duration: 5, intervalColor: .systemYellow, sound: sounds.bell))
+//        aRout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: aRout))
         return aRout
     }
 
-
-
-    
-    
+    func setTableViewBackground(tableView: UITableView) {
+        tableView.backgroundColor = ColorCompatibility.systemGroupedBackground
+    }
 }

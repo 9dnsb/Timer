@@ -82,7 +82,7 @@ public class SaveRoutine {
             person.warmup = self.addHighLowCD(transaction: transaction, interval: self.rout.warmup)
             person.rest = self.addHighLowCD(transaction: transaction, interval: self.rout.restTime)
             person.coolDown = self.addHighLowCD(transaction: transaction, interval: self.rout.coolDown)
-            
+            person.restInterval = self.addHighLowCD(transaction: transaction, interval: self.rout.intervalRestTime)
         }
     }
     

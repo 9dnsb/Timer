@@ -10,21 +10,43 @@ import UIKit
 import SwiftyStoreKit
 import PKHUD
 
-class SubscribeViewController: UIViewController {
+class SubscribeViewController: UIViewController, settingDelegate {
+    func changeValue(sub: subSendData) {
+        if sub.isSubscribed {
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
+
     let appBundleId = "db.timer.main"
     var weeklyPrice = ""
     let purchaseStartCell = 1
+    var subDel : subscribeDelegate?
+    
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
+
+
         tableView.register(UINib(nibName: "textCellView", bundle: nil), forCellReuseIdentifier: "textCellView")
         tableView.register(UINib(nibName: "SubscribeCellView", bundle: nil), forCellReuseIdentifier: "SubscribeCellView")
         tableView.register(UINib(nibName: "basicRightLabelCell", bundle: nil), forCellReuseIdentifier: "basicRightLabelCell")
-        self.isModalInPresentation = true
+        if #available(iOS 13.0, *) {
+            self.isModalInPresentation = true
+        } else {
+            // Fallback on earlier versions
+        }
 
         tableView.rowHeight = UITableView.automaticDimension
-
+        guard let navigationStack = navigationController?.viewControllers, navigationStack.count > 1 else {
+            let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
+            self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
+            return
+        }
         // Do any additional setup after loading the view.
+    }
+    @objc func closeButtonClick(){
+        self.dismiss(animated: true, completion: nil)
+
     }
     func showAlert(_ alert: UIAlertController) {
         guard self.presentedViewController != nil else {
@@ -43,7 +65,7 @@ class SubscribeViewController: UIViewController {
     func purchase(_ purchase: RegisteredPurchase, atomically: Bool) {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
-        HUD.hide(afterDelay: 1.0)
+
         SwiftyStoreKit.purchaseProduct(appBundleId + "." + purchase.rawValue, atomically: atomically) { result in
             //HUD.show(.progress)
             NetworkActivityIndicatorManager.networkOperationFinished()
@@ -70,7 +92,15 @@ class SubscribeViewController: UIViewController {
         switch result {
         case .success(let purchase):
             print("Purchase Success: \(purchase.productId)")
+
+            UserDefaults.standard.set(true, forKey: subscription.isSubsribed.rawValue)
+            self.subDel?.runAfterSubscribe()
+            HUD.hide(afterDelay: 1.0)
             self.dismiss(animated: true, completion: nil)
+
+            //self.view.window!.rootViewController?.dismiss(animated: false, completion: nil)
+            
+
             return nil
         case .error(let error):
             print("Purchase Failed: \(error)")
@@ -79,6 +109,7 @@ class SubscribeViewController: UIViewController {
             case .clientInvalid: // client is not allowed to issue the request, etc.
                 return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
             case .paymentCancelled: // user cancelled the request, etc.
+                HUD.hide(afterDelay: 1.0)
                 return nil
             case .paymentInvalid: // purchase identifier was invalid, etc.
                 return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
@@ -93,7 +124,9 @@ class SubscribeViewController: UIViewController {
             case .cloudServiceRevoked: // user has revoked permission to use this cloud service
                 return alertWithTitle("Purchase failed", message: "Cloud service was revoked")
             default:
+                HUD.hide(afterDelay: 1.0)
                 return alertWithTitle("Purchase failed", message: (error as NSError).localizedDescription)
+                
             }
         }
     }
@@ -124,6 +157,9 @@ class SubscribeViewController: UIViewController {
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         } else if results.restoredPurchases.count > 0 {
             print("Restore Success: \(results.restoredPurchases)")
+            let sg = SubscribeGlobal()
+            sg.setDel = self
+            sg.verifySubscriptions([.weekly, .monthly, .yearly])
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         } else {
             print("Nothing to Restore")
@@ -227,5 +263,7 @@ extension SubscribeViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension SubscribeViewController: UIAdaptivePresentationControllerDelegate {
     func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        self.subDel?.runAfterSubscribe()
+        print("here")
     }
 }

@@ -34,6 +34,8 @@
 		634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CFC242668AB0011B9ED /* PlayerView.storyboard */; };
 		634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5D022426944D0011B9ED /* routineTotalTime.swift */; };
 		638E96C1242C01C300A8626C /* blank.wav in Resources */ = {isa = PBXBuildFile; fileRef = 638E96C0242C01C300A8626C /* blank.wav */; };
+		63911E24244E262C009C184A /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63911E23244E262C009C184A /* Reachability.swift */; };
+		63911E26244E3E7F009C184A /* SubscribeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63911E25244E3E7F009C184A /* SubscribeAlert.swift */; };
 		63B24DA92445444B00EC48F3 /* Train Whistle.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D992445444200EC48F3 /* Train Whistle.mp3 */; };
 		63B24DAA2445444B00EC48F3 /* Alarm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9A2445444200EC48F3 /* Alarm.mp3 */; };
 		63B24DAB2445444B00EC48F3 /* Train Horn.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 63B24D9B2445444300EC48F3 /* Train Horn.mp3 */; };
@@ -132,6 +134,8 @@
 		634E5D022426944D0011B9ED /* routineTotalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routineTotalTime.swift; sourceTree = "<group>"; };
 		638E96C0242C01C300A8626C /* blank.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = blank.wav; sourceTree = "<group>"; };
 		638E96C3242C04BF00A8626C /* test.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.aif; sourceTree = "<group>"; };
+		63911E23244E262C009C184A /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		63911E25244E3E7F009C184A /* SubscribeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeAlert.swift; sourceTree = "<group>"; };
 		63B24D992445444200EC48F3 /* Train Whistle.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Whistle.mp3"; sourceTree = "<group>"; };
 		63B24D9A2445444200EC48F3 /* Alarm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Alarm.mp3; sourceTree = "<group>"; };
 		63B24D9B2445444300EC48F3 /* Train Horn.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Train Horn.mp3"; sourceTree = "<group>"; };
@@ -181,6 +185,7 @@
 		63C7CCD42422C0B700960513 /* TimerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TimerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		63C7CCD82422C0B700960513 /* TimerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerUITests.swift; sourceTree = "<group>"; };
 		63C7CCDA2422C0B700960513 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63DCE2EE2451B87800DDDDA6 /* Timer2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Timer2.xcdatamodel; sourceTree = "<group>"; };
 		63E76E3F2425206700AA6814 /* RoutineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineCell.swift; sourceTree = "<group>"; };
 		63EEB01024412DCB0013B5A6 /* SaveRoutine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveRoutine.swift; sourceTree = "<group>"; };
 		6E893264AC50A0A294F2D04D /* Pods_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -368,6 +373,7 @@
 				63B61E79242788C300CDAD88 /* Globals.swift */,
 				63EEB01024412DCB0013B5A6 /* SaveRoutine.swift */,
 				63BBDF9D2449067900D1AB69 /* DarkModeEnable.swift */,
+				63911E23244E262C009C184A /* Reachability.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -461,6 +467,7 @@
 				63BBDFB0244919A500D1AB69 /* textCellVCTableViewCell.swift */,
 				63BBDFB62449FEA700D1AB69 /* SubscribeGlobals.swift */,
 				63BBDFBA244A0CF400D1AB69 /* SubscribeCellVC.swift */,
+				63911E25244E3E7F009C184A /* SubscribeAlert.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -893,6 +900,7 @@
 			files = (
 				6317165D242FE87900BC4F7E /* lowHighCell.swift in Sources */,
 				631C0C6C2434B53500C06AD2 /* selectColorCell.swift in Sources */,
+				63911E24244E262C009C184A /* Reachability.swift in Sources */,
 				63B24DC124461C1A00EC48F3 /* FormSettingModel.swift in Sources */,
 				63BBDFBB244A0CF400D1AB69 /* SubscribeCellVC.swift in Sources */,
 				63B24DBF244615DF00EC48F3 /* FormSettingVC.swift in Sources */,
@@ -918,6 +926,7 @@
 				63BBDFAB2449126B00D1AB69 /* SubscribeModel.swift in Sources */,
 				63E76E402425206700AA6814 /* RoutineCell.swift in Sources */,
 				631C0C772436983A00C06AD2 /* pickerData.swift in Sources */,
+				63911E26244E3E7F009C184A /* SubscribeAlert.swift in Sources */,
 				631C0C7A24369A8900C06AD2 /* soundPicker.swift in Sources */,
 				634B9268242391CB00E82F66 /* RoutinesModel.swift in Sources */,
 				63171659242FCC5900BC4F7E /* selectIntervalCell.swift in Sources */,
@@ -1102,15 +1111,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CURRENT_PROJECT_VERSION = 1.8;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "Interval Timer";
 				SWIFT_VERSION = 5.0;
@@ -1124,15 +1133,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.1;
+				CURRENT_PROJECT_VERSION = 1.8;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "Interval Timer";
 				SWIFT_VERSION = 5.0;
@@ -1273,6 +1282,7 @@
 		63C7CCBC2422C0B200960513 /* Timer.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				63DCE2EE2451B87800DDDDA6 /* Timer2.xcdatamodel */,
 				63C7CCBD2422C0B200960513 /* Timer.xcdatamodel */,
 			);
 			currentVersion = 63C7CCBD2422C0B200960513 /* Timer.xcdatamodel */;

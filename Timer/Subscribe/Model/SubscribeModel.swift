@@ -24,3 +24,11 @@ enum RegisteredPurchase: String {
     case sixMonth
     case yearly
 }
+
+struct subSendData {
+    var isSubscribed : Bool = false
+    var expireDate = Date(timeIntervalSinceReferenceDate: -123456789.0)
+    var isTrial : Bool = false
+    var runSetting : Bool = false
+    var runSetting2 : Bool = false
+}

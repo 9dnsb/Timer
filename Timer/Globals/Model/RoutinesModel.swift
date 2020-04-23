@@ -75,7 +75,8 @@ struct Routine: Equatable {
     var routineColor: UIColor
     var totalTime: Int
     var routineID: String!
-    var routineIndex: Int!
+    var routineIndex: Int! = 0
+    var intervalRestTime: IntervalIntensity
     
 }
 
@@ -94,6 +95,7 @@ enum intervalOptions: Int {
     case lowInt = 4
     case highInt = 5
     case highLowInt = 6
+    case intervalRest = 7
 }
 
 struct constants {

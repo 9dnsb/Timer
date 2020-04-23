@@ -10,19 +10,23 @@ import UIKit
 
 public class DarkModeEnable: UIViewController {
 
-    public func checkForDarkMode() -> UIUserInterfaceStyle  {
-        if #available(iOS 13.0, *)  {
-            if self.traitCollection.userInterfaceStyle == .dark && !UserDefaults.standard.bool(forKey: settings.enableDarkMode.rawValue) {
-                // Always adopt a light interface style.
-                self.overrideUserInterfaceStyle = .light
-                return self.overrideUserInterfaceStyle
-                //self.navigationController?.navigationBar.tintColor = .systemGray6
-            }
-
-
-        }
-        return self.overrideUserInterfaceStyle
-    }
+//    public func checkForDarkMode() -> UIUserInterfaceStyle  {
+//        if #available(iOS 13.0, *)  {
+//            if self.traitCollection.userInterfaceStyle == .dark && !UserDefaults.standard.bool(forKey: settings.enableDarkMode.rawValue) {
+//                // Always adopt a light interface style.
+//                self.overrideUserInterfaceStyle = .light
+//                return self.overrideUserInterfaceStyle
+//                //self.navigationController?.navigationBar.tintColor = .systemGray6
+//            }
+//
+//
+//        }
+//        if #available(iOS 13.0, *) {
+//            return self.overrideUserInterfaceStyle
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//    }
     
 
     /*

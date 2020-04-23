@@ -23,6 +23,7 @@ protocol SecondVCDelegate {
 
 class RoutineEditorController: UIViewController, ModalDelegate {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var addInterval: UIImageView!
     var people: [NSManagedObject] = []
     var colorPicker = ColorPickerViewController()
     let dataStack = DataStack(xcodeModelName: "Timer")
@@ -31,8 +32,9 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     var incomingData:Routine!
     var currObjId : CDRoutine!
     var passClubDelegate: ModalDelegate3?
-    var presetInterval: HighLowInterval = HighLowInterval(firstIntervalHigh: true, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)
+    var presetInterval: HighLowInterval = globals().returnDefaultRout().intervals[0]
     var rout: Routine = globals().returnDefaultRout()
+    var closeButton : UIBarButtonItem!
 
     var totalSections = 7
     var indexSection = 3
@@ -42,7 +44,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     var intervalChangeIndex = 0
     var origName = ""
     var origRout : Routine!
-    
+
 
     override func viewDidLoad() {
         
@@ -53,7 +55,11 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         if rout.name == "" {
             rout.routineColor = colors[number]
         }
+        //rout.routineColor = colors[4]
+        //rout.name = "Leg Stretch"
         super.viewDidLoad()
+
+
         do {
             try dataStack.addStorageAndWait(SQLiteStore())
             
@@ -65,7 +71,10 @@ class RoutineEditorController: UIViewController, ModalDelegate {
             switchClicked = true
         }
         totalSections = totalSections + 1
-        self.tableView.backgroundColor = .systemGroupedBackground
+        if rout.intervals.count > 1 {
+            totalSections += 1
+        }
+        globals().setTableViewBackground(tableView: self.tableView)
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
         view.addGestureRecognizer(tap)
         tap.cancelsTouchesInView = false
@@ -78,7 +87,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     
     func setNavigationBar() {
         self.navigationItem.setHidesBackButton(true, animated: false)
-        let closeButton = UIBarButtonItem(title: "Discard", style: .plain, target: self, action: #selector(closeButtonClick))
+        closeButton = UIBarButtonItem(title: "Discard", style: .plain, target: self, action: #selector(closeButtonClick))
         self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
         let editButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveButton))
         self.navigationItem.setRightBarButtonItems([editButton], animated: true)
@@ -88,14 +97,14 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
     
     @objc func closeButtonClick(){
-        print("closeButtonClick")
+        //print("closeButtonClick")
         if origRout == rout {
-            print("here 30")
+            //print("here 30")
             self.navigationController?.popViewController(animated: true)
         }
         else {
-            print("here 31")
-            presentActionSheet()
+            //print("here 31")
+            presentActionSheet(sender: closeButton)
         }
 
     }
@@ -150,7 +159,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
             person.warmup = self.addHighLowCD(transaction: transaction, interval: self.rout.warmup)
             person.rest = self.addHighLowCD(transaction: transaction, interval: self.rout.restTime)
             person.coolDown = self.addHighLowCD(transaction: transaction, interval: self.rout.coolDown)
-            
+            person.restInterval = self.addHighLowCD(transaction: transaction, interval: self.rout.intervalRestTime)
         }
     }
     
@@ -203,7 +212,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     @objc func saveButton(){
         //print("closeButtonClick")
         if rout.name == "" {
-            let alert = UIAlertController(title: "Routine Name is empty", message: "Please enter a Routine Name", preferredStyle: UIAlertController.Style.alert)
+            let alert = UIAlertController(title: "Timer Name is empty", message: "Please enter a Routine Name", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
             return
@@ -217,7 +226,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         super.viewWillAppear(animated)
     }
     
-    func presentActionSheet(ifSaving: Bool = false) {
+    func presentActionSheet(sender: UIBarButtonItem, ifSaving: Bool = false) {
         let actionSheetControllerIOS8: UIAlertController = UIAlertController()
         let cancelActionButton = UIAlertAction(title: "Continue Editing", style: .cancel) { _ in
             print("Cancel")
@@ -237,6 +246,9 @@ class RoutineEditorController: UIViewController, ModalDelegate {
             }
             actionSheetControllerIOS8.addAction(deleteActionButton)
         }
+        if let popoverController = actionSheetControllerIOS8.popoverPresentationController {
+          popoverController.barButtonItem = sender
+        }
         self.present(actionSheetControllerIOS8, animated: true, completion: nil)
     }
     
@@ -249,6 +261,9 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         }
         if intervalChanged == intervalOptions.rest {
             rout.restTime = value[0]
+        }
+        if intervalChanged == intervalOptions.intervalRest {
+            rout.intervalRestTime = value[0]
         }
         if intervalChanged == intervalOptions.highLowInt {
             rout.intervals[intervalChangeIndex] = highlowInt
@@ -348,13 +363,14 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell1") as! inputTextCell
+        
         if cell.returnInputString() != "" {
             rout.name = cell.returnInputString()
         }
         if (indexPath.section == 0) && indexPath.row == 0{
             cell.inputString.text = rout.name
             cell.inputString.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
-            
+            cell.selectionStyle = .none
             return cell
         }
         let cell2a = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
@@ -368,7 +384,8 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         }
         let cell27 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
         if indexPath.section == (1) && indexPath.row == 0 {
-            cell27.colorLabel.text = "Routine Color"
+            cell27.colorLabel.text = "Timer Color"
+            cell27.colorCircle.image = cell27.colorCircle.image?.withRenderingMode(.alwaysTemplate)
             cell27.colorCircle.tintColor = rout.routineColor
             return cell27
         }
@@ -402,9 +419,27 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             }
             return cell24
         }
+
+        let cell2z = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
+        if indexPath.section == totalSections - 5 && rout.intervals.count > 1 {
+            cell2z.intervalName.text = "Interval Rest Time"
+            cell2z.setImageColor(color: rout.intervalRestTime.intervalColor)
+            cell2z.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.intervalRestTime.duration)))
+            cell2z.theImage.isHidden = false
+            cell2z.labelLeftContrain.constant = 10
+            return cell2z
+        }
         
         let cell3 = tableView.dequeueReusableCell(withIdentifier: "addNewCycle") as! addNewCycleCell
         if indexPath.section == totalSections - 4 {
+            if #available(iOS 13.0, *) {
+                cell3.addInterval.image = UIImage(systemName: "plus.circle.fill")
+            } else {
+                cell3.addInterval.image = cell3.addInterval.image?.withRenderingMode(.alwaysTemplate)
+
+
+            }
+
             return cell3
         }
         let cell33 = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! switchCell
@@ -412,6 +447,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             cell33.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             let theSwitch = UISwitch()
             cell33.switchSwitch = theSwitch
+            cell33.selectionStyle = .none
             cell33.accessoryView = theSwitch
             cell33.switchLabel.text = "Repeat"
             theSwitch.addTarget(self, action: #selector(switchValueDidChange(_:)), for: .valueChanged)
@@ -425,7 +461,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == totalSections - 3 && indexPath.row == 1 {
             cell2b.theImage.isHidden = true
             cell2b.totalTime.text = "2"
-            cell2b.setIntervalName(intervalName: "Number of Routine Cycles")
+            cell2b.setIntervalName(intervalName: "Number of Cycles")
             if rout.numCycles > 1 {
                 cell2b.totalTime.text = String(rout.numCycles)
             }
@@ -436,7 +472,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         let cell2c = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
         if indexPath.section == totalSections - 2 {
             cell2c.setImageColor(color: rout.restTime.intervalColor)
-            cell2c.setIntervalName(intervalName: "Rest Time")
+            cell2c.setIntervalName(intervalName: "Cycle Rest Time")
             cell2c.totalTime.text = String(rout.numCycles)
             cell2c.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.restTime.duration)))
             return cell2c
@@ -453,26 +489,66 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
+        if indexPath.section == totalSections - 5 && self.rout.intervals.count > 1 {
+            let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
+            let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
+            myVC!.modalPresentationStyle = .fullScreen
+            let navController = UINavigationController(rootViewController: myVC!)
+            myVC!.title = "Interval Rest Time"
+            myVC!.interval = rout.intervalRestTime
+            navController.presentationController?.delegate = myVC
+            intervalChanged = intervalOptions.intervalRest
+            myVC?.delegate = self
+            self.navigationController?.present(navController, animated: true, completion: nil)
+        }
+        if indexPath.section == 0 {
+            
+        }
         if indexPath.section == 1 {
             self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
             
             self.present(colorPicker, animated: true, completion: nil)
             colorPicker.selectedColor = { color in
                 self.rout.routineColor = color
-                print(color)
-                print(self.rout.routineColor)
+                //print(color)
+                //print(self.rout.routineColor)
                 self.tableView.reloadData()
             }
         }
         
-        if indexPath.section == indexSection + 1 {
-            presetInterval.intervalName = "Interval Cycle #\(rout.intervals.count + 1)"
+        if indexPath.section == totalSections - 4 {
+//            if SubscribeAlert().runAlert(theView: self, theString: "add an interval") {
+//                return
+//            }
+
+
+            presetInterval.intervalName = "Interval #\(rout.intervals.count + 1)"
+
             rout.intervals.append(presetInterval)
-            tableView.performBatchUpdates({
+
+            if #available(iOS 11.0, *) {
+                tableView.performBatchUpdates({
+                    tableView.insertRows(at: [IndexPath(row: rout.intervals.count - 1, section: indexSection)], with: .none)
+                    if rout.intervals.count > 1 && totalSections == 8 {
+                        //print("add intervals")
+                        totalSections += 1
+                        let indexSet = IndexSet(integer: totalSections - 5)
+                        tableView.insertSections(indexSet, with: .none)
+                        //self.tableView.reloadData()
+                    }
+
+                }) { (update) in
+                    print("Update SUccess1")
+                }
+            } else {
                 tableView.insertRows(at: [IndexPath(row: rout.intervals.count - 1, section: indexSection)], with: .none)
-            }) { (update) in
-                print("Update SUccess1")
+                if rout.intervals.count > 1 && totalSections == 8 {
+                    //print("add intervals")
+                    totalSections += 1
+                    let indexSet = IndexSet(integer: totalSections - 5)
+                    tableView.insertSections(indexSet, with: .none)
+                    self.tableView.reloadData()
+                }
             }
         }
         
@@ -583,6 +659,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         if indexPath.section == indexSection {
             return 84.5
         }
+
         return tableView.rowHeight
     }
     
@@ -604,7 +681,10 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                     print("destructive")
                     self.rout.intervals.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    
+                    if self.rout.intervals.count == 1 && self.totalSections != 7 {
+                        self.totalSections -= 1
+                        self.tableView.reloadData()
+                    }
                 @unknown default:
                     print("error")
                 }}))
@@ -730,3 +810,4 @@ extension UIColor {
         }
     }
 }
+

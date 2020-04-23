@@ -17,7 +17,7 @@
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9er-yW-nx6">
                         <rect key="frame" x="15" y="10" width="384" height="19"/>
-                        <string key="text">David's Interval Timer relies on subscriptions to support future app development and support the app developer. You can easily cancel at any time, from here or the App Store, without talking to anyone</string>
+                        <string key="text">David's Interval Timer relies on subscriptions to support future app development and support the app developer. Subscriptions also allow the app to run free of ads. You can easily cancel at any time, from here or the App Store, without talking to anyone</string>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>

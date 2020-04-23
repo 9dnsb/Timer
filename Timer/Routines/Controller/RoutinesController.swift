@@ -11,24 +11,46 @@ import SwiftReorder
 import SwiftyStoreKit
 import CoreData
 import CoreStore
+import PKHUD
+
 
 protocol settingDelegate {
-    func changeValue(darkMode: Bool)
+    func changeValue(sub: subSendData)
+}
+protocol subscribeDelegate {
+    func runAfterSubscribe()
 }
 let check = DarkModeEnable()
 
-class RoutinesController: UIViewController, settingDelegate {
-    func changeValue(darkMode: Bool) {
+class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
+    func runAfterSubscribe() {
+        self.verifySub()
+        print("runAfterSubscribe")
+
+    }
+
+    func changeValue(sub: subSendData) {
         //print("changeVal")
-        if !darkMode {
-            let storyboard = UIStoryboard(name: "SubscribeView", bundle: nil)
-            let myVC = storyboard.instantiateViewController(withIdentifier: "SubscribeView") as! SubscribeViewController
-            myVC.title = "Subscription Settings"
-            let navController = UINavigationController(rootViewController: myVC)
-            self.navigationController?.present(navController, animated: true, completion: nil)
+        //print(UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue))
+        if !sub.isSubscribed {
+//            let storyboard = UIStoryboard(name: "SubscribeView", bundle: nil)
+//            let myVC = storyboard.instantiateViewController(withIdentifier: "SubscribeView") as! SubscribeViewController
+//            myVC.title = "Subscription Settings"
+//            myVC.subDel = self
+//            let navController = UINavigationController(rootViewController: myVC)
+//            self.navigationController?.present(navController, animated: true, completion: nil)
         
         }
+        else {
+            if sub.runSetting{
+                //self.settingClickRun()
+            }
+        }
+        //print("sub.expireDate", sub.expireDate)
+        subData = sub
+
         //self.overrideUserInterfaceStyle = check.checkForDarkMode()
+        //print(sub)
     }
 
     @IBOutlet weak var tableView: UITableView!
@@ -38,27 +60,18 @@ class RoutinesController: UIViewController, settingDelegate {
     var isEditingBool = true
     var addEditClick: UIBarButtonItem = UIBarButtonItem()
     var addRoutineButton: UIBarButtonItem = UIBarButtonItem()
-    
+    var subData = subSendData()
     var rout = [Routine]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let sg = SubscribeGlobal()
-        sg.setDel = self
-        sg.verifySubscriptions([.weekly, .monthly, .yearly])
         
-//        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
-//            let storyboard = UIStoryboard(name: "SubscribeView", bundle: nil)
-//            let myVC = storyboard.instantiateViewController(withIdentifier: "SubscribeView") as! SubscribeViewController
-//            myVC.title = "Subscription Settings"
-//            let navController = UINavigationController(rootViewController: myVC)
-//            self.navigationController?.present(navController, animated: true, completion: nil)
-//        }
+
         self.setBackgroundandNavigationBar()
         self.setupTable()
         
-        self.tableView.reorder.delegate = self as TableViewReorderDelegate
+//        self.tableView.reorder.delegate = self as TableViewReorderDelegate
         do {
             try dataStack.addStorageAndWait(SQLiteStore())
             
@@ -66,45 +79,13 @@ class RoutinesController: UIViewController, settingDelegate {
         catch { // ...
             print("error")
         }
-//                SwiftyStoreKit.retrieveProductsInfo(["db.timer.main.weekly"]) { result in
-//                    if let product = result.retrievedProducts.first {
-//                        let priceString = product.localizedPrice!
-//                        print("Product: \(product.localizedDescription), price: \(priceString)")
-//                    }
-//                    else if let invalidProductId = result.invalidProductIDs.first {
-//                        print("Invalid product identifier: \(invalidProductId)")
-//                    }
-//                    else {
-//                        //print("Error: \(String(describing: result.error))")
-//                    }
-//                }
-//
-//
-//
-                
-//                SwiftyStoreKit.purchaseProduct("db.timer.main.weekly", quantity: 1, atomically: false) { result in
-//                    switch result {
-//                    case .success(let product):
-//                        // fetch content from your server, then:
-//                        if product.needsFinishTransaction {
-//                            SwiftyStoreKit.finishTransaction(product.transaction)
-//                        }
-//                        print("Purchase Success: \(product.productId)")
-//                    case .error(let error):
-//                        switch error.code {
-//                        case .unknown: print("Unknown error. Please contact support")
-//                        case .clientInvalid: print("Not allowed to make the payment")
-//                        case .paymentCancelled: break
-//                        case .paymentInvalid: print("The purchase identifier was invalid")
-//                        case .paymentNotAllowed: print("The device is not allowed to make the payment")
-//                        case .storeProductNotAvailable: print("The product is not available in the current storefront")
-//                        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
-//                        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
-//                        case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
-//                        default: print((error as NSError).localizedDescription)
-//                        }
-//                    }
-//                }
+
+    }
+
+    func verifySub() {
+        let sg = SubscribeGlobal()
+        sg.setDel = self
+        sg.verifySubscriptions([.weekly, .monthly, .yearly])
     }
 
     func addDefaultRout() {
@@ -125,7 +106,7 @@ class RoutinesController: UIViewController, settingDelegate {
             else {
                 //print("count", objects.count)
                 for (_, i) in objects.enumerated() {
-                    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+                    var rout: Routine = globals().returnDefaultRout()
                     //print("i", i)
                     //rout.objectID = i
                     //print(i.cdName)
@@ -140,7 +121,7 @@ class RoutinesController: UIViewController, settingDelegate {
                     rout.coolDown = self.setIntIntesity(cdInt: i.coolDown!)
                     rout.routineID = i.cdUUID!
                     rout.routineIndex = Int(i.cdRoutineIndex)
-
+                    rout.intervalRestTime = self.setIntIntesity(cdInt: i.restInterval!)
 
                     for (j, elem) in i.cDHighLowInterval!.enumerated() {
                         //print("j", j)
@@ -190,9 +171,19 @@ class RoutinesController: UIViewController, settingDelegate {
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
+        //self.verifySub()
+//        SwiftyStoreKit.fetchReceipt(forceRefresh: false) { result in
+//            switch result {
+//            case .success(let receiptData):
+//                let encryptedReceipt = receiptData.base64EncodedString(options: [])
+//                print("Fetch receipt success:\n\(encryptedReceipt)")
+//            case .error(let error):
+//                print("Fetch receipt failed: \(error)")
+//            }
+//        }
         //self.deleteCoreData()
         self.loadCoreData2()
-        tableView.reloadData()
+        //tableView.reloadData()
         setBackgroundandNavigationBar()
     }
     
@@ -204,6 +195,7 @@ class RoutinesController: UIViewController, settingDelegate {
     func setRightBarItem() {
         addRoutineButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addRoutineClick))
         addEditClick = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(addEditButton))
+//        self.navigationItem.setRightBarButtonItems([addRoutineButton, addEditClick], animated: true)
         if rout.count > 1 {
             self.navigationItem.setRightBarButtonItems([addRoutineButton, addEditClick], animated: true)
         }
@@ -213,10 +205,21 @@ class RoutinesController: UIViewController, settingDelegate {
     }
     
     func setBackgroundandNavigationBar() {
-        self.tableView.backgroundColor = .systemGroupedBackground
+        globals().setTableViewBackground(tableView: self.tableView)
         let settingButton = UIButton(type: .custom)
-        //settingButton.frame = CGRect(x: 0, y: 0, width: 53, height: 51)
-        settingButton.setImage(UIImage(systemName: "gear"), for: .normal)
+        if #available(iOS 13.0, *) {
+            settingButton.frame = CGRect(x: 0, y: 0, width: 53, height: 51)
+            settingButton.setImage(UIImage(systemName: "gear"), for: .normal)
+        } else {
+            let origImage = UIImage(named: "gear")
+            let tintedImage = origImage?.withRenderingMode(.alwaysTemplate)
+            settingButton.setBackgroundImage(tintedImage, for: .normal)
+            settingButton.tintColor = self.view.tintColor
+        }
+
+
+        //settingButton.setBackgroundImage(UIImage(named: "gear"), for: .normal)
+
         // settingButton.tintColor = .systemGray
         settingButton.addTarget(self, action: #selector(settingClicked), for: .touchUpInside)
         let item1 = UIBarButtonItem(customView: settingButton)
@@ -229,55 +232,55 @@ class RoutinesController: UIViewController, settingDelegate {
     
     
     func setupTable() {
-        let newRout1 = Routine(name: "Low Interval", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 4, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 2, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 4, restTime: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
-        let newInter = HighLowInterval(firstIntervalHigh: true, numSets: 4, intervalName: "Interval #2", highInterval: IntervalIntensity(duration: 4, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
-        let newInter2 = HighLowInterval(firstIntervalHigh: false, numSets: 3, intervalName: "Interval #3", highInterval: IntervalIntensity(duration: 7, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 5, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
-        let newInter3 = HighLowInterval(firstIntervalHigh: true, numSets: 3, intervalName: "Interval #3", highInterval: IntervalIntensity(duration: 7, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 5, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
-        var rout3 = newRout1
-        rout3.intervals.append(newInter)
-        rout3.intervals.append(newInter2)
-        rout3.intervals.append(newInter3)
-        rout3.intervals.append(newInter)
-        rout3.intervals.append(newInter2)
-        rout3.name = "Test #3"
-        let newRout2 = Routine(name: "Elbow", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 1, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 80, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemIndigo, totalTime: 0)
-        let newRout5 = Routine(name: "High Interval", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 2, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 1, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemYellow, totalTime: 0)
-        let newRout6 = Routine(name: "Low Interval", type: "Simple", warmup: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.trainWhistle), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 5, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 8, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 1, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemYellow, totalTime: 0)
+//        let newRout1 = Routine(name: "Low Interval", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 4, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 2, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 4, restTime: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+//        let newInter = HighLowInterval(firstIntervalHigh: true, numSets: 4, intervalName: "Interval #2", highInterval: IntervalIntensity(duration: 4, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
+//        let newInter2 = HighLowInterval(firstIntervalHigh: false, numSets: 3, intervalName: "Interval #3", highInterval: IntervalIntensity(duration: 7, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 5, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
+//        let newInter3 = HighLowInterval(firstIntervalHigh: true, numSets: 3, intervalName: "Interval #3", highInterval: IntervalIntensity(duration: 7, intervalColor: .systemPink, sound: sounds.none), lowInterval: IntervalIntensity(duration: 5, intervalColor: .systemTeal, sound: sounds.none), HighLowIntervalColor: .systemRed)
+//        var rout3 = newRout1
+//        rout3.intervals.append(newInter)
+//        rout3.intervals.append(newInter2)
+//        rout3.intervals.append(newInter3)
+//        rout3.intervals.append(newInter)
+//        rout3.intervals.append(newInter2)
+//        rout3.name = "Test #3"
+//        let newRout2 = Routine(name: "Elbow", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 1, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 3, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 80, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemIndigo, totalTime: 0)
+//        let newRout5 = Routine(name: "High Interval", type: "Simple", warmup: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), intervals: [HighLowInterval(firstIntervalHigh: true, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 3, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 2, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 1, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemYellow, totalTime: 0)
+//        let newRout6 = Routine(name: "Low Interval", type: "Simple", warmup: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.trainWhistle), intervals: [HighLowInterval(firstIntervalHigh: false, numSets: 2, intervalName: "Interval #1", highInterval: IntervalIntensity(duration: 5, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 8, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed)], numCycles: 1, restTime: IntervalIntensity(duration: 0, intervalColor: .systemGreen, sound: sounds.none), coolDown: IntervalIntensity(duration: 20, intervalColor: .systemGreen, sound: sounds.none), routineColor: .systemYellow, totalTime: 0)
+//        
+//        rout.append(newRout1)
+//        rout.append(newRout2)
+//        rout.append(rout3)
+//        
+//        rout.append(newRout5)
+//        rout.append(newRout6)
+//        for (j, aRout) in rout.enumerated() {
+//            rout[j].totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: aRout))
+//        }
         
-        rout.append(newRout1)
-        rout.append(newRout2)
-        rout.append(rout3)
-        
-        rout.append(newRout5)
-        rout.append(newRout6)
-        for (j, aRout) in rout.enumerated() {
-            rout[j].totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: aRout))
-        }
-        
+    }
+
+    func settingClickRun() {
+        let storyboard = UIStoryboard(name: "FormSettingView", bundle: nil)
+        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView") as! FormSettingVC
+        myVC.title = "Settings"
+        myVC.settingDel = self
+        myVC.subData = self.subData
+        myVC.routineContr = self
+        let navController = UINavigationController(rootViewController: myVC)
+        self.navigationController?.present(navController, animated: true, completion: nil)
     }
     
     
     // MARK: - Table view data source
     @objc func settingClicked(){
-        let storyboard = UIStoryboard(name: "FormSettingView", bundle: nil)
-        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView") as! FormSettingVC
-        myVC.title = "Settings"
-        myVC.settingDel = self
-        let navController = UINavigationController(rootViewController: myVC)
-        self.navigationController?.present(navController, animated: true, completion: nil)
+        self.settingClickRun()
+
     }
     
     @objc func addRoutineClick(){
-        //let storyboard = UIStoryboard(name: "RoutineEditorView", bundle: nil)
-        //let myVC = storyboard.instantiateViewController(withIdentifier: "RoutineEditorView")
-        //        let myVC = RoutineEditorController()
-        //        myVC.title = "Add Routine"
-        //        self.present(myVC, animated: true, completion: nil)
-        //        //let navController = UINavigationController(rootViewController: myVC)
-        //
-        //        //self.navigationController?.present(navController, animated: true, completion: nil)
+
         if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
-            viewController.title = "Add Routine"
+            viewController.title = "Add Timer"
             viewController.rout.routineIndex = self.rout.count
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
@@ -287,19 +290,25 @@ class RoutinesController: UIViewController, settingDelegate {
     }
     @objc func addEditButton(){
         
-        self.tableView.setEditing(self.isEditingBool, animated: true)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { // Change `2.0` to the desired number of seconds. // Code you want to be delayed }
-            self.tableView.reloadData()
+
+            
             if self.isEditingBool {
+                //print("here1")
                 self.addEditClick = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(self.addEditButton))
                 self.navigationItem.setRightBarButtonItems([self.addEditClick], animated: true)
             }
             else {
+                //print("here2")
                 self.addEditClick = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(self.addEditButton))
                 self.navigationItem.setRightBarButtonItems([self.addRoutineButton, self.addEditClick], animated: true)
             }
-            self.isEditingBool.toggle()
-        }
+
+            //
+
+        self.tableView.setEditing(self.isEditingBool, animated: true)
+        self.isEditingBool.toggle()
+        //self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+
         
     }
     
@@ -309,6 +318,7 @@ class RoutinesController: UIViewController, settingDelegate {
         rout.insert(movedObject, at: destinationIndexPath.row)
         self.reorderRouts()
     }
+
     
     func reorderRouts() {
         self.dataStack.perform(
@@ -327,7 +337,7 @@ class RoutinesController: UIViewController, settingDelegate {
                     sr.dataStack = self.dataStack
                     sr.rout = self.rout[j]
                     sr.save3()
-                    self.tableView.reloadData()
+                    //self.tableView.reloadData()
                 }
 
         }
@@ -341,22 +351,25 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         rout.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let spacer = tableView.reorder.spacerCell(for: indexPath) {
-            return spacer
-        }
+//        if let spacer = tableView.reorder.spacerCell(for: indexPath) {
+//            return spacer
+//        }
         let routine = rout[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: "RoutineCell") as! RoutineCell
         cell.setLabels(rout: routine, edit: !self.isEditingBool)
-        print(rout[indexPath.row])
-        print("rout[indexPath.row].totalTime", rout[indexPath.row].totalTime)
+        //print(rout[indexPath.row])
+        //print("rout[indexPath.row].totalTime", rout[indexPath.row].totalTime)
         cell.timeLabel.text =
-            globals().timeString(time: TimeInterval(rout[indexPath.row].totalTime)) 
+            globals().timeString(time: TimeInterval(rout[indexPath.row].totalTime))
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
+
+
     
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
@@ -366,11 +379,11 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
     {
         if rout.count > 1 {
-            self.setRightBarItem()
+            //self.setRightBarItem()
             return UITableViewCell.EditingStyle.delete
 
         } else {
-            self.setRightBarItem()
+            //self.setRightBarItem()
             return .none
 
         }
@@ -393,7 +406,7 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
                     print("cancel")
                     
                 case .destructive:
-                    print("destructive")
+                    //print("destructive")
                     self.rout.remove(at: indexPath.row)
                     self.tableView.deleteRows(at: [indexPath], with: .automatic)
                     self.reorderRouts()
@@ -429,15 +442,6 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        
-//        if let viewController = UIStoryboard(name: "PlayerView", bundle: nil).instantiateViewController(withIdentifier: "PlayerView") as? PlayerController {
-//
-//            viewController.rout = rout[indexPath.row]
-//
-//            if let navigator = navigationController {
-//                navigator.pushViewController(viewController, animated: true)
-//            }
-//        }
         if let viewController = UIStoryboard(name: "PlayerView", bundle: nil).instantiateViewController(withIdentifier: "PlayerView") as? PlayerController {
             viewController.rout = rout[indexPath.row]
             if let navigator = navigationController {
@@ -446,13 +450,13 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
-
-extension RoutinesController: TableViewReorderDelegate {
-    func tableView(_ tableView: UITableView, reorderRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        // Update data model
-        self.movedRout(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
-    }
-}
+//
+//extension RoutinesController: TableViewReorderDelegate {
+//    func tableView(_ tableView: UITableView, reorderRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        // Update data model
+//        //self.movedRout(sourceIndexPath: sourceIndexPath, destinationIndexPath: destinationIndexPath)
+//    }
+//}
 
 func hexStringToUIColor (hex:String) -> UIColor {
     var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
@@ -474,4 +478,16 @@ func hexStringToUIColor (hex:String) -> UIColor {
         blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
         alpha: CGFloat(1.0)
     )
+}
+
+extension UIImage {
+   static func imageWithColor(tintColor: UIColor) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, 0)
+        tintColor.setFill()
+        UIRectFill(rect)
+        let image: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
+    }
 }

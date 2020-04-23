@@ -21,5 +21,16 @@ class inputTextCell: UITableViewCell {
         sender.resignFirstResponder()
     }
 
+//    override func setSelected(_ selected: Bool, animated: Bool) {
+//        super.setSelected(selected, animated: animated)
+//        print("here")
+//        if !inputString.isFirstResponder {
+//            inputString.becomeFirstResponder()
+//        }
+//
+//
+//        // Configure the view for the selected state
+//    }
+
 }
 

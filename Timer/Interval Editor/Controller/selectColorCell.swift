@@ -15,6 +15,15 @@ class selectColorCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        if #available(iOS 13.0, *) {
+            self.colorCircle.image = UIImage(systemName: "circle.fill")
+        } else {
+            self.colorCircle.image = UIImage(named: "circle.fill")
+        colorCircle.image = colorCircle.image?.withRenderingMode(.alwaysTemplate)
+
+
+        }
+        
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {

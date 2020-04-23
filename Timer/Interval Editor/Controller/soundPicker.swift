@@ -25,7 +25,11 @@ class soundPicker: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate {
         butt = UIButton(frame: CGRect(x: screenSize.width - 30, y: UIScreen.main.bounds.height - 189, width: 30, height: 30))
         // butt.backgroundColor = .systemTeal
         butt.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        butt.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        if #available(iOS 13.0, *) {
+            butt.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        } else {
+            // Fallback on earlier versions
+        }
         butt.tintColor = .systemGray
         
         

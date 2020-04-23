@@ -9,7 +9,7 @@
 import Foundation
 import SwiftyStoreKit
 import UIKit
-
+import PKHUD
 
 public class SubscribeGlobal {
     let appBundleId = "db.timer.main"
@@ -38,27 +38,40 @@ public class SubscribeGlobal {
         SwiftyStoreKit.verifyReceipt(using: appleValidator, completion: completion)
     }
 
-    func alertForVerifySubscriptions(_ result: VerifySubscriptionResult, productIds: Set<String>) -> UIAlertController {
-
+    func alertForVerifySubscriptions(_ result: VerifySubscriptionResult, productIds: Set<String>) {
+        var subsend = subSendData()
         switch result {
         case .purchased(let expiryDate, let items):
-            //print("\(productIds) is valid until \(expiryDate)\n\(items)\n")
+            print("\(productIds) is valid until \(expiryDate)\n\(items)\n")
             UserDefaults.standard.set(true, forKey: subscription.isSubsribed.rawValue)
             //print("setDel")
-            setDel?.changeValue(darkMode: true)
-            return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
+            subsend.isSubscribed = true
+            subsend.expireDate = expiryDate
+            subsend.runSetting = true
+
+//            DispatchQueue.main.asyncAfter(deadline: .now()) {
+//                // ...and once it finishes we flash the HUD for a second.
+//               HUD.hide()
+//                self.setDel?.changeValue(sub: subsend)
+//            }
+            setDel?.changeValue(sub: subsend)
+
+
+
+
+            //return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
         case .expired(let expiryDate, let items):
             UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
-            //print("\(productIds) is expired since \(expiryDate)\n\(items)\n")
+            print("\(productIds) is expired since \(expiryDate)\n\(items)\n")
             //print("setDel")
-            setDel?.changeValue(darkMode: false)
-            return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")
+            setDel?.changeValue(sub: subsend)
+            //return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")
         case .notPurchased:
             UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
-            //print("\(productIds) has never been purchased")
+            print("\(productIds) has never been purchased")
             //print("setDel")
-            setDel?.changeValue(darkMode: false)
-            return alertWithTitle("Not purchased", message: "This product has never been purchased")
+            setDel?.changeValue(sub: subsend)
+            //return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
 
@@ -103,14 +116,14 @@ public class SubscribeGlobal {
     func alertForProductRetrievalInfo(_ result: RetrieveResults) {
 
         if let product = result.retrievedProducts.first {
-            let priceString = product.localizedPrice!
+            _ = product.localizedPrice!
             //print(priceString)
 
             //return priceString
-        } else if let invalidProductId = result.invalidProductIDs.first {
+        } else if result.invalidProductIDs.first != nil {
             //return invalidProductId
         } else {
-            let errorString = result.error?.localizedDescription ?? "Unknown error. Please contact support"
+            _ = result.error?.localizedDescription ?? "Unknown error. Please contact support"
             //return errorString
         }
     }
@@ -167,4 +180,5 @@ public class SubscribeGlobal {
             }
         }
     }
+
 }

@@ -9,13 +9,14 @@
 import UIKit
 import SRCountdownTimer
 import AVFoundation
+import GoogleMobileAds
 
 protocol ModalDelegate3 {
     func getRoutine(value: Routine)
 }
 
 public  typealias PXColor = UIColor
-class PlayerController: UIViewController, ModalDelegate3{
+class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     func getRoutine(value: Routine) {
 
         self.rout = value
@@ -24,8 +25,6 @@ class PlayerController: UIViewController, ModalDelegate3{
     }
     
     
-
-
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var timer: UILabel!
@@ -37,13 +36,18 @@ class PlayerController: UIViewController, ModalDelegate3{
     @IBOutlet weak var intervalNameLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var lockButton: UIButton!
-    @IBOutlet weak var lockbuttonView: UIView!
 
-    //@IBOutlet weak var countdownTimer: SRCountdownTimer!
+    @IBOutlet weak var veryBottom: UIView!
+    @IBOutlet weak var googleAd: GADBannerView!
+
+
+
     var player : AVAudioPlayer?
+    var Blankplayer : AVAudioPlayer?
+    var arrayView = [UIView]()
     var timer2 : Timer?
     let audioLimit: TimeInterval = 1
-    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0)
+    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0, intervalRestTime: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none))
     var routArrayPlayer = [routArray]()
     var timerClass = Timer()
     var elapsedTimer = Timer()
@@ -54,7 +58,8 @@ class PlayerController: UIViewController, ModalDelegate3{
     var currIndex = 0
     var speechSynthesizer = AVSpeechSynthesizer()
     var speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: "")
-    
+
+
     required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
@@ -62,16 +67,54 @@ class PlayerController: UIViewController, ModalDelegate3{
     
     override func viewDidLoad() {
         // playVoice(voice: "This is a test. This is only a test. If this was an actual emergency, then this wouldn’t have been a test.")
+
+
+
+
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        self.setSystemImages()
         
     }
-    
+
+    func runGoogleAds() {
+        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
+            googleAd.adUnitID = "ca-app-pub-3940256099942544/2934735716" //test
+            //googleAd.adUnitID = "ca-app-pub-2464759242018155/7204785293" //real
+            googleAd.rootViewController = self
+            googleAd.delegate = self
+            googleAd.layer.cornerRadius = 8.0
+            googleAd.clipsToBounds = true
+            googleAd.adSize = kGADAdSizeBanner
+            googleAd.load(GADRequest())
+            googleAd.isHidden = false
+        }
+        else {
+            googleAd.isHidden = true
+        }
+    }
+
+    func setSystemImages() {
+        if #available(iOS 13.0, *) {
+            self.backIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.left"), for: .normal)
+            self.forwardIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
+            self.lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
+            self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+        } else {
+            self.backIntervalButton.setBackgroundImage(UIImage(named: "chevron_left"), for: .normal)
+            self.forwardIntervalButton.setBackgroundImage(UIImage(named: "chevron.right"), for: .normal)
+            self.lockButton.setBackgroundImage(UIImage(named: "lock.open"), for: .normal)
+            self.startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
+            
+        }
+    }
+
     @objc func applicationDidBecomeActive(notification: NSNotification) {
-        print("ACTIVE")
+        //print("ACTIVE")
     }
     @objc func applicationDidEnterBackground(notification: NSNotification) {
-        print("BACKGROUND")
+        //print("BACKGROUND")
+        //self.playerBlank()
         if  !(UserDefaults.standard.bool(forKey: settings.backgroundWork.rawValue)) && !self.startButtonModel.resumeTapped {
 
             self.stopTimer()
@@ -79,7 +122,7 @@ class PlayerController: UIViewController, ModalDelegate3{
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
                 switch action.style{
                 case .default:
-                    print("default")
+                    //print("default")
                     UserDefaults.standard.set(true, forKey: settings.backgroundWork.rawValue)
                     self.playerBlank()
                 case .cancel:
@@ -118,7 +161,7 @@ class PlayerController: UIViewController, ModalDelegate3{
         speechUtterance = AVSpeechUtterance(string: voice)
         //Line 3. Specify the speech utterance rate. 1 = speaking extremely the higher the values the slower speech patterns. The default rate, AVSpeechUtteranceDefaultSpeechRate is 0.5
         speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.5
-        speechUtterance.volume = UserDefaults.standard.float(forKey: settings.soundVolume.rawValue) / 10
+        speechUtterance.volume = 1
         // Line 4. Specify the voice. It is explicitly set to English here, but it will use the device default if not specified.
         // speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         // Line 5. Pass in the urrerance to the synthesizer to actually speak.
@@ -144,9 +187,7 @@ class PlayerController: UIViewController, ModalDelegate3{
         
         
     }
-    
-    //    @objc func updateRemainingTimer() {
-    //    }
+
     
     @IBAction func forwardInteralButtonClicked(_ sender: Any) {
         self.elapsedRemainingUpdate(timeChange: model.seconds - 1)
@@ -160,25 +201,35 @@ class PlayerController: UIViewController, ModalDelegate3{
     }
 
     @IBAction func backInteralButtonClicked(_ sender: Any) {
-        print("backInteralButtonClicked")
+        //print("backInteralButtonClicked")
         var timeToChange = 1
         if currIndex == 0 {
+            //self.elapsedRemainingUpdate(timeChange: (routArrayPlayer[currIndex - 1].interval.duration  * -1) - timeToChange)
+            self.changeInterval()
+            self.setRemainingTimer()
             return
         }
         if !self.startButtonModel.resumeTapped {
-            print("here")
-            print("currIndex", currIndex)
-            print("model.seconds", model.seconds)
+            //print("here")
+            //print("currIndex", currIndex)
+            //print("model.seconds", model.seconds)
             timeToChange = 1// + currIndex
+            self.elapsedRemainingUpdate(timeChange: (((routArrayPlayer[currIndex - 1].interval.duration) + (routArrayPlayer[currIndex].interval.duration - model.seconds) ) * -1) - timeToChange)
         }
-        self.elapsedRemainingUpdate(timeChange: (((routArrayPlayer[currIndex - 1].interval.duration) + (routArrayPlayer[currIndex - 1].interval.duration - model.seconds) ) * -1) - timeToChange)
+        else {
+            self.elapsedRemainingUpdate(timeChange: (routArrayPlayer[currIndex - 1].interval.duration  * -1) - timeToChange)
+        }
+
         model.seconds = 1
         updateTimer(toAdd: -1, playSound: true)
     }
 
     
     @IBAction func startButton(_ sender: Any) {
-
+        if currIndex == 0 && model.seconds == routArrayPlayer[currIndex].interval.duration {
+            //print("here")
+            self.playSound()
+        }
         if self.startButtonModel.resumeTapped == false {
             self.stopTimer()
             
@@ -186,7 +237,14 @@ class PlayerController: UIViewController, ModalDelegate3{
             runTimer()
             //countdownTimer.resume()
             //startButton.setTitle("STOP",for: .normal)
-            startButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
+            if #available(iOS 13.0, *) {
+                startButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
+            } else {
+                startButton.setBackgroundImage(UIImage(named: "pause.fill"), for: .normal)
+            }
+            //
+
+
             self.startButtonModel.resumeTapped = false
             if UserDefaults.standard.bool(forKey: settings.lockPlayer.rawValue) {
                 self.disableButtons()
@@ -200,7 +258,13 @@ class PlayerController: UIViewController, ModalDelegate3{
         //countdownTimer.pause()
         self.startButtonModel.resumeTapped = true
         //startButton.setTitle("START",for: .normal)
-        startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+        //
+
+        if #available(iOS 13.0, *) {
+            startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+        } else {
+            startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
+        }
     }
     
     func setCurrentIntervalTotalSets() {
@@ -219,15 +283,16 @@ class PlayerController: UIViewController, ModalDelegate3{
             return
         }
         if runSound {
-            //self.playSound()
-            if  UserDefaults.standard.bool(forKey: settings.vibration.rawValue) {
-                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-            }
-            self.player = globals().playSound(sound: routArrayPlayer[currIndex].interval.sound.rawValue, setSession: false)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-
-                self.playerBlank()
-            }
+            self.playSound()
+//            if  UserDefaults.standard.bool(forKey: settings.vibration.rawValue) {
+//                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+//            }
+//            self.player?.pause()
+//            self.player = globals().playSound(sound: routArrayPlayer[currIndex].interval.sound.rawValue, setSession: false)
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//
+//                self.playerBlank()
+//            }
 
         }
         
@@ -241,9 +306,18 @@ class PlayerController: UIViewController, ModalDelegate3{
         self.view.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor
         topView.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor
         bottomView.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
-        //countdownTimer.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
+        veryBottom.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
+//        arrayView = [topMiddle, topBottom]
+//        for i in arrayView {
+//            i.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor
+//        }
+//        arrayView = [bottomTop, bottomMiddle, bottomBottom, bottomLockView, BottomsafeArea]
+//        for i in arrayView {
+//            i.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
+//        }
+//        countdownTimer.backgroundColor = routArrayPlayer[currIndex].interval.intervalColor.darker(amount: 0.2)
         timer.text = timeString(time: TimeInterval(routArrayPlayer[currIndex].interval.duration))
-        if routArrayPlayer[currIndex].isHigh == intervalOptions.cooldown.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.warmUp.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.rest.rawValue {
+        if routArrayPlayer[currIndex].isHigh == intervalOptions.cooldown.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.warmUp.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.rest.rawValue || routArrayPlayer[currIndex].isHigh == intervalOptions.intervalRest.rawValue {
             intervalNumberLabel.text = ""
             
             
@@ -264,25 +338,27 @@ class PlayerController: UIViewController, ModalDelegate3{
     }
     
     func setNavigationBar() {
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.setHidesBackButton(true, animated: false)
         let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
         self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
+        
         closeButton.tintColor = .white
         let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonClick))
         self.navigationItem.setRightBarButtonItems([editButton], animated: true)
         editButton.tintColor = .white
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-        self.navigationController?.navigationBar.isTranslucent = true
+
         self.title = rout.name
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-
+        //self.runGoogleAds()
         //let oo = globals().loadCoreData2(rout1: rout)
         //print("oo", oo)
         self.currIndex = 0
@@ -320,9 +396,10 @@ class PlayerController: UIViewController, ModalDelegate3{
             return
         }
 
-        player = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "blank", withExtension: "wav")!)
-        player?.numberOfLoops = -1
-        player?.play()
+        Blankplayer = try? AVAudioPlayer(contentsOf: Bundle.main.url(forResource: "blank", withExtension: "wav")!)
+        Blankplayer?.numberOfLoops = -1
+        Blankplayer?.volume = 0.1
+        Blankplayer?.play()
         //print("here")
     }
     override func viewWillDisappear(_ animated: Bool) {
@@ -336,7 +413,7 @@ class PlayerController: UIViewController, ModalDelegate3{
         remainingTimer.invalidate()
         timer2?.invalidate()
         self.stopTimer()
-        print("diss")
+        //print("diss")
 
         
     }
@@ -355,12 +432,26 @@ class PlayerController: UIViewController, ModalDelegate3{
         // self.navigationController?.navigationBar.tintColor = .gray
         if startButton.isEnabled {
             self.navigationController?.navigationBar.alpha = 1
-            lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
+            //lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
+
+            if #available(iOS 13.0, *) {
+                lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
+            } else {
+                lockButton.setBackgroundImage(UIImage(named: "lock.open"), for: .normal)
+            }
+
 
         }
         else {
             self.navigationController?.navigationBar.alpha = 0.5
-            lockButton.setBackgroundImage(UIImage(systemName: "lock"), for: .normal)
+//
+
+            if #available(iOS 13.0, *) {
+                lockButton.setBackgroundImage(UIImage(systemName: "lock"), for: .normal)
+            } else {
+                lockButton.setBackgroundImage(UIImage(named: "lock.closed"), for: .normal)
+            }
+
         }
 
 
@@ -369,26 +460,20 @@ class PlayerController: UIViewController, ModalDelegate3{
     @objc func editButtonClick(){
         
         if !self.startButtonModel.resumeTapped {
-            print("playing")
+            //print("playing")
 
         }
         
         if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
             viewController.rout = rout
             //viewController.currObjId = rout.objectID
-            viewController.title = "Edit Routine"
+            viewController.title = "Edit Timer"
             viewController.passClubDelegate = self
             
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
             }
         }
-        //        let storyboard = UIStoryboard(name: "RoutineEditorView", bundle: nil)
-        //        let myVC = storyboard.instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController
-        //        myVC?.rout = rout
-        //        let navController = UINavigationController(rootViewController: myVC!)
-        //        myVC!.title = "Edit Routine"
-        //        self.navigationController?.present(navController, animated: true, completion: nil)
         
         
     }
@@ -406,21 +491,31 @@ class PlayerController: UIViewController, ModalDelegate3{
     }
 
     func playSound() {
-        if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false {
-            //print("is false")
-            return
-        }
-        
-        player?.stop()
-        //print("routArrayPlayer[currIndex].interval.sound.rawValue", routArrayPlayer[currIndex].interval.sound.rawValue)
-        if !(routArrayPlayer[currIndex].interval.sound == sounds.none) {
-            let alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: routArrayPlayer[currIndex].interval.sound.rawValue, ofType: "mp3")!)
-            try! player = AVAudioPlayer(contentsOf: alertSound)
-            player?.prepareToPlay()
-            player?.volume =  UserDefaults.standard.float(forKey: settings.soundVolume.rawValue) / 10
-            //print("player?.volume", player?.volume!)
-            player?.play()
-        }
+            if  UserDefaults.standard.bool(forKey: settings.vibration.rawValue) {
+                    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
+                }
+                self.player?.stop()
+                self.player = globals().playSound(sound: routArrayPlayer[currIndex].interval.sound.rawValue, setSession: false)
+
+//        if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false {
+//            //print("is false")
+//            return
+//        }
+//
+//        player?.stop()
+//        //print("routArrayPlayer[currIndex].interval.sound.rawValue", routArrayPlayer[currIndex].interval.sound.rawValue)
+//        if !(routArrayPlayer[currIndex].interval.sound == sounds.none) {
+//            let alertSound = URL(fileURLWithPath: Bundle.main.path(forResource: routArrayPlayer[currIndex].interval.sound.rawValue, ofType: "mp3")!)
+//            try! player = AVAudioPlayer(contentsOf: alertSound)
+//            player?.prepareToPlay()
+//            player?.volume =  UserDefaults.standard.float(forKey: settings.soundVolume.rawValue) / 10
+//            //print("player?.volume", player?.volume!)
+//            player?.play()
+////            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+////
+////                            self.playerBlank()
+////                        }
+//        }
         
     }
     
@@ -454,13 +549,18 @@ class PlayerController: UIViewController, ModalDelegate3{
     
     func runAlert() {
 
-        let alert = UIAlertController(title: "Completed", message: "You have completed your routine", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Completed", message: "You have completed your timer", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
             switch action.style{
             case .default:
-                print("default")
+                //print("default")
                 //self.startButton.setTitle("START",for: .normal)
-                self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+
+                if #available(iOS 13.0, *) {
+                    self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
+                } else {
+                    self.startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
+                }
                 self.setRemainingTimer()
                 self.changeInterval(runSound: false)
                 
@@ -483,6 +583,38 @@ class PlayerController: UIViewController, ModalDelegate3{
         let minutes = Int(time) / 60
         let seconds = Int(time)  % 3600 % 60
         return String(format: "%02i:%02i ", minutes, seconds)
+    }
+
+    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+      print("adViewDidReceiveAd")
+    }
+
+    /// Tells the delegate an ad request failed.
+    func adView(_ bannerView: GADBannerView,
+        didFailToReceiveAdWithError error: GADRequestError) {
+      print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+    }
+
+    /// Tells the delegate that a full-screen view will be presented in response
+    /// to the user clicking on an ad.
+    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+      print("adViewWillPresentScreen")
+    }
+
+    /// Tells the delegate that the full-screen view will be dismissed.
+    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+      print("adViewWillDismissScreen")
+    }
+
+    /// Tells the delegate that the full-screen view has been dismissed.
+    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+      print("adViewDidDismissScreen")
+    }
+
+    /// Tells the delegate that a user click will open another app (such as
+    /// the App Store), backgrounding the current app.
+    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+      print("adViewWillLeaveApplication")
     }
     
     

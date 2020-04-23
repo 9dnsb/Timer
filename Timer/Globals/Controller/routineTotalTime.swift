@@ -32,7 +32,7 @@ public class routineTotalTime  {
     
     func buildArray(rout: Routine) -> [routArray] {
         var routArrayPlayer = [routArray]()
-        for (_, i) in rout.intervals.enumerated() {
+        for (j, i) in rout.intervals.enumerated() {
             var x = 0
 
             while x < i.numSets {
@@ -53,8 +53,15 @@ public class routineTotalTime  {
                     routArrayPlayer.append(contentsOf: newArray.reversed())
                 }
                 x += 1
-            }
 
+            }
+            if rout.intervals.count > 1 && rout.intervalRestTime.duration > 0 {
+                let intervalRest = routArray(interval: IntervalIntensity(duration: rout.intervalRestTime.duration, intervalColor: rout.intervalRestTime.intervalColor, sound: rout.intervalRestTime.sound), currInterval: 999, totalInterval: 999, isHigh: intervalOptions.intervalRest.rawValue, intervalName: "Interval Rest")
+                if !(j+1 == rout.intervals.count) {
+                    routArrayPlayer.append(intervalRest)
+                }
+
+            }
 
             if rout.numCycles > 1 && rout.restTime.duration > 0 {
                 let warmupRout = routArray(interval: IntervalIntensity(duration: rout.restTime.duration, intervalColor: rout.restTime.intervalColor, sound: rout.restTime.sound), currInterval: 999, totalInterval: 999, isHigh: intervalOptions.rest.rawValue, intervalName: "Warm Up")
@@ -73,7 +80,7 @@ public class routineTotalTime  {
             
         }
         if rout.warmup.duration != 0 {
-            let warmupRout = routArray(interval: IntervalIntensity(duration: rout.warmup.duration, intervalColor: rout.warmup.intervalColor, sound: rout.warmup.sound), currInterval: 998, totalInterval: 998, isHigh: intervalOptions.warmUp.rawValue, intervalName: "Rest")
+            let warmupRout = routArray(interval: IntervalIntensity(duration: rout.warmup.duration, intervalColor: rout.warmup.intervalColor, sound: rout.warmup.sound), currInterval: 998, totalInterval: 998, isHigh: intervalOptions.warmUp.rawValue, intervalName: "Cycle Rest")
             routArrayPlayer.insert(warmupRout, at: 0)
         }
         if rout.coolDown.duration != 0 {
