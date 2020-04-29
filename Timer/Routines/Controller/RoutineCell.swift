@@ -12,7 +12,8 @@ class RoutineCell: UITableViewCell {
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
-    
+    @IBOutlet weak var smallView: UIView!
+
 
     func setLabels(rout: Routine, edit: Bool) {
         titleLabel.text = rout.name

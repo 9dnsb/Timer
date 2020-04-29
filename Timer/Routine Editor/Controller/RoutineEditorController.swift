@@ -575,6 +575,9 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 stringArray.append(subArray)
             }
             let mcPicker = McPicker(data: stringArray)
+            let hoursLabel = UILabel()
+            hoursLabel.text = "r"
+            //mcPicker.picker.setPickerLabels(labels: [0: hoursLabel], containedView: mcPicker)
             globals().setMcPickerDetails(mcPicker: mcPicker)
             if rout.numCycles == 2 {
             }
@@ -810,4 +813,3 @@ extension UIColor {
         }
     }
 }
-

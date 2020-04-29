@@ -28,6 +28,7 @@
 		631C0C752435212900C06AD2 /* picker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 631C0C742435212900C06AD2 /* picker.xib */; };
 		631C0C772436983A00C06AD2 /* pickerData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C762436983A00C06AD2 /* pickerData.swift */; };
 		631C0C7A24369A8900C06AD2 /* soundPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C0C7924369A8900C06AD2 /* soundPicker.swift */; };
+		634608B32459F71E007F09AB /* PickerLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634608B22459F71E007F09AB /* PickerLabels.swift */; };
 		634B9268242391CB00E82F66 /* RoutinesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B9267242391CB00E82F66 /* RoutinesModel.swift */; };
 		634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634B926D2423A07600E82F66 /* RoutineEditorController.swift */; };
 		634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5CFA2426689E0011B9ED /* PlayerController.swift */; };
@@ -127,6 +128,7 @@
 		631C0C742435212900C06AD2 /* picker.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = picker.xib; sourceTree = "<group>"; };
 		631C0C762436983A00C06AD2 /* pickerData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pickerData.swift; sourceTree = "<group>"; };
 		631C0C7924369A8900C06AD2 /* soundPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = soundPicker.swift; sourceTree = "<group>"; };
+		634608B22459F71E007F09AB /* PickerLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerLabels.swift; sourceTree = "<group>"; };
 		634B9267242391CB00E82F66 /* RoutinesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesModel.swift; sourceTree = "<group>"; };
 		634B926D2423A07600E82F66 /* RoutineEditorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineEditorController.swift; sourceTree = "<group>"; };
 		634E5CFA2426689E0011B9ED /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
@@ -279,6 +281,14 @@
 				631C0C762436983A00C06AD2 /* pickerData.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		634608B12459F6E7007F09AB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				634608B22459F71E007F09AB /* PickerLabels.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		634B92692423A01400E82F66 /* Routine Editor */ = {
@@ -583,6 +593,7 @@
 		63C7CCB22422C0B200960513 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				634608B12459F6E7007F09AB /* Extensions */,
 				634E5CFE2426940B0011B9ED /* Globals */,
 				63B24DBB2446158E00EC48F3 /* FormSetting */,
 				63BBDFA224490BC200D1AB69 /* Subscribe */,
@@ -912,6 +923,7 @@
 				63BBDFB72449FEA700D1AB69 /* SubscribeGlobals.swift in Sources */,
 				63BBDFAD2449160500D1AB69 /* NetworkActivityIndicatorManager.swift in Sources */,
 				63C7CCB42422C0B200960513 /* AppDelegate.swift in Sources */,
+				634608B32459F71E007F09AB /* PickerLabels.swift in Sources */,
 				631C0C702434EC6400C06AD2 /* basicRightLabelCell.swift in Sources */,
 				634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */,
 				631C0C5D2433626F00C06AD2 /* mainCell.swift in Sources */,
@@ -1111,7 +1123,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.8;
+				CURRENT_PROJECT_VERSION = 1.81;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1119,7 +1131,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.81;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "Interval Timer";
 				SWIFT_VERSION = 5.0;
@@ -1133,7 +1145,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.8;
+				CURRENT_PROJECT_VERSION = 1.81;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1141,7 +1153,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.8;
+				MARKETING_VERSION = 1.81;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "Interval Timer";
 				SWIFT_VERSION = 5.0;

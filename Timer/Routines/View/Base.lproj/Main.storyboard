@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="S1G-I6-hmD">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -62,8 +63,10 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="OoZ-6R-9i2" firstAttribute="leading" secondItem="ouu-WX-Yth" secondAttribute="leading" constant="15" id="Evm-hc-iJU"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="OoZ-6R-9i2" secondAttribute="trailing" constant="20" symbolic="YES" id="Pr3-TS-zMW"/>
                                                 <constraint firstItem="NbC-i5-TfG" firstAttribute="leading" secondItem="ouu-WX-Yth" secondAttribute="leading" constant="15" id="bB8-dA-68W"/>
                                                 <constraint firstAttribute="bottom" secondItem="OoZ-6R-9i2" secondAttribute="bottom" constant="10" id="dvZ-Oi-vi9"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="NbC-i5-TfG" secondAttribute="trailing" constant="20" symbolic="YES" id="kEz-Yw-r8g"/>
                                                 <constraint firstItem="NbC-i5-TfG" firstAttribute="top" secondItem="ouu-WX-Yth" secondAttribute="topMargin" constant="-1" id="uBg-Iz-SqZ"/>
                                                 <constraint firstItem="OoZ-6R-9i2" firstAttribute="top" secondItem="NbC-i5-TfG" secondAttribute="bottom" constant="5" id="xNA-Rq-znS"/>
                                             </constraints>

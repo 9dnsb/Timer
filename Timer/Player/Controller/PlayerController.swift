@@ -9,14 +9,58 @@
 import UIKit
 import SRCountdownTimer
 import AVFoundation
-import GoogleMobileAds
+import Instructions
+
+//import GoogleMobileAds
+//import SwiftRater
 
 protocol ModalDelegate3 {
     func getRoutine(value: Routine)
 }
 
 public  typealias PXColor = UIColor
-class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
+class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDataSource, CoachMarksControllerDelegate{
+    func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkViewsAt index: Int, madeFrom coachMark: CoachMark) -> (bodyView: CoachMarkBodyView, arrowView: CoachMarkArrowView?) {
+        let coachViews = coachMarksController.helper.makeDefaultCoachViews(withArrow: true, arrowOrientation: coachMark.arrowOrientation)
+        let okText = "Ok"
+        switch(index) {
+        case 0:
+            coachViews.bodyView.hintLabel.text = "This is the name of the timer"
+            coachViews.bodyView.nextLabel.text = okText
+        case 1:
+            coachViews.bodyView.hintLabel.text = "Click this to edit the timer"
+            coachViews.bodyView.nextLabel.text = okText
+
+        default: break
+        }
+        return (bodyView: coachViews.bodyView, arrowView: coachViews.arrowView)
+    }
+
+    func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkAt index: Int) -> CoachMark {
+//        return coachMarksController.helper.makeCoachMark(for: self.intervalNameLabel)
+        switch(index) {
+        case 0:
+            return coachMarksController.helper.makeCoachMark(for: self.navigationController?.navigationBar) { (frame: CGRect) -> UIBezierPath in
+                // This will make a cutoutPath matching the shape of
+                // the component (no padding, no rounded corners).
+                return UIBezierPath(rect: frame)
+            }
+        case 1:
+            let addBarButtomItemView: UIView = self.navItem.value(forKey: "view") as! UIView
+            return coachMarksController.helper.makeCoachMark(for: addBarButtomItemView)
+        case 2:
+            return coachMarksController.helper.makeCoachMark(for: self.backIntervalButton)
+        case 3:
+            return coachMarksController.helper.makeCoachMark(for: self.forwardIntervalButton)
+        default:
+            return coachMarksController.helper.makeCoachMark()
+        }
+    }
+
+    func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
+        2
+    }
+    //GADBannerViewDelegate
     func getRoutine(value: Routine) {
 
         self.rout = value
@@ -38,7 +82,9 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     @IBOutlet weak var lockButton: UIButton!
 
     @IBOutlet weak var veryBottom: UIView!
-    @IBOutlet weak var googleAd: GADBannerView!
+    //@IBOutlet weak var googleAd: GADBannerView!
+    @IBOutlet weak var navItem: UIBarButtonItem!
+    @IBOutlet weak var navItemLeft: UIBarButtonItem!
 
 
 
@@ -58,7 +104,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     var currIndex = 0
     var speechSynthesizer = AVSpeechSynthesizer()
     var speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: "")
-
+    let coachMarksController = CoachMarksController()
 
     required init?(coder aDecoder: NSCoder) {
         
@@ -67,32 +113,37 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     
     override func viewDidLoad() {
         // playVoice(voice: "This is a test. This is only a test. If this was an actual emergency, then this wouldn’t have been a test.")
+        super.viewDidLoad()
 
-
-
+         self.coachMarksController.dataSource = self
+         self.coachMarksController.delegate = self
 
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         self.setSystemImages()
-        
+//        SwiftRater.check()
+
+
     }
 
-    func runGoogleAds() {
-        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
-            googleAd.adUnitID = "ca-app-pub-3940256099942544/2934735716" //test
-            //googleAd.adUnitID = "ca-app-pub-2464759242018155/7204785293" //real
-            googleAd.rootViewController = self
-            googleAd.delegate = self
-            googleAd.layer.cornerRadius = 8.0
-            googleAd.clipsToBounds = true
-            googleAd.adSize = kGADAdSizeBanner
-            googleAd.load(GADRequest())
-            googleAd.isHidden = false
-        }
-        else {
-            googleAd.isHidden = true
-        }
-    }
+
+
+//    func runGoogleAds() {
+//        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
+//            googleAd.adUnitID = "ca-app-pub-3940256099942544/2934735716" //test
+//            //googleAd.adUnitID = "ca-app-pub-2464759242018155/7204785293" //real
+//            googleAd.rootViewController = self
+//            googleAd.delegate = self
+//            googleAd.layer.cornerRadius = 8.0
+//            googleAd.clipsToBounds = true
+//            googleAd.adSize = kGADAdSizeBanner
+//            googleAd.load(GADRequest())
+//            googleAd.isHidden = false
+//        }
+//        else {
+//            googleAd.isHidden = true
+//        }
+//    }
 
     func setSystemImages() {
         if #available(iOS 13.0, *) {
@@ -279,6 +330,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             timerClass.invalidate()
             //countdownTimer.end()
             playVoice(voice: "Activity Completed.")
+            //SwiftRater.incrementSignificantUsageCount()
             runAlert()
             return
         }
@@ -342,17 +394,21 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true
         self.navigationItem.setHidesBackButton(true, animated: false)
-        let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
-        self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
-        
-        closeButton.tintColor = .white
-        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonClick))
-        self.navigationItem.setRightBarButtonItems([editButton], animated: true)
-        editButton.tintColor = .white
+//        let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
+//        self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
+//
+//        closeButton.tintColor = .white
+//        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonClick))
+//        self.navigationItem.setRightBarButtonItems([editButton], animated: true)
+//        editButton.tintColor = .white
         self.navigationController?.navigationBar.tintColor = .white
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
 
         self.title = rout.name
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        //self.coachMarksController.start(in: .currentWindow(of: self))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -384,11 +440,12 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
         
         model.totalIntervalCycles = rout.intervals.count
         model.totalCycles = rout.numCycles
-        super.viewDidLoad()
+
         
         self.setRemainingTimer()
         self.changeInterval(runSound: false)
         // self.playAudioFile()
+
     }
 
     func playerBlank() {
@@ -404,6 +461,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        self.coachMarksController.stop(immediately: true)
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.shadowImage = nil
         
@@ -413,14 +471,14 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
         remainingTimer.invalidate()
         timer2?.invalidate()
         self.stopTimer()
+
         //print("diss")
 
         
     }
-    
-    @objc func closeButtonClick(){
+
+    @IBAction func closeButtonClick(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
-        
     }
 
     func disableButtons() {
@@ -456,27 +514,24 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
 
 
     }
-    
-    @objc func editButtonClick(){
-        
+    @IBAction func editButtonClick(_ sender: Any) {
         if !self.startButtonModel.resumeTapped {
             //print("playing")
 
         }
-        
+
         if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
             viewController.rout = rout
             //viewController.currObjId = rout.objectID
             viewController.title = "Edit Timer"
             viewController.passClubDelegate = self
-            
+
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
             }
         }
-        
-        
     }
+
     
     func runTimer() {
         timer.text = timeString(time: TimeInterval(model.seconds))
@@ -585,37 +640,37 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
         return String(format: "%02i:%02i ", minutes, seconds)
     }
 
-    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
-      print("adViewDidReceiveAd")
-    }
-
-    /// Tells the delegate an ad request failed.
-    func adView(_ bannerView: GADBannerView,
-        didFailToReceiveAdWithError error: GADRequestError) {
-      print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
-    }
-
-    /// Tells the delegate that a full-screen view will be presented in response
-    /// to the user clicking on an ad.
-    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
-      print("adViewWillPresentScreen")
-    }
-
-    /// Tells the delegate that the full-screen view will be dismissed.
-    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
-      print("adViewWillDismissScreen")
-    }
-
-    /// Tells the delegate that the full-screen view has been dismissed.
-    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
-      print("adViewDidDismissScreen")
-    }
-
-    /// Tells the delegate that a user click will open another app (such as
-    /// the App Store), backgrounding the current app.
-    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
-      print("adViewWillLeaveApplication")
-    }
+//    func adViewDidReceiveAd(_ bannerView: GADBannerView) {
+//      print("adViewDidReceiveAd")
+//    }
+//
+//    /// Tells the delegate an ad request failed.
+//    func adView(_ bannerView: GADBannerView,
+//        didFailToReceiveAdWithError error: GADRequestError) {
+//      print("adView:didFailToReceiveAdWithError: \(error.localizedDescription)")
+//    }
+//
+//    /// Tells the delegate that a full-screen view will be presented in response
+//    /// to the user clicking on an ad.
+//    func adViewWillPresentScreen(_ bannerView: GADBannerView) {
+//      print("adViewWillPresentScreen")
+//    }
+//
+//    /// Tells the delegate that the full-screen view will be dismissed.
+//    func adViewWillDismissScreen(_ bannerView: GADBannerView) {
+//      print("adViewWillDismissScreen")
+//    }
+//
+//    /// Tells the delegate that the full-screen view has been dismissed.
+//    func adViewDidDismissScreen(_ bannerView: GADBannerView) {
+//      print("adViewDidDismissScreen")
+//    }
+//
+//    /// Tells the delegate that a user click will open another app (such as
+//    /// the App Store), backgrounding the current app.
+//    func adViewWillLeaveApplication(_ bannerView: GADBannerView) {
+//      print("adViewWillLeaveApplication")
+//    }
     
     
 }
@@ -697,5 +752,11 @@ extension UIButton {
         
         // perform hit test on larger frame
         return (largerFrame.contains(point)) ? self : nil
+    }
+}
+
+extension UIBarButtonItem {
+    var view: UIView? {
+        return perform(#selector(getter: UIViewController.view)).takeRetainedValue() as? UIView
     }
 }

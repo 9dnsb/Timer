@@ -9,7 +9,8 @@
 import UIKit
 import CoreData
 import SwiftyStoreKit
-import GoogleMobileAds
+//import GoogleMobileAds
+//import SwiftRater
 
 
 @UIApplicationMain
@@ -43,6 +44,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.object(forKey: subscription.isSubsribed.rawValue) == nil {
             UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
         }
+        if UserDefaults.standard.object(forKey: settings.removeLastIntervalLow.rawValue) == nil {
+            UserDefaults.standard.set(false, forKey: settings.removeLastIntervalLow.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.removeLastIntervalRest.rawValue) == nil {
+            UserDefaults.standard.set(false, forKey: settings.removeLastIntervalRest.rawValue)
+        }
         //UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
 
 
@@ -53,13 +60,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
             //setupAds()
         }
-        
+        //self.showRating()
         return true
     }
 
     func setupAds() {
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        //GADMobileAds.sharedInstance().start(completionHandler: nil)
     }
+//
+//    func showRating() {
+//        SwiftRater.daysUntilPrompt = 7
+//        SwiftRater.usesUntilPrompt = 10
+//        SwiftRater.significantUsesUntilPrompt = 3
+//        SwiftRater.daysBeforeReminding = 1
+//        SwiftRater.showLaterButton = true
+//        SwiftRater.debugMode = false
+//        SwiftRater.appLaunched()
+//
+//    }
 
     func setupIAP() {
 

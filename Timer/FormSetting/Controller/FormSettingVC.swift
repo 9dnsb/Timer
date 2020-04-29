@@ -9,6 +9,8 @@
 import UIKit
 import Eureka
 import MessageUI
+import SwiftRater
+import StoreKit
 
 
 class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
@@ -18,11 +20,16 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
     var routineContr : RoutinesController!
     override func viewDidLoad() {
         super.viewDidLoad()
+        if #available(iOS 13.0, *) {
+            isModalInPresentation = true
+        } else {
+            // Fallback on earlier versions
+        }
         let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
         self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
         form +++
 
-            Section("General")
+            Section("Player")
             <<< SwitchRow() {
                 $0.title = "Lock Player on Start"
 
@@ -30,7 +37,44 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
             }.onChange { cell in
                 UserDefaults.standard.set(cell.value, forKey: settings.lockPlayer.rawValue)
             }
+            <<< SwitchRow() {
+                $0.title = "Remove Last Low Interval"
 
+                $0.value = UserDefaults.standard.bool(forKey: settings.removeLastIntervalLow.rawValue)
+            }.onChange { cell in
+                UserDefaults.standard.set(cell.value, forKey: settings.removeLastIntervalLow.rawValue)
+            }
+            <<< SwitchRow() {
+                $0.title = "Remove Last Rest Interval"
+
+                $0.value = UserDefaults.standard.bool(forKey: settings.removeLastIntervalRest.rawValue)
+            }.onChange { cell in
+                UserDefaults.standard.set(cell.value, forKey: settings.removeLastIntervalRest.rawValue)
+            }
+
+            <<< ActionSheetRow<String>() {
+                $0.title = "Background Work"
+                $0.selectorTitle = "Timer continues to work in the background when you lock the screen or press device's Home button. Timer will be stopped if you press the X button"
+                $0.options = ["Enabled", "Disabled"]
+                if  UserDefaults.standard.bool(forKey: settings.backgroundWork.rawValue) {
+                    $0.value = "Enabled"
+                }
+                else {
+                    $0.value = "Disabled"
+                }
+
+                }
+                .onPresent { from, to in
+                    to.popoverPresentationController?.permittedArrowDirections = .up
+            }.onChange { cell in
+                if cell.value == "Enabled" {
+                    UserDefaults.standard.set(true, forKey: settings.backgroundWork.rawValue)
+                }
+                else {
+                    UserDefaults.standard.set(false, forKey: settings.backgroundWork.rawValue)
+                }
+
+            }
 //            <<< SwitchRow() {
 //                $0.title = "Enable Dark Mode"
 //
@@ -74,31 +118,11 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
                     UserDefaults.standard.set(cell.value!, forKey: settings.soundVolume.rawValue)
             }
 
-        +++ Section("Background Work")
 
-        <<< ActionSheetRow<String>() {
-            $0.title = "Background Work"
-            $0.selectorTitle = "Timer continues to work in the background when you lock the screen or press device's Home button. Timer will be stopped if you press the X button"
-            $0.options = ["Enabled", "Disabled"]
-            if  UserDefaults.standard.bool(forKey: settings.backgroundWork.rawValue) {
-                $0.value = "Enabled"
-            }
-            else {
-                $0.value = "Disabled"
-            }
 
-            }
-            .onPresent { from, to in
-                to.popoverPresentationController?.permittedArrowDirections = .up
-        }.onChange { cell in
-            if cell.value == "Enabled" {
-                UserDefaults.standard.set(true, forKey: settings.backgroundWork.rawValue)
-            }
-            else {
-                UserDefaults.standard.set(false, forKey: settings.backgroundWork.rawValue)
-            }
+        //+++ Section("Background Work")
 
-        }
+
 
 //        +++ Section("Subscription")
 //
@@ -166,21 +190,44 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
 //            cell.textLabel?.textAlignment = .left
 //        }
 //
-//        +++ Section("Support")
-//
-//        <<< ButtonRow("email") { row in
-//            row.title = "Email Developer"
-//            }.onCellSelection { _, _ in
-//                let composeVC = MFMailComposeViewController()
-//                composeVC.mailComposeDelegate = self
-//                composeVC.setToRecipients(["davidblatt10@gmail.com"])
-//                composeVC.setSubject("David's Interval Timer Support")
-//
-//                self.present(composeVC, animated: true, completion: nil)
-//                
-//        }.cellUpdate { cell, row in
-//            cell.textLabel?.textAlignment = .left
-//        }
+            
+        +++ Section("Feedback")
+            
+        <<< ButtonRow("email") { row in
+            row.title = "Email Developer"
+            }.onCellSelection { _, _ in
+                if MFMailComposeViewController.canSendMail() {
+                    let composeVC = MFMailComposeViewController()
+                    composeVC.mailComposeDelegate = self
+                    composeVC.setToRecipients(["davidblatt10@gmail.com"])
+                    composeVC.setSubject("David's Interval Timer Support")
+
+                    self.present(composeVC, animated: true, completion: nil)
+                }
+                else {
+                    let alert = UIAlertController(title: "Can't send email", message: "This device doesn't support sending email from the app", preferredStyle: UIAlertController.Style.alert)
+                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
+                    self.present(alert, animated: true, completion: nil)
+                }
+
+        }.cellUpdate { cell, row in
+            cell.textLabel?.textAlignment = .left
+        }
+        <<< ButtonRow("rate") { row in
+            row.title = "Rate David's Interval Timer"
+            }.onCellSelection { _, _ in
+                if #available(iOS 10.3, *) {
+                    SKStoreReviewController.requestReview()
+                } else {
+                    SwiftRater.rateApp(host: self)
+                }
+
+
+        }.cellUpdate { cell, row in
+            cell.textLabel?.textAlignment = .left
+        }
+
+
 
 
 
@@ -195,11 +242,13 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
 
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        print("from disappear")
-    }
-
-    
-
 
 }
+
+extension FormSettingVC: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerDidAttemptToDismiss(_ presentationController: UIPresentationController) {
+        //print("here")
+        self.closeButtonClick()
+    }
+}
+

@@ -13,7 +13,6 @@ import CoreData
 import CoreStore
 import PKHUD
 
-
 protocol settingDelegate {
     func changeValue(sub: subSendData)
 }
@@ -62,14 +61,15 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     var addRoutineButton: UIBarButtonItem = UIBarButtonItem()
     var subData = subSendData()
     var rout = [Routine]()
-    
+    @IBOutlet weak var topView: UIView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
 
         self.setBackgroundandNavigationBar()
         self.setupTable()
+        
         
 //        self.tableView.reorder.delegate = self as TableViewReorderDelegate
         do {
@@ -81,6 +81,7 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
         }
 
     }
+    
 
     func verifySub() {
         let sg = SubscribeGlobal()
@@ -260,13 +261,25 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     }
 
     func settingClickRun() {
+//        let storyboard = UIStoryboard(name: "FormSettingView", bundle: nil)
+//        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView") as! FormSettingVC
+//        myVC.title = "Settings"
+//        myVC.settingDel = self
+//
+//        myVC.subData = self.subData
+//        myVC.routineContr = self
+//        let navController = UINavigationController(rootViewController: myVC)
+//        self.navigationController?.present(navController, animated: true, completion: nil)
         let storyboard = UIStoryboard(name: "FormSettingView", bundle: nil)
-        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView") as! FormSettingVC
-        myVC.title = "Settings"
-        myVC.settingDel = self
-        myVC.subData = self.subData
-        myVC.routineContr = self
-        let navController = UINavigationController(rootViewController: myVC)
+        let myVC = storyboard.instantiateViewController(withIdentifier: "FormSettingView") as? FormSettingVC
+        myVC!.modalPresentationStyle = .fullScreen
+        let navController = UINavigationController(rootViewController: myVC!)
+        myVC!.title = "Settings"
+        myVC!.routineContr = self
+        myVC!.subData = self.subData
+        myVC!.settingDel = self
+        navController.presentationController?.delegate = myVC
+
         self.navigationController?.present(navController, animated: true, completion: nil)
     }
     
@@ -343,6 +356,8 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
         }
         )
     }
+
+
 }
 
 extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
@@ -362,6 +377,7 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         cell.timeLabel.text =
             globals().timeString(time: TimeInterval(rout[indexPath.row].totalTime))
         cell.accessoryType = .disclosureIndicator
+        
         return cell
     }
     
@@ -491,3 +507,4 @@ extension UIImage {
         return image
     }
 }
+

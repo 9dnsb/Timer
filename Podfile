@@ -17,6 +17,8 @@ target 'Timer' do
   pod 'Eureka'
   pod 'Google-Mobile-Ads-SDK'
   pod 'ColorCompatibility'
+  pod 'SwiftRater'
+  pod 'Instructions', '~> 1.4.0'
 
 
   target 'TimerTests' do

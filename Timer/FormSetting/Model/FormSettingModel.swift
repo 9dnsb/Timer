@@ -15,4 +15,6 @@ enum settings: String {
     case backgroundWork
     case lockPlayer
     case enableDarkMode
+    case removeLastIntervalLow
+    case removeLastIntervalRest
 }

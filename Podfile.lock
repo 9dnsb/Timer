@@ -27,6 +27,7 @@ PODS:
   - "GoogleUtilities/NSData+zlib (6.5.2)"
   - GoogleUtilities/Reachability (6.5.2):
     - GoogleUtilities/Logger
+  - Instructions (1.4.0)
   - McPicker (2.0.1)
   - MKColorPicker (1.2)
   - nanopb (0.3.9011):
@@ -36,6 +37,7 @@ PODS:
   - nanopb/encode (0.3.9011)
   - PKHUD (5.3.0)
   - SRCountdownTimer (1.1)
+  - SwiftRater (1.8.0)
   - SwiftReorder (7.2.0)
   - SwiftyStoreKit (0.15.0)
 
@@ -45,10 +47,12 @@ DEPENDENCIES:
   - CoreStore (~> 7.0)
   - Eureka
   - Google-Mobile-Ads-SDK
+  - Instructions (~> 1.4.0)
   - McPicker
   - MKColorPicker
   - PKHUD (~> 5.0)
   - SRCountdownTimer
+  - SwiftRater
   - SwiftReorder (~> 7.2)
   - SwiftyStoreKit
 
@@ -61,11 +65,13 @@ SPEC REPOS:
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleUtilities
+    - Instructions
     - McPicker
     - MKColorPicker
     - nanopb
     - PKHUD
     - SRCountdownTimer
+    - SwiftRater
     - SwiftReorder
     - SwiftyStoreKit
 
@@ -77,14 +83,16 @@ SPEC CHECKSUMS:
   Google-Mobile-Ads-SDK: 7052557293c75c676db55feb707ace9b790f32c1
   GoogleAppMeasurement: e49be3954045b17d046f271b9cc1ec052bad9702
   GoogleUtilities: ad0f3b691c67909d03a3327cc205222ab8f42e0e
+  Instructions: 8986424854e99640665a82cfe56852c52a0c5bdf
   McPicker: a0a6b8ece8f1642e05401a29867463aba501188b
   MKColorPicker: 8998b2ab977e4f240fdf254db27a18b810da3cfc
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
   SRCountdownTimer: 9c92e444b5403c92f01dd6610299b8c634bc8562
+  SwiftRater: 6094fa6e9b3866ff8beca0a871b4b5f9ab896a6d
   SwiftReorder: d687883abf5f2327268e006b038025a6fc515e34
   SwiftyStoreKit: 033d06b6f87955405d3f844a18a7687c2438592a
 
-PODFILE CHECKSUM: 20738372edbf8bb73216c7daf69c9927bbd508c8
+PODFILE CHECKSUM: 98a1d2766780069b9d5f5fc54e11e310edb7f5ec
 
 COCOAPODS: 1.9.1

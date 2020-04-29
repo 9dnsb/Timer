@@ -40,10 +40,13 @@ public class routineTotalTime  {
                 let toAppend = routArray(interval: i.highInterval, currInterval: intCount, totalInterval: i.numSets, isHigh: intervalOptions.highInt.rawValue, intervalName: i.intervalName)
                 let toAppend2 = routArray(interval: i.lowInterval, currInterval:  intCount, totalInterval: i.numSets , isHigh: intervalOptions.lowInt.rawValue, intervalName: i.intervalName)
                 var newArray = [routArray]()
-                if i.highInterval.duration > 0 {
+                if i.highInterval.duration > 0{
                     newArray.append(toAppend)
                 }
-                if i.lowInterval.duration > 0 {
+                if i.lowInterval.duration > 0  && !((x+1 == i.numSets) && i.firstIntervalHigh && (UserDefaults.standard.bool(forKey: settings.removeLastIntervalLow.rawValue))) {
+
+                    //print("x", x)
+                    //print("i.numsets", i.numSets)
                     newArray.append(toAppend2)
                 }
                 if i.firstIntervalHigh {
@@ -57,7 +60,7 @@ public class routineTotalTime  {
             }
             if rout.intervals.count > 1 && rout.intervalRestTime.duration > 0 {
                 let intervalRest = routArray(interval: IntervalIntensity(duration: rout.intervalRestTime.duration, intervalColor: rout.intervalRestTime.intervalColor, sound: rout.intervalRestTime.sound), currInterval: 999, totalInterval: 999, isHigh: intervalOptions.intervalRest.rawValue, intervalName: "Interval Rest")
-                if !(j+1 == rout.intervals.count) {
+                if !((j+1 == rout.intervals.count) && (UserDefaults.standard.bool(forKey: settings.removeLastIntervalRest.rawValue))) {
                     routArrayPlayer.append(intervalRest)
                 }
 

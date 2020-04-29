@@ -380,6 +380,13 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
                 stringArray.append(subArray)
             }
             let mcPicker = McPicker(data: stringArray)
+            let hoursLabel = UILabel()
+            hoursLabel.text = "h"
+            let hoursLabel1 = UILabel()
+            hoursLabel1.text = "m"
+            let hoursLabel2 = UILabel()
+            hoursLabel2.text = "s"
+            mcPicker.picker.setPickerLabels(labels: [0: hoursLabel, 1: hoursLabel1, 2: hoursLabel2], containedView: mcPicker)
             globals().setMcPickerDetails(mcPicker: mcPicker)
             let (h,m,s) = globals().secondsToHoursMinutesSeconds(seconds: self.intervalArray[indexPathSection].duration)
             mcPicker.pickerSelectRowsForComponents = [
