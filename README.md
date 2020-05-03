@@ -8,11 +8,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/roshanlam/ReadMeTemplate/">
-    <img src="./logo.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/9dnsb/Timer/blob/master/Timer/Assets.xcassets/1024.imageset/">
+    <img src="./1024.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Read Me Template</h3>
+  <h3 align="center">David's Interval Timer</h3>
 
   <p align="center">
     A Read Me template for your projects!
