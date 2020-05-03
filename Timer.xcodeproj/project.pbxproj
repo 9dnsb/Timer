@@ -34,7 +34,6 @@
 		634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5CFA2426689E0011B9ED /* PlayerController.swift */; };
 		634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 634E5CFC242668AB0011B9ED /* PlayerView.storyboard */; };
 		634E5D032426944D0011B9ED /* routineTotalTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 634E5D022426944D0011B9ED /* routineTotalTime.swift */; };
-		6350ECEC245F3CE4006DA809 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 6350ECEB245F3CE4006DA809 /* README.md */; };
 		638E96C1242C01C300A8626C /* blank.wav in Resources */ = {isa = PBXBuildFile; fileRef = 638E96C0242C01C300A8626C /* blank.wav */; };
 		63911E24244E262C009C184A /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63911E23244E262C009C184A /* Reachability.swift */; };
 		63911E26244E3E7F009C184A /* SubscribeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63911E25244E3E7F009C184A /* SubscribeAlert.swift */; };
@@ -135,7 +134,6 @@
 		634E5CFA2426689E0011B9ED /* PlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerController.swift; sourceTree = "<group>"; };
 		634E5CFC242668AB0011B9ED /* PlayerView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PlayerView.storyboard; sourceTree = "<group>"; };
 		634E5D022426944D0011B9ED /* routineTotalTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = routineTotalTime.swift; sourceTree = "<group>"; };
-		6350ECEB245F3CE4006DA809 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		638E96C0242C01C300A8626C /* blank.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = blank.wav; sourceTree = "<group>"; };
 		638E96C3242C04BF00A8626C /* test.aif */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.aif; sourceTree = "<group>"; };
 		63911E23244E262C009C184A /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
@@ -608,7 +606,6 @@
 				63C7CCBF2422C0B700960513 /* Assets.xcassets */,
 				63C7CCC12422C0B700960513 /* LaunchScreen.storyboard */,
 				63C7CCC42422C0B700960513 /* Info.plist */,
-				6350ECEB245F3CE4006DA809 /* README.md */,
 				63C7CCBC2422C0B200960513 /* Timer.xcdatamodeld */,
 				63B61E7D2428DA7A00CDAD88 /* Sounds */,
 				63BC9A8D2422D2B30010C81F /* Settings */,
@@ -762,7 +759,6 @@
 				63B24DB82445444C00EC48F3 /* Air Horn.mp3 in Resources */,
 				63C7CCC02422C0B700960513 /* Assets.xcassets in Resources */,
 				63B24DAF2445444B00EC48F3 /* Church Bell.mp3 in Resources */,
-				6350ECEC245F3CE4006DA809 /* README.md in Resources */,
 				63B24DAE2445444B00EC48F3 /* Train Honk.mp3 in Resources */,
 				63B24DB52445444B00EC48F3 /* Bell.mp3 in Resources */,
 				631C0C752435212900C06AD2 /* picker.xib in Resources */,
