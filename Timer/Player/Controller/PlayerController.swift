@@ -9,58 +9,19 @@
 import UIKit
 import SRCountdownTimer
 import AVFoundation
-import Instructions
 
-//import GoogleMobileAds
-//import SwiftRater
+import GoogleMobileAds
+import SwiftRater
 
 protocol ModalDelegate3 {
     func getRoutine(value: Routine)
 }
 
 public  typealias PXColor = UIColor
-class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDataSource, CoachMarksControllerDelegate{
-    func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkViewsAt index: Int, madeFrom coachMark: CoachMark) -> (bodyView: CoachMarkBodyView, arrowView: CoachMarkArrowView?) {
-        let coachViews = coachMarksController.helper.makeDefaultCoachViews(withArrow: true, arrowOrientation: coachMark.arrowOrientation)
-        let okText = "Ok"
-        switch(index) {
-        case 0:
-            coachViews.bodyView.hintLabel.text = "This is the name of the timer"
-            coachViews.bodyView.nextLabel.text = okText
-        case 1:
-            coachViews.bodyView.hintLabel.text = "Click this to edit the timer"
-            coachViews.bodyView.nextLabel.text = okText
+class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
 
-        default: break
-        }
-        return (bodyView: coachViews.bodyView, arrowView: coachViews.arrowView)
-    }
 
-    func coachMarksController(_ coachMarksController: CoachMarksController, coachMarkAt index: Int) -> CoachMark {
-//        return coachMarksController.helper.makeCoachMark(for: self.intervalNameLabel)
-        switch(index) {
-        case 0:
-            return coachMarksController.helper.makeCoachMark(for: self.navigationController?.navigationBar) { (frame: CGRect) -> UIBezierPath in
-                // This will make a cutoutPath matching the shape of
-                // the component (no padding, no rounded corners).
-                return UIBezierPath(rect: frame)
-            }
-        case 1:
-            let addBarButtomItemView: UIView = self.navItem.value(forKey: "view") as! UIView
-            return coachMarksController.helper.makeCoachMark(for: addBarButtomItemView)
-        case 2:
-            return coachMarksController.helper.makeCoachMark(for: self.backIntervalButton)
-        case 3:
-            return coachMarksController.helper.makeCoachMark(for: self.forwardIntervalButton)
-        default:
-            return coachMarksController.helper.makeCoachMark()
-        }
-    }
 
-    func numberOfCoachMarks(for coachMarksController: CoachMarksController) -> Int {
-        2
-    }
-    //GADBannerViewDelegate
     func getRoutine(value: Routine) {
 
         self.rout = value
@@ -80,9 +41,9 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     @IBOutlet weak var intervalNameLabel: UILabel!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var lockButton: UIButton!
+    @IBOutlet weak var googleAd: GADBannerView!
 
     @IBOutlet weak var veryBottom: UIView!
-    //@IBOutlet weak var googleAd: GADBannerView!
     @IBOutlet weak var navItem: UIBarButtonItem!
     @IBOutlet weak var navItemLeft: UIBarButtonItem!
 
@@ -93,7 +54,7 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     var arrayView = [UIView]()
     var timer2 : Timer?
     let audioLimit: TimeInterval = 1
-    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0, intervalRestTime: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none))
+    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0, intervalRestTime: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), enableIntervalVoice: false)
     var routArrayPlayer = [routArray]()
     var timerClass = Timer()
     var elapsedTimer = Timer()
@@ -103,8 +64,6 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     var currInterval = currentInterval()
     var currIndex = 0
     var speechSynthesizer = AVSpeechSynthesizer()
-    var speechUtterance: AVSpeechUtterance = AVSpeechUtterance(string: "")
-    let coachMarksController = CoachMarksController()
 
     required init?(coder aDecoder: NSCoder) {
         
@@ -115,35 +74,33 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
         // playVoice(voice: "This is a test. This is only a test. If this was an actual emergency, then this wouldn’t have been a test.")
         super.viewDidLoad()
 
-         self.coachMarksController.dataSource = self
-         self.coachMarksController.delegate = self
+        
 
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         self.setSystemImages()
-//        SwiftRater.check()
-
+        
 
     }
 
+    
 
-
-//    func runGoogleAds() {
-//        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
+    func runGoogleAds() {
+        if !UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
 //            googleAd.adUnitID = "ca-app-pub-3940256099942544/2934735716" //test
-//            //googleAd.adUnitID = "ca-app-pub-2464759242018155/7204785293" //real
-//            googleAd.rootViewController = self
-//            googleAd.delegate = self
-//            googleAd.layer.cornerRadius = 8.0
-//            googleAd.clipsToBounds = true
-//            googleAd.adSize = kGADAdSizeBanner
-//            googleAd.load(GADRequest())
-//            googleAd.isHidden = false
-//        }
-//        else {
-//            googleAd.isHidden = true
-//        }
-//    }
+            googleAd.adUnitID = "ca-app-pub-2464759242018155/7204785293" //real
+            googleAd.rootViewController = self
+            googleAd.delegate = self
+            googleAd.layer.cornerRadius = 8.0
+            googleAd.clipsToBounds = true
+            googleAd.adSize = kGADAdSizeBanner
+            googleAd.load(GADRequest())
+            googleAd.isHidden = false
+        }
+        else {
+            googleAd.isHidden = true
+        }
+    }
 
     func setSystemImages() {
         if #available(iOS 13.0, *) {
@@ -204,19 +161,13 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
         }
 
     }
-    
+
     func playVoice(voice: String) {
-        if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false {
+        if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false || UserDefaults.standard.bool(forKey: settings.endVoiceEnabled.rawValue) == false {
             return
         }
-        speechUtterance = AVSpeechUtterance(string: voice)
-        //Line 3. Specify the speech utterance rate. 1 = speaking extremely the higher the values the slower speech patterns. The default rate, AVSpeechUtteranceDefaultSpeechRate is 0.5
-        speechUtterance.rate = AVSpeechUtteranceMaximumSpeechRate / 2.5
-        speechUtterance.volume = 1
-        // Line 4. Specify the voice. It is explicitly set to English here, but it will use the device default if not specified.
-        // speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        // Line 5. Pass in the urrerance to the synthesizer to actually speak.
-        speechSynthesizer.speak(speechUtterance)
+
+        globals().playVoice(voice: voice, speechSynth: speechSynthesizer)
     }
     
     
@@ -248,7 +199,35 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     }
     
     @IBAction func lockButtonClicked(_ sender: Any) {
-        self.disableButtons()
+//        self.disableButtons()
+        let firstActivityItem = "Description you want.."
+        let dog = Dog(name: "Rex", owner: "Etgar")
+
+//        DispatchQueue.main.async {
+//                let encoder = JSONEncoder()
+//                if let jsonData = try? encoder.encode(dog) {
+//                    if let jsonString = String(data: jsonData, encoding: .utf8) {
+//                        var documentsDirectoryURL = try! FileManager().url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+//                        let file2ShareURL = documentsDirectoryURL.appendingPathComponent("blah.json")
+//                        do {
+//                            try jsonString.write(to: file2ShareURL, atomically: false, encoding: .utf8)
+//                        } catch {
+//                            print(error)
+//                        }
+//
+//                        do {
+//                            let _ = try Data(contentsOf: file2ShareURL)
+//                            let activityViewController = UIActivityViewController(activityItems: [file2ShareURL], applicationActivities: nil)
+//                            activityViewController.popoverPresentationController?.sourceView = self.view
+//                            self.present(activityViewController, animated: true, completion: nil)
+//                        } catch {
+//                            print(error)
+//                        }
+//
+//                }
+//            }
+//        }
+
     }
 
     @IBAction func backInteralButtonClicked(_ sender: Any) {
@@ -277,8 +256,9 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
 
     
     @IBAction func startButton(_ sender: Any) {
-        if currIndex == 0 && model.seconds == routArrayPlayer[currIndex].interval.duration {
+        if currIndex == 0 && model.seconds == routArrayPlayer[currIndex].interval.duration && self.startButtonModel.firstTimeTapped == false {
             //print("here")
+            self.startButtonModel.firstTimeTapped = true
             self.playSound()
         }
         if self.startButtonModel.resumeTapped == false {
@@ -330,15 +310,22 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
             timerClass.invalidate()
             //countdownTimer.end()
             playVoice(voice: "Activity Completed.")
-            //SwiftRater.incrementSignificantUsageCount()
+            SwiftRater.incrementSignificantUsageCount()
             runAlert()
             return
         }
         if runSound {
             self.playSound()
-//            if  UserDefaults.standard.bool(forKey: settings.vibration.rawValue) {
-//                AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
-//            }
+            if  UserDefaults.standard.bool(forKey: settings.vibration.rawValue) {
+                print("vibrate")
+                
+                let generator = UIImpactFeedbackGenerator(style: .heavy)
+
+                for _ in 1...2 {
+                    generator.impactOccurred()
+                }
+
+            }
 //            self.player?.pause()
 //            self.player = globals().playSound(sound: routArrayPlayer[currIndex].interval.sound.rawValue, setSession: false)
 //            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -413,8 +400,10 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        UIApplication.shared.isIdleTimerDisabled = true
 
-        //self.runGoogleAds()
+
+        self.runGoogleAds()
         //let oo = globals().loadCoreData2(rout1: rout)
         //print("oo", oo)
         self.currIndex = 0
@@ -461,7 +450,6 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.coachMarksController.stop(immediately: true)
         self.navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
         self.navigationController?.navigationBar.shadowImage = nil
         
@@ -478,7 +466,13 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
     }
 
     @IBAction func closeButtonClick(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        if model.elapsedTime == 0 {
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
+        
+        presentActionSheet(sender: navItemLeft)
+
     }
 
     func disableButtons() {
@@ -520,6 +514,17 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
 
         }
 
+        if model.elapsedTime == 0 {
+            self.presentEdit()
+            return
+        }
+
+        presentActionSheet(sender: navItemLeft, ifEdit: true)
+
+
+    }
+
+    func presentEdit() {
         if let viewController = UIStoryboard(name: "RoutineEditorView", bundle: nil).instantiateViewController(withIdentifier: "RoutineEditorView") as? RoutineEditorController {
             viewController.rout = rout
             //viewController.currObjId = rout.objectID
@@ -551,6 +556,16 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
                 }
                 self.player?.stop()
                 self.player = globals().playSound(sound: routArrayPlayer[currIndex].interval.sound.rawValue, setSession: false)
+//                if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false || UserDefaults.standard.bool(forKey: settings.endVoiceEnabled.rawValue) == false {
+//                    return
+//                }
+
+        if  UserDefaults.standard.bool(forKey: settings.intervalVoiceEnabled.rawValue) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                globals().playVoice(voice: self.routArrayPlayer[self.currIndex].intervalName, speechSynth: self.speechSynthesizer, voiceInterval: true)
+            }
+
+        }
 
 //        if UserDefaults.standard.bool(forKey: settings.enableSound.rawValue) == false {
 //            //print("is false")
@@ -600,7 +615,30 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
         }
         
     }
-    
+
+    func presentActionSheet(sender: UIBarButtonItem, ifEdit: Bool = false) {
+        let actionSheetControllerIOS8: UIAlertController = UIAlertController()
+        let cancelActionButton = UIAlertAction(title: "Return to Player", style: .cancel) { _ in
+            print("Cancel")
+        }
+        actionSheetControllerIOS8.addAction(cancelActionButton)
+        let saveActionButton = UIAlertAction(title: "Leave Player", style: .destructive)
+        { _ in
+            print("Discard Changes")
+            if !ifEdit {
+                self.navigationController?.popViewController(animated: true)
+            }
+            else {
+                self.presentEdit()
+            }
+        }
+        actionSheetControllerIOS8.addAction(saveActionButton)
+
+        if let popoverController = actionSheetControllerIOS8.popoverPresentationController {
+          popoverController.barButtonItem = sender
+        }
+        self.present(actionSheetControllerIOS8, animated: true, completion: nil)
+    }
     
     func runAlert() {
 
@@ -616,9 +654,12 @@ class PlayerController: UIViewController, ModalDelegate3, CoachMarksControllerDa
                 } else {
                     self.startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
                 }
+                self.startButtonModel.firstTimeTapped = false
                 self.setRemainingTimer()
                 self.changeInterval(runSound: false)
-                
+                if !self.startButton.isEnabled {
+                    self.disableButtons()
+                }
             case .cancel:
                 print("cancel")
                 

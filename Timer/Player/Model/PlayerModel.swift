@@ -9,6 +9,10 @@
 import Foundation
 import CoreData
 
+struct Dog: Codable {
+    var name: String
+    var owner: String
+}
 
 struct playerModel {
     var isTimerRunning = false
@@ -36,6 +40,7 @@ struct currentInterval {
 struct resumeButton {
     var resumeTapped = true
     var text = ""
+    var firstTimeTapped = false
 }
 
 protocol StructDecoder {

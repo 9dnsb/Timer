@@ -21,4 +21,14 @@ class RoutineCell: UITableViewCell {
         //        timeLabel.text = routineTotalTime().calctotalRoutineTimeString(rout: rout)
 
     }
+
+    @objc func myItemAction(_ sender:AnyObject?){
+      print("Did something new!")
+    }
+
+    @objc func copy11(_ sender:AnyObject?){
+      print("Did something new 2!")
+    }
+
+    
 }

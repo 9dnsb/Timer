@@ -10,7 +10,10 @@ import Foundation
 import CoreStore
 
 public class SaveRoutine {
-    var dataStack = DataStack(xcodeModelName: "Timer")
+    var dataStack = DataStack(
+        xcodeModelName: "Timer",
+        migrationChain: ["Timer", "Timer 3"]
+    )
     var rout : Routine!
     
     func save3() {
@@ -69,6 +72,7 @@ public class SaveRoutine {
         person.cdName = self.rout.name
         person.cdNumCycles = Int32(self.rout.numCycles)
         person.cdRoutineColor = self.rout.routineColor.hexString(.d6)
+        person.cdIntervalVoiceEnable = self.rout.enableIntervalVoice
         //print("self.rout.routineIndex", self.rout.routineIndex!)
         person.cdRoutineIndex = Int32(self.rout.routineIndex)
         for (j, _) in self.rout.intervals.enumerated() {

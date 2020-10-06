@@ -41,6 +41,7 @@ class IntervalEditorVC: UIViewController {
         globals().keyboardClick(view: self.view)
         globals().setTableViewBackground(tableView: self.tableView)
         super.viewDidLoad()
+
         if interval == nil {
             sections = 4
             isHighLow = true
@@ -202,8 +203,16 @@ class IntervalEditorVC: UIViewController {
     }
 
     @objc func textFieldDidChange(_ textField: UITextField) {
+        print("here55")
         intervalHighLow?.intervalName = textField.text ?? ""
 
+    }
+
+    @objc func textFieldDidBegin(_ textField: UITextField) {
+        DispatchQueue.main.async{
+           let newPosition = textField.endOfDocument
+           textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+        }
     }
 
     @objc func controlValueChanged(_ sender: BetterSegmentedControl) {
@@ -243,6 +252,7 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
         cell.labelLeft!.text = "Interval Name"
         cell.textInput.text = intervalHighLow?.intervalName
         cell.textInput.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        cell.textInput.addTarget(self, action: #selector(textFieldDidBegin(_:)), for: .editingDidBegin)
 
         if indexPath.section == 1 && isHighLow && indexPath.row == 0 {
             let cell2 = tableView.dequeueReusableCell(withIdentifier: "basicRightLabelCell") as! basicRightLabelCell

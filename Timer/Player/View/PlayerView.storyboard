@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -313,13 +313,13 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1eK-d8-u5Q" userLabel="Middle">
                                         <rect key="frame" x="0.0" y="327.33333333333331" width="414" height="70"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i0d-Sf-ONx">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i0d-Sf-ONx" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                                 <rect key="frame" x="135.66666666666666" y="5" width="142.99999999999997" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXq-B7-cVr">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fXq-B7-cVr" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                                 <rect key="frame" x="162" y="38" width="90" height="27"/>
                                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -582,13 +582,13 @@
                                                     <action selector="forwardInteralButtonClicked:" destination="3ts-DC-Ew5" eventType="touchUpInside" id="Uju-Gr-Sgh"/>
                                                 </connections>
                                             </button>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ju0-y5-1iY">
-                                                <rect key="frame" x="135.66666666666666" y="0.0" width="142.99999999999997" height="27"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ju0-y5-1iY" customClass="MarqueeLabel" customModule="MarqueeLabel">
+                                                <rect key="frame" x="46" y="0.0" width="322" height="27"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gVk-z6-4bd">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval #" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gVk-z6-4bd" customClass="MarqueeLabel" customModule="MarqueeLabel">
                                                 <rect key="frame" x="162" y="33" width="90" height="27"/>
                                                 <fontDescription key="fontDescription" type="italicSystem" pointSize="22"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -605,6 +605,8 @@
                                             <constraint firstAttribute="height" constant="60" id="TS3-2q-heK"/>
                                             <constraint firstItem="pO8-Zi-7IB" firstAttribute="centerY" secondItem="Kct-EJ-vUD" secondAttribute="centerY" id="VcV-fi-GQt"/>
                                             <constraint firstItem="pO8-Zi-7IB" firstAttribute="leading" secondItem="Kct-EJ-vUD" secondAttribute="leading" constant="15" id="YWt-gF-heO"/>
+                                            <constraint firstItem="eXn-Fr-HTj" firstAttribute="leading" secondItem="ju0-y5-1iY" secondAttribute="trailing" constant="5" id="bDf-Ms-nsA"/>
+                                            <constraint firstItem="ju0-y5-1iY" firstAttribute="leading" secondItem="pO8-Zi-7IB" secondAttribute="trailing" constant="5" id="lY4-bt-raI"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hIy-A0-nhM" userLabel="Bottom">
@@ -709,12 +711,22 @@
                                             <constraint firstItem="aOQ-kT-nDv" firstAttribute="centerY" secondItem="ZA4-Be-PUp" secondAttribute="centerY" id="cSR-eJ-7kf"/>
                                         </constraints>
                                     </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ILa-vb-RwS" customClass="GADBannerView">
+                                        <rect key="frame" x="47" y="337" width="320" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="Gw6-15-4CL"/>
+                                            <constraint firstAttribute="width" constant="320" id="fbw-pK-seI"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemRedColor" red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="ZA4-Be-PUp" secondAttribute="trailing" id="9Qb-9n-JXg"/>
                                     <constraint firstItem="ZA4-Be-PUp" firstAttribute="leading" secondItem="m9t-8l-KOq" secondAttribute="leading" id="HeH-tN-Dba"/>
+                                    <constraint firstItem="ILa-vb-RwS" firstAttribute="centerX" secondItem="m9t-8l-KOq" secondAttribute="centerX" id="OxR-El-qLt"/>
                                     <constraint firstItem="ZA4-Be-PUp" firstAttribute="top" secondItem="m9t-8l-KOq" secondAttribute="top" id="ZQs-Tp-Zm7"/>
+                                    <constraint firstAttribute="bottom" secondItem="ILa-vb-RwS" secondAttribute="bottom" id="ZU0-oP-T9z"/>
                                     <constraint firstAttribute="centerY" secondItem="ZA4-Be-PUp" secondAttribute="bottom" id="uIU-xe-8Xa"/>
                                 </constraints>
                             </view>
@@ -759,6 +771,7 @@
                         <outlet property="backIntervalButton" destination="pO8-Zi-7IB" id="mgl-bf-Izr"/>
                         <outlet property="bottomView" destination="m9t-8l-KOq" id="Ci0-p0-bhW"/>
                         <outlet property="forwardIntervalButton" destination="eXn-Fr-HTj" id="z5l-IZ-Kbn"/>
+                        <outlet property="googleAd" destination="ILa-vb-RwS" id="Ns5-WH-Csn"/>
                         <outlet property="intervalNameLabel" destination="ju0-y5-1iY" id="RHL-ef-Wmf"/>
                         <outlet property="intervalNumberLabel" destination="gVk-z6-4bd" id="eE6-nV-ysh"/>
                         <outlet property="lockButton" destination="JOV-hV-loK" id="CWK-NW-ZkB"/>

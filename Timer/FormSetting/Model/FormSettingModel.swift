@@ -17,4 +17,12 @@ enum settings: String {
     case enableDarkMode
     case removeLastIntervalLow
     case removeLastIntervalRest
+    case lowIntDefault
+    case setsDefault
+    case endVoiceEnabled
+    case endVoiceSpeed
+    case endVoiceVolume
+    case intervalVoiceEnabled
+    case intervalVoiceSpeed
+    case IntervalVoiceVolume
 }

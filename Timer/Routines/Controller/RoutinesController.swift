@@ -12,6 +12,7 @@ import SwiftyStoreKit
 import CoreData
 import CoreStore
 import PKHUD
+import SwiftRater
 
 protocol settingDelegate {
     func changeValue(sub: subSendData)
@@ -54,7 +55,10 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
 
     @IBOutlet weak var tableView: UITableView!
     
-    let dataStack = DataStack(xcodeModelName: "Timer")
+    var dataStack = DataStack(
+        xcodeModelName: "Timer",
+        migrationChain: ["Timer", "Timer 3"]
+    )
     let cellSpacingHeight: CGFloat = 20
     var isEditingBool = true
     var addEditClick: UIBarButtonItem = UIBarButtonItem()
@@ -66,20 +70,39 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        SwiftRater.check()
 
+        //addCustomMenuItems()
         self.setBackgroundandNavigationBar()
         self.setupTable()
-        
-        
 //        self.tableView.reorder.delegate = self as TableViewReorderDelegate
         do {
-            try dataStack.addStorageAndWait(SQLiteStore())
+//            try dataStack.addStorageAndWait(SQLiteStore())
+            try dataStack.addStorageAndWait(
+                SQLiteStore(
+                    fileURL: SQLiteStore().fileURL,
+                    localStorageOptions: .allowSynchronousLightweightMigration
+                )
+            )
             
         }
+
+
         catch { // ...
             print("error")
         }
 
+    }
+
+
+
+    private func addCustomMenuItems() {
+      let newMenuItem = UIMenuItem(title: "Copy", action: MenuAction.Custom.selector())
+
+      let menuController = UIMenuController.shared
+      var newItems = menuController.menuItems ?? [UIMenuItem]()
+      newItems.append(newMenuItem)
+      menuController.menuItems = newItems
     }
     
 
@@ -123,12 +146,16 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
                     rout.routineID = i.cdUUID!
                     rout.routineIndex = Int(i.cdRoutineIndex)
                     rout.intervalRestTime = self.setIntIntesity(cdInt: i.restInterval!)
-
+                    rout.enableIntervalVoice = i.cdIntervalVoiceEnable
                     for (j, elem) in i.cDHighLowInterval!.enumerated() {
                         //print("j", j)
                         let elem = elem as! CDHighLowInterval
                         if !rout.intervals.indices.contains(j) {
-                            rout.intervals.append(HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed))
+                            var appIntLow = globals().returnDefaultRout().intervals[0]
+                            appIntLow.firstIntervalHigh = false
+                            appIntLow.intervalName = "Interval Cycle #1"
+                            rout.intervals.append(appIntLow)
+//                            rout.intervals.append(HighLowInterval(firstIntervalHigh: false, numSets: 5, intervalName: "Interval Cycle #1", highInterval: IntervalIntensity(duration: 60, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 10, intervalColor: .systemGreen, sound: sounds.none), HighLowIntervalColor: .systemRed))
                         }
                         rout.intervals[j].firstIntervalHigh = elem.cdfirstIntervalHigh
                         rout.intervals[j].HighLowIntervalColor = hexStringToUIColor(hex: elem.cdHighLowIntervalColor!)
@@ -211,8 +238,9 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
         if #available(iOS 13.0, *) {
             settingButton.frame = CGRect(x: 0, y: 0, width: 53, height: 51)
             settingButton.setImage(UIImage(systemName: "gear"), for: .normal)
+            
         } else {
-            let origImage = UIImage(named: "gear")
+            let origImage = UIImage(named: "Gear")
             let tintedImage = origImage?.withRenderingMode(.alwaysTemplate)
             settingButton.setBackgroundImage(tintedImage, for: .normal)
             settingButton.tintColor = self.view.tintColor
@@ -286,6 +314,7 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     
     // MARK: - Table view data source
     @objc func settingClicked(){
+        //fatalError()
         self.settingClickRun()
 
     }
@@ -465,6 +494,38 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
+
+     func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
+      return true
+    }
+
+
+     func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+//        print("HERE")
+        return action == #selector(copy(_:))
+    }
+
+
+     func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
+        if action == #selector(copy(_:)) {
+            var routine = rout[indexPath.row]
+            routine.routineID = UUID().uuidString
+            routine.routineIndex = routine.routineIndex + 1
+            routine.name = routine.name + " Copy"
+            let colors = globals().setAllColorsArray()
+            let count = colors.count - 1
+            let number = Int.random(in: 0 ... count)
+
+            routine.routineColor = colors[number]
+            rout.insert(routine, at: indexPath.row + 1)
+            self.tableView.reloadData()
+            self.reorderRouts()
+        }
+    }
+
+    
+
+    
 }
 //
 //extension RoutinesController: TableViewReorderDelegate {

@@ -26,6 +26,7 @@
         <relationship name="ofwarmup" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CDRoutine" inverseName="warmup" inverseEntity="CDRoutine"/>
     </entity>
     <entity name="CDRoutine" representedClassName="CDRoutine" syncable="YES" codeGenerationType="class">
+        <attribute name="cdIntervalVoiceEnable" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="cdName" optional="YES" attributeType="String"/>
         <attribute name="cdNumCycles" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="cdRoutineColor" optional="YES" attributeType="String"/>
@@ -43,6 +44,6 @@
     <elements>
         <element name="CDHighLowInterval" positionX="-45" positionY="36" width="128" height="178"/>
         <element name="CDIntervalIntensity" positionX="-36" positionY="54" width="128" height="223"/>
-        <element name="CDRoutine" positionX="-45" positionY="0" width="128" height="238"/>
+        <element name="CDRoutine" positionX="-45" positionY="0" width="128" height="253"/>
     </elements>
 </model>

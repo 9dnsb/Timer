@@ -58,8 +58,9 @@ struct Routine: Equatable {
         let f = lhs.restTime == rhs.restTime
         let g = lhs.coolDown == rhs.coolDown
         let h = lhs.routineColor == rhs.routineColor
+        let i = lhs.enableIntervalVoice == rhs.enableIntervalVoice
         
-        if a && b && c && d && e && f && g && h  {
+        if a && b && c && d && e && f && g && h && i {
             return true
         }
         return false
@@ -77,6 +78,7 @@ struct Routine: Equatable {
     var routineID: String!
     var routineIndex: Int! = 0
     var intervalRestTime: IntervalIntensity
+    var enableIntervalVoice: Bool
     
 }
 

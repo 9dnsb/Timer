@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -31,10 +31,10 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="414" height="46.5"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iut-KX-5i2">
-                                                            <rect key="frame" x="15" y="12" width="128" height="22.5"/>
+                                                            <rect key="frame" x="15" y="12" width="105.5" height="22.5"/>
                                                             <subviews>
-                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Timer Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCJ-9U-ugq">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="22.5"/>
+                                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Interval Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iCJ-9U-ugq">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="105.5" height="22.5"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -42,7 +42,7 @@
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="128" id="ElS-He-Ikd"/>
+                                                                <constraint firstAttribute="width" constant="105.5" id="MI1-il-aY2"/>
                                                                 <constraint firstAttribute="bottom" secondItem="iCJ-9U-ugq" secondAttribute="bottom" id="S6o-hB-QmE"/>
                                                                 <constraint firstItem="iCJ-9U-ugq" firstAttribute="leading" secondItem="iut-KX-5i2" secondAttribute="leading" id="ebM-ar-FKo"/>
                                                                 <constraint firstItem="iCJ-9U-ugq" firstAttribute="top" secondItem="iut-KX-5i2" secondAttribute="top" id="l0j-YU-OBJ"/>
@@ -50,10 +50,10 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9eN-KR-TAq">
-                                                            <rect key="frame" x="148" y="12" width="251" height="22.5"/>
+                                                            <rect key="frame" x="260.5" y="12" width="138.5" height="22.5"/>
                                                             <subviews>
                                                                 <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Timer Name" textAlignment="right" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sBs-pG-alT">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="251" height="22.5"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="138.5" height="22.5"/>
                                                                     <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" returnKeyType="done" textContentType="name"/>
@@ -78,7 +78,6 @@
                                                         <constraint firstAttribute="bottom" secondItem="9eN-KR-TAq" secondAttribute="bottom" constant="12" id="aKk-iv-4ax"/>
                                                         <constraint firstItem="9eN-KR-TAq" firstAttribute="top" secondItem="l0d-ra-aj3" secondAttribute="top" constant="12" id="eyb-CL-mbG"/>
                                                         <constraint firstAttribute="trailing" secondItem="9eN-KR-TAq" secondAttribute="trailing" constant="15" id="fOn-4Q-TU8"/>
-                                                        <constraint firstItem="9eN-KR-TAq" firstAttribute="leading" secondItem="iut-KX-5i2" secondAttribute="trailing" constant="5" id="n6E-Nw-P2Q"/>
                                                         <constraint firstAttribute="bottom" secondItem="iut-KX-5i2" secondAttribute="bottom" constant="12" id="xs9-yq-3S8"/>
                                                     </constraints>
                                                 </view>
@@ -351,13 +350,16 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="383" height="40"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="intervalName" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mJv-fO-7Vf">
-                                                            <rect key="frame" x="15" y="9.5" width="101" height="21"/>
+                                                            <rect key="frame" x="15" y="9.5" width="274" height="21"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="totalTime" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EdY-RV-1Ws">
                                                             <rect key="frame" x="296" y="9.5" width="72" height="21"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="72" id="oWm-WL-Cpi"/>
+                                                            </constraints>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <color key="textColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
@@ -369,6 +371,7 @@
                                                         <constraint firstAttribute="trailing" secondItem="EdY-RV-1Ws" secondAttribute="trailing" constant="15" id="9q1-er-rDa"/>
                                                         <constraint firstItem="mJv-fO-7Vf" firstAttribute="leading" secondItem="7LA-iE-CGU" secondAttribute="leading" constant="15" id="Kzr-So-Q2c"/>
                                                         <constraint firstItem="mJv-fO-7Vf" firstAttribute="centerY" secondItem="7LA-iE-CGU" secondAttribute="centerY" id="Ppj-kl-nyV"/>
+                                                        <constraint firstItem="EdY-RV-1Ws" firstAttribute="leading" secondItem="mJv-fO-7Vf" secondAttribute="trailing" constant="7" id="iMW-f3-vfs"/>
                                                     </constraints>
                                                 </view>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uze-oV-vzd" userLabel="Bottom">

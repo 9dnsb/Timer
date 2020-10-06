@@ -11,6 +11,7 @@ import Eureka
 import MessageUI
 import SwiftRater
 import StoreKit
+import AVFoundation
 
 
 class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
@@ -18,6 +19,8 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
     var settingDel : settingDelegate?
     var subData : subSendData!
     var routineContr : RoutinesController!
+    var player : AVAudioPlayer?
+    var speechSynthesizer = AVSpeechSynthesizer()
     override func viewDidLoad() {
         super.viewDidLoad()
         if #available(iOS 13.0, *) {
@@ -85,9 +88,30 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
 //                    settingDel.changeValue(darkMode: true)
 //                }
 //            }
-            
+            +++ Section("Routine Defaults")
 
-            +++ Section("Sounds")
+            <<< IntRow() {
+                $0.title = "Low Interval Time (Seconds)"
+
+                $0.value = UserDefaults.standard.integer(forKey: settings.lowIntDefault.rawValue)
+            }.onChange { cell in
+                UserDefaults.standard.set(cell.value, forKey: settings.lowIntDefault.rawValue)
+            }
+            <<< IntRow() {
+                $0.title = "Number of Sets"
+                $0.add(rule: RuleGreaterThan(min: 0))
+                $0.value = UserDefaults.standard.integer(forKey: settings.setsDefault.rawValue)
+                $0.validationOptions = .validatesOnChange
+            }.onChange { cell in
+                UserDefaults.standard.set(cell.value, forKey: settings.setsDefault.rawValue)
+            }.cellUpdate { cell, row in
+                    if !row.isValid {
+                        cell.titleLabel?.textColor = .red
+                    }
+            }
+
+
+            +++ Section("Timer Sounds")
 
             <<< SwitchRow() {
                 $0.title = "Enable Sounds"
@@ -101,21 +125,86 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
 
             <<< SwitchRow() {
                 $0.title = "Vibration"
-
+                if (UIDevice.current.value(forKey: "_feedbackSupportLevel")) as! Int != 2 {
+                    $0.hidden = true
+                }
                 $0.value = UserDefaults.standard.bool(forKey: settings.vibration.rawValue)
             }.onChange { cell in
                 UserDefaults.standard.set(cell.value, forKey: settings.vibration.rawValue)
             }
 
             <<< SliderRow() {
-                    $0.title = "Sound Volume"
-                    //print("UserDefaults.standard.float(forKey: settings.soundVolume.rawValue)", UserDefaults.standard.object(forKey: settings.soundVolume.rawValue))
-
+                    $0.title = "Timer Volume"
                     $0.value = UserDefaults.standard.float(forKey: settings.soundVolume.rawValue)
-
-
                 }.onChange { cell in
                     UserDefaults.standard.set(cell.value!, forKey: settings.soundVolume.rawValue)
+                    self.player = globals().playSound(sound: sounds.bell.rawValue)
+            }
+
+            +++ Section("Begin Interval Voice Prompt")
+            <<< SwitchRow() {
+                $0.title = "Enable Voice"
+                $0.value = UserDefaults.standard.bool(forKey: settings.intervalVoiceEnabled.rawValue)
+            }.onChange { cell in
+                UserDefaults.standard.set(cell.value, forKey: settings.intervalVoiceEnabled.rawValue)
+            }
+
+
+            <<< SliderRow() {
+
+                $0.title = "Voice Volume"
+                $0.value = UserDefaults.standard.float(forKey: settings.IntervalVoiceVolume.rawValue)
+
+                }.onChange { cell in
+                    UserDefaults.standard.set(cell.value!, forKey: settings.IntervalVoiceVolume.rawValue)
+
+                    globals().playVoice(voice: "Interval Voice", speechSynth: self.speechSynthesizer, voiceInterval: true)
+            }.cellSetup { (cell, row) in
+                row.steps = 10
+            }
+
+            <<< SliderRow() {
+                    $0.title = "Voice Speed"
+                    $0.value = UserDefaults.standard.float(forKey: settings.intervalVoiceSpeed.rawValue)
+                }.onChange { cell in
+                    UserDefaults.standard.set(cell.value!, forKey: settings.intervalVoiceSpeed.rawValue)
+
+                    globals().playVoice(voice: "Interval Voice", speechSynth: self.speechSynthesizer, voiceInterval: true)
+            }.cellSetup { (cell, row) in
+                row.steps = 10
+            }
+
+            +++ Section("Timer Completed Voice Prompt")
+            <<< SwitchRow() {
+                $0.title = "Enable Voice"
+                $0.value = UserDefaults.standard.bool(forKey: settings.endVoiceEnabled.rawValue)
+            }.onChange { cell in
+                UserDefaults.standard.set(cell.value, forKey: settings.endVoiceEnabled.rawValue)
+            }
+
+
+            <<< SliderRow() {
+
+                $0.title = "Voice Volume"
+                $0.value = UserDefaults.standard.float(forKey: settings.endVoiceVolume.rawValue)
+
+                }.onChange { cell in
+                    UserDefaults.standard.set(cell.value!, forKey: settings.endVoiceVolume.rawValue)
+
+                    globals().playVoice(voice: "Completed Voice", speechSynth: self.speechSynthesizer)
+            }.cellSetup { (cell, row) in
+                row.steps = 10
+            }
+
+            <<< SliderRow() {
+                    $0.title = "Voice Speed"
+                    $0.value = UserDefaults.standard.float(forKey: settings.endVoiceSpeed.rawValue)
+                }.onChange { cell in
+                    UserDefaults.standard.set(cell.value!, forKey: settings.endVoiceSpeed.rawValue)
+
+                    globals().playVoice(voice: "Completed Voice", speechSynth: self.speechSynthesizer)
+            }.cellSetup { (cell, row) in
+                row.steps = 10
             }
 
 

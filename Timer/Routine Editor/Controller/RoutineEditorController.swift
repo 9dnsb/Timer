@@ -26,7 +26,10 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     @IBOutlet weak var addInterval: UIImageView!
     var people: [NSManagedObject] = []
     var colorPicker = ColorPickerViewController()
-    let dataStack = DataStack(xcodeModelName: "Timer")
+    var dataStack = DataStack(
+        xcodeModelName: "Timer",
+        migrationChain: ["Timer", "Timer 3"]
+    )
     var testValue: String = ""
     var intervalChanged = intervalOptions(rawValue: 0)
     var incomingData:Routine!
@@ -150,6 +153,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         person.cdNumCycles = Int32(self.rout.numCycles)
         person.cdRoutineColor = self.rout.routineColor.hexString(.d6)
         person.cdRoutineIndex = Int32(self.rout.routineIndex)
+        person.cdIntervalVoiceEnable = self.rout.enableIntervalVoice
         for (j, _) in self.rout.intervals.enumerated() {
             let highLow = transaction.create(Into<CDHighLowInterval>())
             self.setHighLow(highLow: highLow, j: j)
@@ -319,6 +323,13 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     @objc func textFieldDidChange(textField: UITextField){
         rout.name = textField.text!
     }
+
+    @objc func textFieldDidBegin(_ textField: UITextField) {
+        DispatchQueue.main.async{
+           let newPosition = textField.endOfDocument
+           textField.selectedTextRange = textField.textRange(from: newPosition, to: newPosition)
+        }
+    }
     
 }
 
@@ -370,6 +381,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         if (indexPath.section == 0) && indexPath.row == 0{
             cell.inputString.text = rout.name
             cell.inputString.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+            cell.inputString.addTarget(self, action: #selector(textFieldDidBegin(_:)), for: .editingDidBegin)
             cell.selectionStyle = .none
             return cell
         }
@@ -484,6 +496,19 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             cell2d.setIntervalName(intervalName: "Cool Down")
             return cell2d
         }
+//        let cell34 = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! switchCell
+//        if indexPath.section == totalSections - 1 {
+//            cell33.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
+//            let theSwitch = UISwitch()
+//            cell33.switchSwitch = theSwitch
+//            cell33.selectionStyle = .none
+//            cell33.accessoryView = theSwitch
+//            cell33.switchLabel.text = "Interval Voice Enabled"
+//            theSwitch.addTarget(self, action: #selector(switchValueDidChange(_:)), for: .valueChanged)
+//            theSwitch.isOn = switchClicked
+//
+//            return cell33
+//        }
         return cell2d
     }
     
@@ -758,6 +783,36 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
 
     func numberOfSections(in tableView: UITableView) -> Int {
         return totalSections
+    }
+
+
+    func tableView(_ tableView: UITableView, shouldShowMenuForRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 3 {
+            return true
+        }
+          return false
+    }
+
+
+    func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
+    //        print("HERE")
+            return action == #selector(copy(_:))
+    }
+
+    func tableView(_ tableView: UITableView, performAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) {
+        if action == #selector(copy(_:)) {
+            var interval = rout.intervals[indexPath.row]
+            interval.highLowId = UUID().uuidString
+            //interval.intervalName = interval.intervalName + " Copy"
+            let colors = globals().setAllColorsArray()
+            let count = colors.count - 1
+            let number = Int.random(in: 0 ... count)
+
+            interval.HighLowIntervalColor = colors[number]
+            rout.intervals.insert(interval, at: indexPath.row + 1)
+            self.tableView.reloadData()
+
+        }
     }
     
 }

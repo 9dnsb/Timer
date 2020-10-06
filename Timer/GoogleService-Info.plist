@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>45924796364-4r9u9nql5seqmgq02mejkds1un2u66pj.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.45924796364-4r9u9nql5seqmgq02mejkds1un2u66pj</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBBk3lT632L3os8PiHxr7YErkw6vKgRdvM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>45924796364</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>db.Timer</string>
+	<key>PROJECT_ID</key>
+	<string>timer-42a45</string>
+	<key>STORAGE_BUCKET</key>
+	<string>timer-42a45.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:45924796364:ios:011b7dff0584f1963a7f69</string>
+	<key>DATABASE_URL</key>
+	<string>https://timer-42a45.firebaseio.com</string>
+</dict>
+</plist>

@@ -9,9 +9,9 @@
 import UIKit
 import CoreData
 import SwiftyStoreKit
-//import GoogleMobileAds
-//import SwiftRater
-
+import GoogleMobileAds
+import SwiftRater
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        FirebaseApp.configure()
         UserDefaults.standard.set(false, forKey: "_UIConstraintBasedLayoutLogUnsatisfiable")
         if UserDefaults.standard.object(forKey: settings.soundVolume.rawValue) == nil {
             UserDefaults.standard.set(5, forKey: settings.soundVolume.rawValue)
@@ -50,6 +51,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.object(forKey: settings.removeLastIntervalRest.rawValue) == nil {
             UserDefaults.standard.set(false, forKey: settings.removeLastIntervalRest.rawValue)
         }
+        if UserDefaults.standard.object(forKey: settings.lowIntDefault.rawValue) == nil {
+            UserDefaults.standard.set(10, forKey: settings.lowIntDefault.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.setsDefault.rawValue) == nil {
+            UserDefaults.standard.set(5, forKey: settings.setsDefault.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.soundVolume.rawValue) == nil {
+            UserDefaults.standard.set(5, forKey: settings.soundVolume.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.endVoiceEnabled.rawValue) == nil {
+            UserDefaults.standard.set(true, forKey: settings.endVoiceEnabled.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.endVoiceVolume.rawValue) == nil {
+            UserDefaults.standard.set(8, forKey: settings.endVoiceVolume.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.endVoiceSpeed.rawValue) == nil {
+            UserDefaults.standard.set(5, forKey: settings.endVoiceSpeed.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.intervalVoiceEnabled.rawValue) == nil {
+            UserDefaults.standard.set(false, forKey: settings.intervalVoiceEnabled.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.IntervalVoiceVolume.rawValue) == nil {
+            UserDefaults.standard.set(10, forKey: settings.IntervalVoiceVolume.rawValue)
+        }
+        if UserDefaults.standard.object(forKey: settings.intervalVoiceSpeed.rawValue) == nil {
+            UserDefaults.standard.set(4, forKey: settings.intervalVoiceSpeed.rawValue)
+        }
         //UserDefaults.standard.set(false, forKey: subscription.isSubsribed.rawValue)
 
 
@@ -60,24 +88,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if UserDefaults.standard.bool(forKey: subscription.isSubsribed.rawValue) {
             //setupAds()
         }
-        //self.showRating()
+        self.showRating()
         return true
     }
 
     func setupAds() {
-        //GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
     }
-//
-//    func showRating() {
-//        SwiftRater.daysUntilPrompt = 7
-//        SwiftRater.usesUntilPrompt = 10
-//        SwiftRater.significantUsesUntilPrompt = 3
-//        SwiftRater.daysBeforeReminding = 1
-//        SwiftRater.showLaterButton = true
-//        SwiftRater.debugMode = false
-//        SwiftRater.appLaunched()
-//
-//    }
+
+    func showRating() {
+        SwiftRater.daysUntilPrompt = 7
+        SwiftRater.usesUntilPrompt = 10
+        SwiftRater.significantUsesUntilPrompt = 3
+        SwiftRater.daysBeforeReminding = 1
+        SwiftRater.showLaterButton = true
+        SwiftRater.debugMode = false
+        SwiftRater.appLaunched()
+
+    }
 
     func setupIAP() {
 

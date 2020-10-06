@@ -18,7 +18,11 @@ target 'Timer' do
   pod 'Google-Mobile-Ads-SDK'
   pod 'ColorCompatibility'
   pod 'SwiftRater'
-  pod 'Instructions', '~> 1.4.0'
+  pod 'MarqueeLabel'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Performance'
+  pod 'Firebase/Crashlytics'
+
 
 
   target 'TimerTests' do
