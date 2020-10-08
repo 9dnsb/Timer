@@ -48,6 +48,16 @@
                ReferencedContainer = "container:Timer.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "632EDD18252CBCCA00C7537F"
+               BuildableName = "sharedModelExtensionTests.xctest"
+               BlueprintName = "sharedModelExtensionTests"
+               ReferencedContainer = "container:Timer.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -7,7 +7,6 @@ target 'Timer' do
 
   # Pods for Timer
   pod 'SwiftReorder', '~> 7.2'
-  pod 'SRCountdownTimer'
   pod 'SwiftyStoreKit'
   pod 'McPicker'
   pod 'MKColorPicker'

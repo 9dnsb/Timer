@@ -10,22 +10,82 @@ import UIKit
 import Social
 
 class ShareViewController: SLComposeServiceViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("here2")
+        if #available(iOS 13.0, *) {
+            spinner.style = .large
+                } else {
+                    spinner.style = .whiteLarge
+                }
+        Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.didSelectPost), userInfo: nil, repeats: false)
 
-    override func isContentValid() -> Bool {
-        // Do validation of contentText and/or NSExtensionContext attachments here
-        return true
+        self.handleSharedFile()
+
+      }
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
+
+    private func handleSharedFile() {
+      // extracting the path to the URL that is being shared
+        print("here3")
+      let attachments = (self.extensionContext?.inputItems.first as? NSExtensionItem)?.attachments ?? []
+      for provider in attachments {
+        if provider.hasItemConformingToTypeIdentifier("public.json") {
+              provider.loadItem(forTypeIdentifier: "public.json",
+                                options: nil) { [unowned self] (data, error) in
+              // Handle the error here if you want
+              guard error == nil else { return }
+
+              if let url = data as? URL,
+                 
+                 let imageData = try? Data(contentsOf: url) {
+                do {
+                    let blogPost: Routine = try! JSONDecoder().decode(Routine.self, from: imageData)
+                    print(blogPost)
+                    self.saveFriends(friends: [blogPost])
+                }
+              } else {
+                // Handle this situation as you prefer
+                fatalError("Impossible to save image")
+              }
+            }}
+      }
     }
 
-    override func didSelectPost() {
-        // This is called after the user selects Post. Do the upload of contentText and/or NSExtensionContext attachments.
+    private func save(_ data: Data, key: String, value: Any) {
+      let userDefaults = UserDefaults()
+        print("data", data)
+      userDefaults.set(data, forKey: key)
+    }
+
     
-        // Inform the host that we're done, so it un-blocks its UI. Note: Alternatively you could call super's -didSelectPost, which will similarly complete the extension context.
-        self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
-    }
 
-    override func configurationItems() -> [Any]! {
-        // To add configuration options via table cells at the bottom of the sheet, return an array of SLComposeSheetConfigurationItem here.
-        return []
+    func saveFriends(friends: [Routine]) {
+        let documentsDirectory = FileManager().containerURL(forSecurityApplicationGroupIdentifier: shareString.groupName.rawValue)
+        let archiveURL = documentsDirectory?.appendingPathComponent(shareString.JSONFile.rawValue)
+            let encoder = JSONEncoder()
+            if let dataToSave = try? encoder.encode(friends) {
+                do {
+                    print(dataToSave)
+                    try dataToSave.write(to: archiveURL!)
+                    print("saved")
+                    self.openURL(URL(string: "dbtimerapp://com.db.tbtimer?")!)
+
+                } catch {
+                    // TODO: ("Error: Can't save Counters")
+                    return;
+                }
+            }
+        }
+
+    @objc func openURL(_ url: URL){
+        var responder: UIResponder? = self
+        while responder != nil {
+            if let application = responder as? UIApplication {
+                application.perform(#selector(openURL(_:)), with: url)
+            }
+            responder = responder?.next
+        }
     }
 
 }

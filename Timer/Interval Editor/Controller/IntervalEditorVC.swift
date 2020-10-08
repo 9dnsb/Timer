@@ -180,7 +180,7 @@ class IntervalEditorVC: UIViewController {
     func sendDataDelegate() {
         if let delegate = self.delegate {
             if intervalHighLow == nil {
-                intervalHighLow = HighLowInterval(firstIntervalHigh: true, numSets: 0, intervalName: "", highInterval: IntervalIntensity(duration: 0, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 0, intervalColor: .systemRed, sound: sounds.none), HighLowIntervalColor: .systemRed)
+                intervalHighLow = HighLowInterval(firstIntervalHigh: true, numSets: 0, intervalName: "", highInterval: IntervalIntensity(duration: 0, intervalColor: .systemRed, sound: sounds.none), lowInterval: IntervalIntensity(duration: 0, intervalColor: .systemRed, sound: sounds.none), HighLowIntervalColor: .systemRed, highLowId: "")
             }
             delegate.changeValue(value: intervalArray, highlowInt: intervalHighLow!)
         }

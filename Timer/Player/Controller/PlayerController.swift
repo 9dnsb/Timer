@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SRCountdownTimer
+//import SRCountdownTimer
 import AVFoundation
 
 import GoogleMobileAds
@@ -30,6 +30,8 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     }
     
     
+
+    @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var timer: UILabel!
@@ -54,7 +56,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     var arrayView = [UIView]()
     var timer2 : Timer?
     let audioLimit: TimeInterval = 1
-    var rout: Routine = Routine(name: "", type: "", warmup: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), intervals: [], numCycles: 0, restTime: IntervalIntensity(duration: 0, intervalColor: .systemYellow, sound: sounds.none), coolDown: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), routineColor: .systemRed, totalTime: 0, intervalRestTime: IntervalIntensity(duration: 0, intervalColor: .systemBlue, sound: sounds.none), enableIntervalVoice: false)
+    var rout: Routine = globals().returnDefaultRout()
     var routArrayPlayer = [routArray]()
     var timerClass = Timer()
     var elapsedTimer = Timer()
@@ -107,13 +109,15 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             self.backIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.left"), for: .normal)
             self.forwardIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
             self.lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
+            self.shareButton.setBackgroundImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
             self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
         } else {
             self.backIntervalButton.setBackgroundImage(UIImage(named: "chevron_left"), for: .normal)
             self.forwardIntervalButton.setBackgroundImage(UIImage(named: "chevron.right"), for: .normal)
             self.lockButton.setBackgroundImage(UIImage(named: "lock.open"), for: .normal)
             self.startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
-            
+            self.shareButton.setBackgroundImage(UIImage(named: "square.and.arrow.up"), for: .normal)
+
         }
     }
 
@@ -197,36 +201,41 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
         //        self.updateTimer(toAdd: 1)
         updateTimer(toAdd: 1, playSound: true)
     }
+
+    @IBAction func shareButton(_ sender: Any) {
+        DispatchQueue.main.async {
+                let encoder = JSONEncoder()
+            if let jsonData = try? encoder.encode(self.rout) {
+                    if let jsonString = String(data: jsonData, encoding: .utf8) {
+                        let documentsDirectoryURL = try! FileManager().url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                        let file2ShareURL = documentsDirectoryURL.appendingPathComponent(shareString.JSONFile.rawValue)
+                        do {
+                            try jsonString.write(to: file2ShareURL, atomically: false, encoding: .utf8)
+                        } catch {
+                            print(error)
+                        }
+
+                        do {
+                            let _ = try Data(contentsOf: file2ShareURL)
+                            let text = "I'd like to share a timer for Interval Timer Pro. If you don't have Interval Timer Pro installed, you can get it from the App Store: \n\nhttps://apps.apple.com/us/app/id1504066055 \n\nTo add the timer, tap on the attachment to open the Share Sheet. If you don't see 'Copy to Intervals' in the Share Sheet application list, then tap the 'More' button."
+
+                                    // set up activity view controller
+                            let activityViewController = UIActivityViewController(activityItems: [file2ShareURL, text], applicationActivities: nil)
+                            activityViewController.popoverPresentationController?.sourceView = self.view
+                            self.present(activityViewController, animated: true, completion: nil)
+                        } catch {
+                            print(error)
+                        }
+
+                }
+            }
+        }
+    }
     
     @IBAction func lockButtonClicked(_ sender: Any) {
-//        self.disableButtons()
-        let firstActivityItem = "Description you want.."
-        let dog = Dog(name: "Rex", owner: "Etgar")
+        self.disableButtons()
 
-//        DispatchQueue.main.async {
-//                let encoder = JSONEncoder()
-//                if let jsonData = try? encoder.encode(dog) {
-//                    if let jsonString = String(data: jsonData, encoding: .utf8) {
-//                        var documentsDirectoryURL = try! FileManager().url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-//                        let file2ShareURL = documentsDirectoryURL.appendingPathComponent("blah.json")
-//                        do {
-//                            try jsonString.write(to: file2ShareURL, atomically: false, encoding: .utf8)
-//                        } catch {
-//                            print(error)
-//                        }
-//
-//                        do {
-//                            let _ = try Data(contentsOf: file2ShareURL)
-//                            let activityViewController = UIActivityViewController(activityItems: [file2ShareURL], applicationActivities: nil)
-//                            activityViewController.popoverPresentationController?.sourceView = self.view
-//                            self.present(activityViewController, animated: true, completion: nil)
-//                        } catch {
-//                            print(error)
-//                        }
-//
-//                }
-//            }
-//        }
+
 
     }
 
@@ -311,6 +320,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             //countdownTimer.end()
             playVoice(voice: "Activity Completed.")
             SwiftRater.incrementSignificantUsageCount()
+            
             runAlert()
             return
         }

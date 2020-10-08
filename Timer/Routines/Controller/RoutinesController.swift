@@ -63,13 +63,14 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     var isEditingBool = true
     var addEditClick: UIBarButtonItem = UIBarButtonItem()
     var addRoutineButton: UIBarButtonItem = UIBarButtonItem()
+    var settingButton2: UIBarButtonItem = UIBarButtonItem()
     var subData = subSendData()
     var rout = [Routine]()
     @IBOutlet weak var topView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive), name: UIApplication.willEnterForegroundNotification, object: nil)
         SwiftRater.check()
 
         //addCustomMenuItems()
@@ -121,7 +122,6 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
         do {
             self.rout.removeAll()
             let objects = try self.dataStack.fetchAll(From<CDRoutine> ().orderBy(.ascending(\.cdRoutineIndex)))
-            
             if objects.count == 0 {
 
                 self.addDefaultRout()
@@ -143,6 +143,7 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
                     rout.warmup = self.setIntIntesity(cdInt: i.warmup!)
                     rout.restTime = self.setIntIntesity(cdInt: i.rest!)
                     rout.coolDown = self.setIntIntesity(cdInt: i.coolDown!)
+
                     rout.routineID = i.cdUUID!
                     rout.routineIndex = Int(i.cdRoutineIndex)
                     rout.intervalRestTime = self.setIntIntesity(cdInt: i.restInterval!)
@@ -161,6 +162,9 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
                         rout.intervals[j].HighLowIntervalColor = hexStringToUIColor(hex: elem.cdHighLowIntervalColor!)
                         rout.intervals[j].intervalName = elem.cdintervalName!
                         rout.intervals[j].highLowId = elem.cdHighLowId
+                        if rout.intervals[j].highLowId == nil {
+                            rout.intervals[j].highLowId = ""
+                        }
                         //print(Int(elem.cdnumSets))
                         rout.intervals[j].numSets = Int(elem.cdnumSets)
                         rout.intervals[j].lowInterval = self.setIntIntesity(cdInt: elem.lowInterval!)
@@ -213,9 +217,59 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
         self.loadCoreData2()
         //tableView.reloadData()
         setBackgroundandNavigationBar()
+        self.addSharedRout()
+
+    }
+
+    @objc func applicationDidBecomeActive(notification: NSNotification) {
+        self.addSharedRout()
+    }
+
+    func addSharedRout() {
+        let x = self.loadFriends()
+        if !x.isEmpty {
+            var x2 = x[0]
+            x2.routineID = UUID().uuidString
+            x2.routineIndex = self.rout.count + 1
+            rout.append(x2)
+            self.tableView.reloadData()
+            self.reorderRouts()
+            HUD.flash(.labeledSuccess(title: "Success", subtitle: "'\(x2.name)' added"), delay: 3.0)
+        }
+        self.removeImage()
+    }
+
+    func removeImage() {
+        let fileName:String = shareString.JSONFile.rawValue
+        let fileManager = FileManager.default
+        guard let groupURL = fileManager.containerURL(forSecurityApplicationGroupIdentifier: shareString.groupName.rawValue) else {
+            return
+        }
+        let storagePathUrl = groupURL.appendingPathComponent(fileName, isDirectory: false)
+        let storagePath = storagePathUrl.path
+
+        do {
+           if fileManager.fileExists(atPath: storagePath) {
+               try fileManager.removeItem(atPath: storagePath)
+            }
+        } catch let error as NSError {
+            print(error.debugDescription)
+        }
     }
     
-    
+    func loadFriends() -> [Routine] {
+            let documentsDirectory = FileManager().containerURL(forSecurityApplicationGroupIdentifier: shareString.groupName.rawValue)
+            guard let archiveURL = documentsDirectory?.appendingPathComponent(shareString.JSONFile.rawValue) else { return [Routine]() }
+
+            guard let codeData = try? Data(contentsOf: archiveURL) else { return [] }
+
+            let decoder = JSONDecoder()
+
+            let loadedFriends = (try? decoder.decode([Routine].self, from: codeData)) ?? [Routine]()
+
+            return loadedFriends
+        }
+
     public enum subs {
         case weekly(item: String = "db.timer.main.weekly")
     }
@@ -238,21 +292,21 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
         if #available(iOS 13.0, *) {
             settingButton.frame = CGRect(x: 0, y: 0, width: 53, height: 51)
             settingButton.setImage(UIImage(systemName: "gear"), for: .normal)
-            
+            settingButton.addTarget(self, action: #selector(settingClicked), for: .touchUpInside)
+            let item1 = UIBarButtonItem(customView: settingButton)
+            self.navigationItem.setLeftBarButtonItems([item1], animated: true)
         } else {
-            let origImage = UIImage(named: "Gear")
-            let tintedImage = origImage?.withRenderingMode(.alwaysTemplate)
-            settingButton.setBackgroundImage(tintedImage, for: .normal)
-            settingButton.tintColor = self.view.tintColor
+            self.settingButton2 = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingClicked))
+
+
+            self.navigationItem.setLeftBarButtonItems([self.settingButton2], animated: true)
         }
 
 
-        //settingButton.setBackgroundImage(UIImage(named: "gear"), for: .normal)
 
-        // settingButton.tintColor = .systemGray
-        settingButton.addTarget(self, action: #selector(settingClicked), for: .touchUpInside)
-        let item1 = UIBarButtonItem(customView: settingButton)
-        self.navigationItem.setLeftBarButtonItems([item1], animated: true)
+
+
+
         self.setRightBarItem()
 
         
@@ -488,6 +542,8 @@ extension RoutinesController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         
         if let viewController = UIStoryboard(name: "PlayerView", bundle: nil).instantiateViewController(withIdentifier: "PlayerView") as? PlayerController {
+            //print("rout[indexPath.row]", rout[indexPath.row])
+            //print("rout.coolDown", rout[indexPath.row].coolDown)
             viewController.rout = rout[indexPath.row]
             if let navigator = navigationController {
                 navigator.pushViewController(viewController, animated: true)
