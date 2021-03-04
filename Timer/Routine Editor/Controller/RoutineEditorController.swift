@@ -55,6 +55,8 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         let colors = globals().setAllColorsArray()
         let count = colors.count - 1
         let number = Int.random(in: 0 ... count)
+        print("HEREHRE")
+        print(rout.routineID)
         if rout.name == "" {
             rout.routineColor = colors[number]
         }
@@ -113,7 +115,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
     
     func save3() {
-        //print("here5")
+        print("here5")
         let dataStack = self.dataStack
         dataStack.perform(
             asynchronous: { (transaction) -> Bool in
@@ -143,12 +145,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
     
     func doSaveAction(person: CDRoutine, transaction: AsynchronousDataTransaction, isEdit: Bool = false) {
-        if self.rout.routineID == nil {
-            person.cdUUID = UUID().uuidString
-        }
-        else {
-            person.cdUUID = self.rout.routineID
-        }
+        person.cdUUID = UUID().uuidString
         person.cdName = self.rout.name
         person.cdNumCycles = Int32(self.rout.numCycles)
         person.cdRoutineColor = self.rout.routineColor.hexString(.d6)
@@ -214,7 +211,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
     
     @objc func saveButton(){
-        //print("closeButtonClick")
+        print("closeButtonClick")
         if rout.name == "" {
             let alert = UIAlertController(title: "Timer Name is empty", message: "Please enter a Routine Name", preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: nil))
@@ -222,8 +219,16 @@ class RoutineEditorController: UIViewController, ModalDelegate {
             return
         }
         tableView.reloadData()
-
-        self.saveData2()
+        print(self.rout)
+        if self.rout.routineID == "" {
+            print("nil")
+            self.save3()
+        }
+        else {
+            print(" not nil")
+            self.saveData2()
+        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -413,10 +418,10 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 cell24.rightLabelName.text = "Low"
                 cell24.leftLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.highInterval.duration)))
                 cell24.rightLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.lowInterval.duration)))
-                cell24.leftLabelName.textColor = currInterval.highInterval.intervalColor
-                cell24.leftLabelValue.textColor = currInterval.highInterval.intervalColor
-                cell24.rightLabelName.textColor = currInterval.lowInterval.intervalColor
-                cell24.rightLabelValue.textColor = currInterval.lowInterval.intervalColor
+//                cell24.leftLabelName.textColor = currInterval.highInterval.intervalColor
+//                cell24.leftLabelValue.textColor = currInterval.highInterval.intervalColor
+//                cell24.rightLabelName.textColor = currInterval.lowInterval.intervalColor
+//                cell24.rightLabelValue.textColor = currInterval.lowInterval.intervalColor
                 
             }
             else {
@@ -424,11 +429,15 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 cell24.rightLabelName.text = "High"
                 cell24.leftLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.lowInterval.duration)))
                 cell24.rightLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.highInterval.duration)))
-                cell24.leftLabelName.textColor = currInterval.lowInterval.intervalColor
-                cell24.leftLabelValue.textColor = currInterval.lowInterval.intervalColor
-                cell24.rightLabelName.textColor = currInterval.highInterval.intervalColor
-                cell24.rightLabelValue.textColor = currInterval.highInterval.intervalColor
+//                cell24.leftLabelName.textColor = currInterval.lowInterval.intervalColor
+//                cell24.leftLabelValue.textColor = currInterval.lowInterval.intervalColor
+//                cell24.rightLabelName.textColor = currInterval.highInterval.intervalColor
+//                cell24.rightLabelValue.textColor = currInterval.highInterval.intervalColor
             }
+            cell24.leftLabelName.textColor = .none
+            cell24.leftLabelValue.textColor = .none
+            cell24.rightLabelName.textColor = .none
+            cell24.rightLabelValue.textColor = .none
             return cell24
         }
 
@@ -530,14 +539,26 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             
         }
         if indexPath.section == 1 {
-            self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
-            
-            self.present(colorPicker, animated: true, completion: nil)
-            colorPicker.selectedColor = { color in
-                self.rout.routineColor = color
-                //print(color)
-                //print(self.rout.routineColor)
-                self.tableView.reloadData()
+//            self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
+//
+//            self.present(colorPicker, animated: true, completion: nil)
+//            colorPicker.selectedColor = { color in
+//                self.rout.routineColor = color
+//                //print(color)
+//                //print(self.rout.routineColor)
+//                self.tableView.reloadData()
+//            }
+            if let viewController = UIStoryboard(name: "Colorful", bundle: nil).instantiateViewController(withIdentifier: "Colorful") as? ColorfulVC {
+                viewController.initialColor = self.rout.routineColor
+                viewController.title = "Timer Color"
+                if let navigator = navigationController {
+                    navigator.pushViewController(viewController, animated: true)
+                    viewController.completionHandler = { text in
+                        self.rout.routineColor = text
+                        tableView.reloadData()
+                        return 1
+                    }
+                }
             }
         }
         

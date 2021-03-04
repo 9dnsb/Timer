@@ -97,6 +97,8 @@
 		63E76E402425206700AA6814 /* RoutineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E76E3F2425206700AA6814 /* RoutineCell.swift */; };
 		63EEB01124412DCB0013B5A6 /* SaveRoutine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EEB01024412DCB0013B5A6 /* SaveRoutine.swift */; };
 		84C00D3C2E32C676CC1C7B53 /* Pods_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDE2C271C07AA001938359A /* Pods_Timer.framework */; };
+		D22F08B125D4200F00C19888 /* ColorfulVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22F08B025D4200F00C19888 /* ColorfulVC.swift */; };
+		D22F08B725D4203700C19888 /* Colorful.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D22F08B625D4203700C19888 /* Colorful.storyboard */; };
 		FCD4324FC73271BCC8F3FB7B /* Pods_TimerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0596AE099F0A01ECDCCB4184 /* Pods_TimerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -292,6 +294,8 @@
 		92BF89A6CABFC7A20A65BCAA /* Pods-Timer-TimerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer-TimerUITests.release.xcconfig"; path = "Target Support Files/Pods-Timer-TimerUITests/Pods-Timer-TimerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		975A8784CA501BE83ED5B0FD /* Pods-TimerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TimerTests.debug.xcconfig"; path = "Target Support Files/Pods-TimerTests/Pods-TimerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A50BF2E4AFBCA10198A0DCD8 /* Pods-TimerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TimerTests.release.xcconfig"; path = "Target Support Files/Pods-TimerTests/Pods-TimerTests.release.xcconfig"; sourceTree = "<group>"; };
+		D22F08B025D4200F00C19888 /* ColorfulVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorfulVC.swift; sourceTree = "<group>"; };
+		D22F08B625D4203700C19888 /* Colorful.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Colorful.storyboard; sourceTree = "<group>"; };
 		D51377AED458067C7B6F719C /* Pods-Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.release.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.release.xcconfig"; sourceTree = "<group>"; };
 		ECDE2C271C07AA001938359A /* Pods_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA81E926A1CF8727D56850D8 /* Pods_Timer_TimerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer_TimerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -763,6 +767,7 @@
 		63C7CCB22422C0B200960513 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
+				D22F08AF25D41FF200C19888 /* Colorful */,
 				632EDCDB252CB94F00C7537F /* Interval Timer.entitlements */,
 				634608B12459F6E7007F09AB /* Extensions */,
 				634E5CFE2426940B0011B9ED /* Globals */,
@@ -801,6 +806,15 @@
 				63C7CCDA2422C0B700960513 /* Info.plist */,
 			);
 			path = TimerUITests;
+			sourceTree = "<group>";
+		};
+		D22F08AF25D41FF200C19888 /* Colorful */ = {
+			isa = PBXGroup;
+			children = (
+				D22F08B625D4203700C19888 /* Colorful.storyboard */,
+				D22F08B025D4200F00C19888 /* ColorfulVC.swift */,
+			);
+			path = Colorful;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1043,6 +1057,7 @@
 				634E5CFD242668AB0011B9ED /* PlayerView.storyboard in Resources */,
 				63B24DB32445444B00EC48F3 /* Pencil Check.mp3 in Resources */,
 				63171650242F91AF00BC4F7E /* RoutineEditorView.storyboard in Resources */,
+				D22F08B725D4203700C19888 /* Colorful.storyboard in Resources */,
 				63B24DB62445444C00EC48F3 /* Police Siren.mp3 in Resources */,
 				631B45A32438B4A7008F61EB /* segmentCell.xib in Resources */,
 				63BBDFAF2449192A00D1AB69 /* textCellView.xib in Resources */,
@@ -1258,6 +1273,7 @@
 				634608B32459F71E007F09AB /* PickerLabels.swift in Sources */,
 				631C0C702434EC6400C06AD2 /* basicRightLabelCell.swift in Sources */,
 				634B926E2423A07600E82F66 /* RoutineEditorController.swift in Sources */,
+				D22F08B125D4200F00C19888 /* ColorfulVC.swift in Sources */,
 				631C0C5D2433626F00C06AD2 /* mainCell.swift in Sources */,
 				63C7CCB62422C0B200960513 /* SceneDelegate.swift in Sources */,
 				63B61E7C2427A14200CDAD88 /* PlayerModel.swift in Sources */,
@@ -1373,7 +1389,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Share Timer/Share Timer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.91;
+				CURRENT_PROJECT_VERSION = 1.97;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = "Share Timer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1382,7 +1398,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.91;
+				MARKETING_VERSION = 1.97;
 				PRODUCT_BUNDLE_IDENTIFIER = "db.Timer.Share-Timer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1396,7 +1412,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "Share Timer/Share Timer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.91;
+				CURRENT_PROJECT_VERSION = 1.97;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = "Share Timer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1405,7 +1421,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.91;
+				MARKETING_VERSION = 1.97;
 				PRODUCT_BUNDLE_IDENTIFIER = "db.Timer.Share-Timer";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1640,7 +1656,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Timer/Interval Timer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.91;
+				CURRENT_PROJECT_VERSION = 1.97;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
@@ -1649,7 +1665,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.91;
+				MARKETING_VERSION = 1.97;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "Interval Timer";
 				SWIFT_VERSION = 5.0;
@@ -1665,7 +1681,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Timer/Interval Timer.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.91;
+				CURRENT_PROJECT_VERSION = 1.97;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
@@ -1673,7 +1689,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.91;
+				MARKETING_VERSION = 1.97;
 				PRODUCT_BUNDLE_IDENTIFIER = db.Timer;
 				PRODUCT_NAME = "Interval Timer";
 				SWIFT_VERSION = 5.0;

@@ -28,19 +28,19 @@ class selectColorCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        // self.makeDashedBorder()
+        self.makeDashedBorder()
         // Configure the view for the selected state
     }
 
     func makeDashedBorder()  {
         
-        let yourViewBorder = CAShapeLayer()
-        yourViewBorder.strokeColor = UIColor.black.cgColor
-        yourViewBorder.lineDashPattern = [2, 2]
-        yourViewBorder.frame = colorCircle.bounds
-        yourViewBorder.fillColor = nil
-        yourViewBorder.path = UIBezierPath(rect: colorCircle.bounds).cgPath
-        colorCircle.layer.addSublayer(yourViewBorder)
+        colorCircle.layer.borderWidth = 2
+        if #available(iOS 13.0, *) {
+            colorCircle.layer.borderColor = globals().textColor(bgColor: .systemBackground).cgColor
+        } else {
+            colorCircle.layer.borderColor = UIColor.black.cgColor
+        }
+        colorCircle.layer.cornerRadius = colorCircle.frame.width / 2
     }
     
 }

@@ -115,6 +115,67 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
 
     func addDefaultRout() {
         self.rout.append(globals().returnDefaultRout(setTitle: true))
+        self.save3()
+    }
+    
+    func save3() {
+        print("here5")
+        let dataStack = self.dataStack
+        dataStack.perform(
+            asynchronous: { (transaction) -> Bool in
+                let person = transaction.create(Into<CDRoutine>())
+                self.doSaveAction(person: person, transaction: transaction)
+                return transaction.hasChanges
+        },
+            completion: { (result) -> Void in
+                switch result {
+                case .success(let hasChanges):
+                    print("success! Has changes? \(hasChanges)")
+                    
+                case .failure(let error): print(error)
+                }
+        }
+        )
+    }
+    
+    func setHighLow(highLow: CDHighLowInterval, j: Int) {
+        highLow.cdfirstIntervalHigh = self.rout[0].intervals[j].firstIntervalHigh
+        highLow.cdHighLowIntervalColor = self.rout[0].intervals[j].HighLowIntervalColor.hexString(.d6)
+        highLow.cdintervalName = self.rout[0].intervals[j].intervalName
+        highLow.cdnumSets = Int32(self.rout[0].intervals[j].numSets)
+        highLow.cdIntervalIndex = Int32(j)
+    }
+    
+    func doSaveAction(person: CDRoutine, transaction: AsynchronousDataTransaction, isEdit: Bool = false) {
+        person.cdUUID = UUID().uuidString
+        self.rout[0].routineID = person.cdUUID
+        person.cdName = self.rout[0].name
+        person.cdNumCycles = Int32(self.rout[0].numCycles)
+        person.cdRoutineColor = self.rout[0].routineColor.hexString(.d6)
+        person.cdRoutineIndex = Int32(self.rout[0].routineIndex)
+        person.cdIntervalVoiceEnable = self.rout[0].enableIntervalVoice
+        for (j, _) in self.rout[0].intervals.enumerated() {
+            let highLow = transaction.create(Into<CDHighLowInterval>())
+            self.setHighLow(highLow: highLow, j: j)
+            highLow.lowInterval = self.addHighLowCD(transaction: transaction, interval: self.rout[0].intervals[j].lowInterval)
+            highLow.highInterval = self.addHighLowCD(transaction: transaction, interval: self.rout[0].intervals[j].highInterval)
+            person.addToCDHighLowInterval(highLow)
+            person.warmup = self.addHighLowCD(transaction: transaction, interval: self.rout[0].warmup)
+            person.rest = self.addHighLowCD(transaction: transaction, interval: self.rout[0].restTime)
+            person.coolDown = self.addHighLowCD(transaction: transaction, interval: self.rout[0].coolDown)
+            person.restInterval = self.addHighLowCD(transaction: transaction, interval: self.rout[0].intervalRestTime)
+        }
+    }
+    
+   
+    
+    func addHighLowCD(transaction: AsynchronousDataTransaction, interval: IntervalIntensity, isEdit: Bool = false) -> CDIntervalIntensity {
+        let cd = transaction.create(Into<CDIntervalIntensity>())
+        cd.cdduration = Int32(interval.duration)
+        cd.cdintervalColor = interval.intervalColor.hexString(.d6)
+        cd.cdsound = interval.sound.rawValue
+        return cd
+        
     }
     
     func loadCoreData2() {
@@ -133,8 +194,8 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
                     var rout: Routine = globals().returnDefaultRout()
                     //print("i", i)
                     //rout.objectID = i
-                    //print(i.cdName)
-
+                    print("i.cdName")
+                    print(i.cdName!)
                     rout.name = i.cdName!
                     rout.numCycles = Int(i.cdNumCycles)
                     rout.routineColor =  hexStringToUIColor(hex: i.cdRoutineColor!)
@@ -143,8 +204,12 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
                     rout.warmup = self.setIntIntesity(cdInt: i.warmup!)
                     rout.restTime = self.setIntIntesity(cdInt: i.rest!)
                     rout.coolDown = self.setIntIntesity(cdInt: i.coolDown!)
-
+                    //print("i.cdUUID")
+                    //print(i.cdUUID!)
                     rout.routineID = i.cdUUID!
+                    if rout.routineID == "" {
+                        rout.routineID = UUID().uuidString
+                    }
                     rout.routineIndex = Int(i.cdRoutineIndex)
                     rout.intervalRestTime = self.setIntIntesity(cdInt: i.restInterval!)
                     rout.enableIntervalVoice = i.cdIntervalVoiceEnable

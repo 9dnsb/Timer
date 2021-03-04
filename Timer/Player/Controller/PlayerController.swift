@@ -31,6 +31,9 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     
     
 
+    @IBOutlet weak var titleLabel: UINavigationItem!
+    @IBOutlet weak var remainingLabel: UILabel!
+    @IBOutlet weak var elapsedLabel: UILabel!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var topView: UIView!
     @IBOutlet weak var bottomView: UIView!
@@ -119,6 +122,8 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             self.shareButton.setBackgroundImage(UIImage(named: "square.and.arrow.up"), for: .normal)
 
         }
+        
+        
     }
 
     @objc func applicationDidBecomeActive(notification: NSNotification) {
@@ -384,6 +389,24 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             intervalNameLabel.text = "Rest"
         }
         
+        timer.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        intervalNameLabel.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        intervalNumberLabel.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        timeElapsedLabel.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        timeRemainingLabel.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        elapsedLabel.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        remainingLabel.textColor = globals().textColor(bgColor: topView.backgroundColor!)
+        forwardIntervalButton.tintColor = globals().textColor(bgColor: topView.backgroundColor!)
+        backIntervalButton.tintColor = globals().textColor(bgColor: topView.backgroundColor!)
+        //navigationController?.navigationBar.barTintColor = globals().textColor(bgColor: topView.backgroundColor!)
+        navItemLeft.tintColor = globals().textColor(bgColor: topView.backgroundColor!)
+        navItem.tintColor = globals().textColor(bgColor: topView.backgroundColor!)
+        self.navigationController?.navigationBar.tintColor = globals().textColor(bgColor: topView.backgroundColor!)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : globals().textColor(bgColor: topView.backgroundColor!)]
+        
+
+
+        
     }
     
     func setNavigationBar() {
@@ -398,10 +421,10 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
 //        let editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editButtonClick))
 //        self.navigationItem.setRightBarButtonItems([editButton], animated: true)
 //        editButton.tintColor = .white
-        self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        
 
         self.title = rout.name
+        //print("rout name", rout.name)
     }
 
     override func viewDidAppear(_ animated: Bool) {

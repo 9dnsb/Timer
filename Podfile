@@ -21,6 +21,7 @@ target 'Timer' do
   pod 'Firebase/Analytics'
   pod 'Firebase/Performance'
   pod 'Firebase/Crashlytics'
+  pod 'Colorful', '~> 3.0'
 
 
 

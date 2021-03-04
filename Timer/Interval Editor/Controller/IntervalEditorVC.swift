@@ -19,6 +19,7 @@ class IntervalEditorVC: UIViewController {
 
     var player : AVAudioPlayer?
     var colorPicker = ColorPickerViewController()
+    var colorPickerNew = ColorfulVC()
     var butt : UIButton!
     var picker_values = [String]()
     var myPicker: soundPicker! = soundPicker()
@@ -367,11 +368,23 @@ extension IntervalEditorVC: UITableViewDataSource, UITableViewDelegate {
         }
 
         if self.detectHighLowSection(indexP: indexPath) && indexPath.row == 2 {
-            self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
-            self.present(colorPicker, animated: true, completion: nil)
-            colorPicker.selectedColor = { color in
-                self.intervalArray[indexPathSection].intervalColor = color
-                tableView.reloadData()
+//            self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
+//            self.present(colorPicker, animated: true, completion: nil)
+//            colorPicker.selectedColor = { color in
+//                self.intervalArray[indexPathSection].intervalColor = color
+//                tableView.reloadData()
+//            }
+            if let viewController = UIStoryboard(name: "Colorful", bundle: nil).instantiateViewController(withIdentifier: "Colorful") as? ColorfulVC {
+                viewController.initialColor = self.intervalArray[indexPathSection].intervalColor
+                viewController.title = "Interval Color"
+                if let navigator = navigationController {
+                    navigator.pushViewController(viewController, animated: true)
+                    viewController.completionHandler = { text in
+                        self.intervalArray[indexPathSection].intervalColor = text
+                        tableView.reloadData()
+                        return 1
+                    }
+                }
             }
         }
         if self.detectHighLowSection(indexP: indexPath) && indexPath.row == 0 {

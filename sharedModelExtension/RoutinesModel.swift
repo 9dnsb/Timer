@@ -129,8 +129,11 @@ struct Routine: Equatable, Codable {
         let g = lhs.coolDown == rhs.coolDown
         let h = lhs.routineColor == rhs.routineColor
         let i = lhs.enableIntervalVoice == rhs.enableIntervalVoice
+        let j = lhs.routineID == rhs.routineID
+        let k = lhs.routineIndex == rhs.routineIndex
+      
         
-        if a && b && c && d && e && f && g && h && i {
+        if a && b && c && d && e && f && g && h && i && j && k {
             return true
         }
         return false

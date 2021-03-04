@@ -37,6 +37,26 @@ public class globals  {
 
         return AVSpeechSynthesizer()
     }
+    
+    func textColor(bgColor: UIColor) -> UIColor {
+        
+        var r: CGFloat = 0.0
+        var g: CGFloat = 0.0
+        var b: CGFloat = 0.0
+        var a: CGFloat = 0.0
+        var brightness: CGFloat = 0.0
+        
+        bgColor.getRed(&r, green: &g, blue: &b, alpha: &a)
+        
+        // algorithm from: http://www.w3.org/WAI/ER/WD-AERT/#color-contrast
+        brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        if (brightness < 0.5) {
+            return UIColor.white
+        }
+        else {
+            return UIColor.black
+        }
+    }
 
     func playVoice(voice: String, speechSynth: AVSpeechSynthesizer, voiceInterval: Bool = false) {
         do {
@@ -81,6 +101,8 @@ public class globals  {
     func setAllColorsArray() -> [UIColor] {
         return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, ColorCompatibility.systemIndigo, .systemPurple]
     }
+    
+   
     
     func createColorPopover(tableView: UITableView, indexPath: IndexPath) -> ColorPickerViewController{
         let colorPicker = ColorPickerViewController()
@@ -219,5 +241,28 @@ public class globals  {
 
     func setTableViewBackground(tableView: UITableView) {
         tableView.backgroundColor = ColorCompatibility.systemGroupedBackground
+    }
+}
+
+extension UIColor {
+
+    // Check if the color is light or dark, as defined by the injected lightness threshold.
+    // Some people report that 0.7 is best. I suggest to find out for yourself.
+    // A nil value is returned if the lightness couldn't be determined.
+    func isLight(threshold: Float = 0.5) -> Bool? {
+        let originalCGColor = self.cgColor
+
+        // Now we need to convert it to the RGB colorspace. UIColor.white / UIColor.black are greyscale and not RGB.
+        // If you don't do this then you will crash when accessing components index 2 below when evaluating greyscale colors.
+        let RGBCGColor = originalCGColor.converted(to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil)
+        guard let components = RGBCGColor?.components else {
+            return nil
+        }
+        guard components.count >= 3 else {
+            return nil
+        }
+
+        let brightness = Float(((components[0] * 299) + (components[1] * 587) + (components[2] * 114)) / 1000)
+        return (brightness > threshold)
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -786,6 +786,7 @@
                     <connections>
                         <outlet property="backIntervalButton" destination="pO8-Zi-7IB" id="mgl-bf-Izr"/>
                         <outlet property="bottomView" destination="m9t-8l-KOq" id="Ci0-p0-bhW"/>
+                        <outlet property="elapsedLabel" destination="QgZ-L2-9Gw" id="XXO-ci-Bp9"/>
                         <outlet property="forwardIntervalButton" destination="eXn-Fr-HTj" id="z5l-IZ-Kbn"/>
                         <outlet property="googleAd" destination="ILa-vb-RwS" id="Ns5-WH-Csn"/>
                         <outlet property="intervalNameLabel" destination="ju0-y5-1iY" id="RHL-ef-Wmf"/>
@@ -793,11 +794,13 @@
                         <outlet property="lockButton" destination="JOV-hV-loK" id="CWK-NW-ZkB"/>
                         <outlet property="navItem" destination="tUm-0n-fIe" id="Hgh-vX-Eid"/>
                         <outlet property="navItemLeft" destination="sI8-qZ-hmX" id="3NN-XO-7X3"/>
+                        <outlet property="remainingLabel" destination="hXT-Sg-3ar" id="Sm4-ic-zsB"/>
                         <outlet property="shareButton" destination="ddX-Y5-Xwk" id="KXa-SI-1zN"/>
                         <outlet property="startButton" destination="aOQ-kT-nDv" id="hEI-3B-fYy"/>
                         <outlet property="timeElapsedLabel" destination="B0Q-tk-ZSi" id="SIs-B7-ngR"/>
                         <outlet property="timeRemainingLabel" destination="9jq-Jc-iF0" id="rcU-Vw-IIf"/>
                         <outlet property="timer" destination="vCM-0f-lTp" id="ydX-gg-KhW"/>
+                        <outlet property="titleLabel" destination="Cew-zr-ZR1" id="Hcb-FI-gLm"/>
                         <outlet property="topView" destination="GXx-Ow-lk0" id="auV-iw-vP0"/>
                         <outlet property="veryBottom" destination="Iu3-Do-1g9" id="rfx-Ea-xAN"/>
                     </connections>

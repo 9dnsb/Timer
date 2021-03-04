@@ -11,7 +11,8 @@ var rout: Routine?
 class inputTextCell: UITableViewCell {
     @IBOutlet weak var inputString: UITextField!
     
-
+    @IBOutlet weak var mainName: UILabel!
+    
     func returnInputString() -> String {
         return self.inputString.text!
 
