@@ -30,11 +30,7 @@ class SubscribeViewController: UIViewController, settingDelegate {
         tableView.register(UINib(nibName: "textCellView", bundle: nil), forCellReuseIdentifier: "textCellView")
         tableView.register(UINib(nibName: "SubscribeCellView", bundle: nil), forCellReuseIdentifier: "SubscribeCellView")
         tableView.register(UINib(nibName: "basicRightLabelCell", bundle: nil), forCellReuseIdentifier: "basicRightLabelCell")
-        if #available(iOS 13.0, *) {
-            self.isModalInPresentation = true
-        } else {
-            // Fallback on earlier versions
-        }
+        self.isModalInPresentation = true
 
         tableView.rowHeight = UITableView.automaticDimension
         guard let navigationStack = navigationController?.viewControllers, navigationStack.count > 1 else {

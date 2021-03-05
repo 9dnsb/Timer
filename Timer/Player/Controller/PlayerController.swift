@@ -108,20 +108,11 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
     }
 
     func setSystemImages() {
-        if #available(iOS 13.0, *) {
-            self.backIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.left"), for: .normal)
-            self.forwardIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
-            self.lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
-            self.shareButton.setBackgroundImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
-            self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
-        } else {
-            self.backIntervalButton.setBackgroundImage(UIImage(named: "chevron_left"), for: .normal)
-            self.forwardIntervalButton.setBackgroundImage(UIImage(named: "chevron.right"), for: .normal)
-            self.lockButton.setBackgroundImage(UIImage(named: "lock.open"), for: .normal)
-            self.startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
-            self.shareButton.setBackgroundImage(UIImage(named: "square.and.arrow.up"), for: .normal)
-
-        }
+        self.backIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.left"), for: .normal)
+        self.forwardIntervalButton.setBackgroundImage(UIImage(systemName: "chevron.right"), for: .normal)
+        self.lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
+        self.shareButton.setBackgroundImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
+        self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
         
         
     }
@@ -282,12 +273,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             runTimer()
             //countdownTimer.resume()
             //startButton.setTitle("STOP",for: .normal)
-            if #available(iOS 13.0, *) {
-                startButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
-            } else {
-                startButton.setBackgroundImage(UIImage(named: "pause.fill"), for: .normal)
-            }
-            //
+            startButton.setBackgroundImage(UIImage(systemName: "pause.fill"), for: .normal)
 
 
             self.startButtonModel.resumeTapped = false
@@ -305,11 +291,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
         //startButton.setTitle("START",for: .normal)
         //
 
-        if #available(iOS 13.0, *) {
-            startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
-        } else {
-            startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
-        }
+        startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
     }
     
     func setCurrentIntervalTotalSets() {
@@ -519,11 +501,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             self.navigationController?.navigationBar.alpha = 1
             //lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
 
-            if #available(iOS 13.0, *) {
-                lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
-            } else {
-                lockButton.setBackgroundImage(UIImage(named: "lock.open"), for: .normal)
-            }
+            lockButton.setBackgroundImage(UIImage(systemName: "lock.open"), for: .normal)
 
 
         }
@@ -531,11 +509,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
             self.navigationController?.navigationBar.alpha = 0.5
 //
 
-            if #available(iOS 13.0, *) {
-                lockButton.setBackgroundImage(UIImage(systemName: "lock"), for: .normal)
-            } else {
-                lockButton.setBackgroundImage(UIImage(named: "lock.closed"), for: .normal)
-            }
+            lockButton.setBackgroundImage(UIImage(systemName: "lock"), for: .normal)
 
         }
 
@@ -682,11 +656,7 @@ class PlayerController: UIViewController, ModalDelegate3, GADBannerViewDelegate{
                 //print("default")
                 //self.startButton.setTitle("START",for: .normal)
 
-                if #available(iOS 13.0, *) {
-                    self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
-                } else {
-                    self.startButton.setBackgroundImage(UIImage(named: "play.fill"), for: .normal)
-                }
+                self.startButton.setBackgroundImage(UIImage(systemName: "play.fill"), for: .normal)
                 self.startButtonModel.firstTimeTapped = false
                 self.setRemainingTimer()
                 self.changeInterval(runSound: false)

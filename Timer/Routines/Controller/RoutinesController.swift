@@ -119,7 +119,7 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     }
     
     func save3() {
-        print("here5")
+        //print("here5")
         let dataStack = self.dataStack
         dataStack.perform(
             asynchronous: { (transaction) -> Bool in
@@ -194,8 +194,8 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
                     var rout: Routine = globals().returnDefaultRout()
                     //print("i", i)
                     //rout.objectID = i
-                    print("i.cdName")
-                    print(i.cdName!)
+                    //print("i.cdName")
+                    //print(i.cdName!)
                     rout.name = i.cdName!
                     rout.numCycles = Int(i.cdNumCycles)
                     rout.routineColor =  hexStringToUIColor(hex: i.cdRoutineColor!)
@@ -354,18 +354,11 @@ class RoutinesController: UIViewController, settingDelegate, subscribeDelegate {
     func setBackgroundandNavigationBar() {
         globals().setTableViewBackground(tableView: self.tableView)
         let settingButton = UIButton(type: .custom)
-        if #available(iOS 13.0, *) {
-            settingButton.frame = CGRect(x: 0, y: 0, width: 53, height: 51)
-            settingButton.setImage(UIImage(systemName: "gear"), for: .normal)
-            settingButton.addTarget(self, action: #selector(settingClicked), for: .touchUpInside)
-            let item1 = UIBarButtonItem(customView: settingButton)
-            self.navigationItem.setLeftBarButtonItems([item1], animated: true)
-        } else {
-            self.settingButton2 = UIBarButtonItem(title: "Settings", style: .plain, target: self, action: #selector(settingClicked))
-
-
-            self.navigationItem.setLeftBarButtonItems([self.settingButton2], animated: true)
-        }
+        settingButton.frame = CGRect(x: 0, y: 0, width: 53, height: 51)
+        settingButton.setImage(UIImage(systemName: "gear"), for: .normal)
+        settingButton.addTarget(self, action: #selector(settingClicked), for: .touchUpInside)
+        let item1 = UIBarButtonItem(customView: settingButton)
+        self.navigationItem.setLeftBarButtonItems([item1], animated: true)
 
 
 

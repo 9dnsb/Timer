@@ -23,11 +23,7 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
     var speechSynthesizer = AVSpeechSynthesizer()
     override func viewDidLoad() {
         super.viewDidLoad()
-        if #available(iOS 13.0, *) {
-            isModalInPresentation = true
-        } else {
-            // Fallback on earlier versions
-        }
+        isModalInPresentation = true
         let closeButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(closeButtonClick))
         self.navigationItem.setLeftBarButtonItems([closeButton], animated: true)
         form +++
@@ -305,11 +301,7 @@ class FormSettingVC: FormViewController, MFMailComposeViewControllerDelegate {
         <<< ButtonRow("rate") { row in
             row.title = "Rate David's Interval Timer"
             }.onCellSelection { _, _ in
-                if #available(iOS 10.3, *) {
-                    SKStoreReviewController.requestReview()
-                } else {
-                    SwiftRater.rateApp(host: self)
-                }
+                SwiftRater.rateApp(host: self)
 
 
         }.cellUpdate { cell, row in

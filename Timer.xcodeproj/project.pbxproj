@@ -99,6 +99,7 @@
 		84C00D3C2E32C676CC1C7B53 /* Pods_Timer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ECDE2C271C07AA001938359A /* Pods_Timer.framework */; };
 		D22F08B125D4200F00C19888 /* ColorfulVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22F08B025D4200F00C19888 /* ColorfulVC.swift */; };
 		D22F08B725D4203700C19888 /* Colorful.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D22F08B625D4203700C19888 /* Colorful.storyboard */; };
+		D2FE442925F1815500FA4C3D /* RoutineEditorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FE442825F1815500FA4C3D /* RoutineEditorModel.swift */; };
 		FCD4324FC73271BCC8F3FB7B /* Pods_TimerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0596AE099F0A01ECDCCB4184 /* Pods_TimerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -296,6 +297,7 @@
 		A50BF2E4AFBCA10198A0DCD8 /* Pods-TimerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TimerTests.release.xcconfig"; path = "Target Support Files/Pods-TimerTests/Pods-TimerTests.release.xcconfig"; sourceTree = "<group>"; };
 		D22F08B025D4200F00C19888 /* ColorfulVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorfulVC.swift; sourceTree = "<group>"; };
 		D22F08B625D4203700C19888 /* Colorful.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Colorful.storyboard; sourceTree = "<group>"; };
+		D2FE442825F1815500FA4C3D /* RoutineEditorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineEditorModel.swift; sourceTree = "<group>"; };
 		D51377AED458067C7B6F719C /* Pods-Timer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Timer.release.xcconfig"; path = "Target Support Files/Pods-Timer/Pods-Timer.release.xcconfig"; sourceTree = "<group>"; };
 		ECDE2C271C07AA001938359A /* Pods_Timer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA81E926A1CF8727D56850D8 /* Pods_Timer_TimerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Timer_TimerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -472,6 +474,7 @@
 		634B926A2423A02000E82F66 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				D2FE442825F1815500FA4C3D /* RoutineEditorModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1265,6 +1268,7 @@
 				63BC9AA22422F1B10010C81F /* SettingsController.swift in Sources */,
 				63BC9AA42422FAEA0010C81F /* RoutinesController.swift in Sources */,
 				634E5CFB2426689E0011B9ED /* PlayerController.swift in Sources */,
+				D2FE442925F1815500FA4C3D /* RoutineEditorModel.swift in Sources */,
 				63EEB01124412DCB0013B5A6 /* SaveRoutine.swift in Sources */,
 				6317165B242FD65D00BC4F7E /* addNewCycleCell.swift in Sources */,
 				63BBDFB72449FEA700D1AB69 /* SubscribeGlobals.swift in Sources */,
@@ -1392,7 +1396,7 @@
 				CURRENT_PROJECT_VERSION = 1.97;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = "Share Timer/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1415,7 +1419,7 @@
 				CURRENT_PROJECT_VERSION = 1.97;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = "Share Timer/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1660,7 +1664,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1684,7 +1688,7 @@
 				CURRENT_PROJECT_VERSION = 1.97;
 				DEVELOPMENT_TEAM = S7TFM23263;
 				INFOPLIST_FILE = Timer/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

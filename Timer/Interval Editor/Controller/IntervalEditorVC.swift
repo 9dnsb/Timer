@@ -60,11 +60,7 @@ class IntervalEditorVC: UIViewController {
         else {
             intervalArray.append(interval!)
         }
-        if #available(iOS 13.0, *) {
-            isModalInPresentation = true
-        } else {
-            // Fallback on earlier versions
-        }
+        isModalInPresentation = true
 //        let screenSize: CGRect = UIScreen.main.bounds
 //        butt = UIButton(frame: CGRect(x: screenSize.width - 30, y: UIScreen.main.bounds.height - 189, width: 30, height: 30))
 //        // butt.backgroundColor = .systemTeal

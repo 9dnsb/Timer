@@ -16,14 +16,7 @@ class selectIntervalCell: UITableViewCell {
     @IBOutlet weak var labelLeftContrain: NSLayoutConstraint!
     
     func setImageColor(color: UIColor) {
-        if #available(iOS 13.0, *) {
-            self.theImage.image = UIImage(systemName: "circle.fill")
-        } else {
-            self.theImage.image = UIImage(named: "circle.fill")
-        theImage.image = theImage.image?.withRenderingMode(.alwaysTemplate)
-
-
-        }
+        self.theImage.image = UIImage(systemName: "circle.fill")
         theImage.tintColor = color
     }
     func setIntervalName(intervalName: String) {

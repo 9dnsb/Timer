@@ -45,14 +45,9 @@ class SubscribeCellVC: UITableViewCell {
             NetworkActivityIndicatorManager.networkOperationFinished()
             HUD.hide(afterDelay: 0.5)
             if let product = result.retrievedProducts.first {
-                if #available(iOS 11.2, *) {
-                  if let period = product.introductoryPrice?.subscriptionPeriod {
-                    print("Start your \(period.numberOfUnits) \(self.unitName(unitRawValue: period.unit.rawValue)) Free trial")
-                    self.subTrial.text = ("\(period.numberOfUnits) \(self.unitName(unitRawValue: period.unit.rawValue)) Free Trial")
-                  }
-                } else {
-                  // Fallback on earlier versions
-                  // Get it from your server via API
+                if let period = product.introductoryPrice?.subscriptionPeriod {
+                  print("Start your \(period.numberOfUnits) \(self.unitName(unitRawValue: period.unit.rawValue)) Free trial")
+                  self.subTrial.text = ("\(period.numberOfUnits) \(self.unitName(unitRawValue: period.unit.rawValue)) Free Trial")
                 }
                 let priceString = product.localizedPrice!
                 self.subPrice.text = priceString

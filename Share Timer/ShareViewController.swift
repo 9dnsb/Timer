@@ -13,11 +13,7 @@ class ShareViewController: SLComposeServiceViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("here2")
-        if #available(iOS 13.0, *) {
-            spinner.style = .large
-                } else {
-                    spinner.style = .whiteLarge
-                }
+        spinner.style = .large
         Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.didSelectPost), userInfo: nil, repeats: false)
 
         self.handleSharedFile()

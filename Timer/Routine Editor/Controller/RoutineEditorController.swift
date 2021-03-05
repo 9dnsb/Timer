@@ -38,46 +38,45 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     var presetInterval: HighLowInterval = globals().returnDefaultRout().intervals[0]
     var rout: Routine = globals().returnDefaultRout()
     var closeButton : UIBarButtonItem!
-
-    var totalSections = 7
-    var indexSection = 3
     var switchClicked = false
     var colorReceived : UIColor?
     var intervalGettingChanged : IntervalIntensity?
     var intervalChangeIndex = 0
     var origName = ""
     var origRout : Routine!
+    var intervalNameIndex = routineTableInfo(rowsInSection: 1, intervalType: .intervalName)
+    var intervalColorIndex = routineTableInfo(rowsInSection: 1, intervalType: .timerColor)
+    var intervalWarmupIndex = routineTableInfo(rowsInSection: 1, intervalType: .warmup)
+    var intervalAllIntsIndex = routineTableInfo(rowsInSection: 2, intervalType: .allIntervals)
+    var intervalIntRestIndex = routineTableInfo(rowsInSection: 1, intervalType: .intervalRestTime)
+    var intervalAddIndex = routineTableInfo(rowsInSection: 1, intervalType: .addNewInterval)
+    var intervalRepeatIndex = routineTableInfo(rowsInSection: 1, intervalType: .repeatCycle)
+    var intervalRestIndex = routineTableInfo(rowsInSection: 1, intervalType: .restTime)
+    var intervalCoolIndex = routineTableInfo(rowsInSection: 1, intervalType: .coolDown)
+    var intervalTotalTime = routineTableInfo(rowsInSection: 1, intervalType: .intervalTotalTime)
+
+    var routineTableArray  = [routineTableInfo(rowsInSection: 1, intervalType: .coolDown)]
 
 
     override func viewDidLoad() {
-        
+        super.viewDidLoad()
         self.origName = rout.name
         let colors = globals().setAllColorsArray()
         let count = colors.count - 1
         let number = Int.random(in: 0 ... count)
-        print("HEREHRE")
-        print(rout.routineID)
+
         if rout.name == "" {
             rout.routineColor = colors[number]
         }
-        //rout.routineColor = colors[4]
-        //rout.name = "Leg Stretch"
-        super.viewDidLoad()
-
-
         do {
             try dataStack.addStorageAndWait(SQLiteStore())
-            
         }
         catch { // ...
             print("error")
         }
         if rout.numCycles > 1 {
             switchClicked = true
-        }
-        totalSections = totalSections + 1
-        if rout.intervals.count > 1 {
-            totalSections += 1
+            intervalRepeatIndex.rowsInSection = 2
         }
         globals().setTableViewBackground(tableView: self.tableView)
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing))
@@ -88,6 +87,32 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         self.setNavigationBar()
         self.tableView.register(UINib(nibName: "selectColorCell", bundle: nil), forCellReuseIdentifier: "selectColorCell")
         origRout = self.rout
+        intervalAllIntsIndex.rowsInSection = rout.intervals.count
+        
+    }
+    
+    func getAllIntIndex() -> Int {
+        return routineTableArray.firstIndex { $0.intervalType == intervalAllIntsIndex.intervalType }!
+    }
+    
+    func createTableArray() {
+        intervalAllIntsIndex.rowsInSection = rout.intervals.count
+       routineTableArray = [intervalNameIndex,
+                            intervalTotalTime,
+                                 intervalColorIndex,
+                                 intervalWarmupIndex,
+                                 intervalAllIntsIndex,
+            
+                                 intervalAddIndex,
+                                 intervalRepeatIndex,
+                                 intervalRestIndex,
+                                 intervalCoolIndex
+        ]
+        if rout.intervals.count > 1 {
+            routineTableArray.insert(intervalIntRestIndex, at: self.getAllIntIndex() + 1)
+        }
+        rout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: rout))
+        self.tableView.reloadData()
     }
     
     func setNavigationBar() {
@@ -102,16 +127,12 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
     
     @objc func closeButtonClick(){
-        //print("closeButtonClick")
         if origRout == rout {
-            //print("here 30")
             self.navigationController?.popViewController(animated: true)
         }
         else {
-            //print("here 31")
             presentActionSheet(sender: closeButton)
         }
-
     }
     
     func save3() {
@@ -142,6 +163,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         highLow.cdintervalName = self.rout.intervals[j].intervalName
         highLow.cdnumSets = Int32(self.rout.intervals[j].numSets)
         highLow.cdIntervalIndex = Int32(j)
+        
     }
     
     func doSaveAction(person: CDRoutine, transaction: AsynchronousDataTransaction, isEdit: Bool = false) {
@@ -232,6 +254,7 @@ class RoutineEditorController: UIViewController, ModalDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        self.createTableArray()
         super.viewWillAppear(animated)
     }
     
@@ -285,24 +308,15 @@ class RoutineEditorController: UIViewController, ModalDelegate {
                 rout.intervals[intervalChangeIndex].lowInterval = value[0]
             }
         }
+        rout.totalTime = routineTotalTime().calctotalRoutineTime(routArrayPlayer: routineTotalTime().buildArray(rout: rout))
         tableView.beginUpdates()
         tableView.endUpdates()
         tableView.reloadData()
     }
     
     @objc func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
         
-    }
-    
-    func ifIntervalSectionsStart(indexP: IndexPath, row: Int) -> Bool {
-        return indexP.section > 1 && indexP.section < totalSections - (indexSection + 2) && indexP.row == row
-    }
-    
-    func getCurrInterval(indexP: IndexPath) -> HighLowInterval {
-        let currIndexPath = indexP.section - indexSection
-        return rout.intervals[currIndexPath]
     }
     
     @objc private func switchValueDidChange(_ sender: UISwitch) {
@@ -313,7 +327,10 @@ class RoutineEditorController: UIViewController, ModalDelegate {
         }
         else {
             rout.numCycles = 2
+            intervalRepeatIndex.rowsInSection = 2
+            
         }
+        self.createTableArray()
         globals().animationTableChange(tableView: self.tableView)
         
     }
@@ -341,57 +358,36 @@ class RoutineEditorController: UIViewController, ModalDelegate {
 extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
-        }
-            
-        else if section == 1 {
-            return 1
-        }
-        else if section == 2 {
-            return 1
-        }
-        if section == indexSection {
-            return rout.intervals.count
-        }
-        else if section == totalSections - 4 {
-            return 1
-        }
-        else if section == totalSections - 3 {
-            return 2
-        }
-        else if section == totalSections - 2 {
-            if switchClicked {
-                return 1
-            }
-            else {
-                return 0
-            }
-            
-        }
-        else if section == totalSections - 1 {
-            return 1
-        }
-        else if section == totalSections  {
-            return 1
-        }
-        return 1
+
+        return routineTableArray[section].rowsInSection
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell1") as! inputTextCell
+        print("indexPath", indexPath)
+        print("routineTableArray[indexPath[0]", routineTableArray[indexPath[0]])
         
-        if cell.returnInputString() != "" {
-            rout.name = cell.returnInputString()
-        }
-        if (indexPath.section == 0) && indexPath.row == 0{
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell1") as! inputTextCell
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.intervalName {
             cell.inputString.text = rout.name
+            cell.mainName.text = "Timer Name"
             cell.inputString.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
             cell.inputString.addTarget(self, action: #selector(textFieldDidBegin(_:)), for: .editingDidBegin)
             cell.selectionStyle = .none
             return cell
         }
+        
+        let cellTimeTotal = tableView.dequeueReusableCell(withIdentifier: "cell1") as! inputTextCell
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.intervalTotalTime {
+            cellTimeTotal.inputString.text = globals().timeString(time: TimeInterval(rout.totalTime))
+            cellTimeTotal.isUserInteractionEnabled = false
+            cellTimeTotal.mainName.text = "Timer Time"
+            cellTimeTotal.inputString.addTarget(self, action: #selector(textFieldDidChange(textField:)), for: .editingChanged)
+            cellTimeTotal.inputString.addTarget(self, action: #selector(textFieldDidBegin(_:)), for: .editingDidBegin)
+            cellTimeTotal.selectionStyle = .none
+            return cellTimeTotal
+        }
+
         let cell2a = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
-        if indexPath.section == (2) && indexPath.row == 0 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.warmup {
             cell2a.intervalName.text = "Warm Up"
             cell2a.setImageColor(color: rout.warmup.intervalColor)
             cell2a.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.warmup.duration)))
@@ -400,14 +396,14 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             return cell2a
         }
         let cell27 = tableView.dequeueReusableCell(withIdentifier: "selectColorCell") as! selectColorCell
-        if indexPath.section == (1) && indexPath.row == 0 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.timerColor {
             cell27.colorLabel.text = "Timer Color"
             cell27.colorCircle.image = cell27.colorCircle.image?.withRenderingMode(.alwaysTemplate)
             cell27.colorCircle.tintColor = rout.routineColor
             return cell27
         }
         let cell24 = tableView.dequeueReusableCell(withIdentifier: "mainCell") as! mainCell
-        if indexPath.section == (indexSection)  {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.allIntervals {
             cell24.setEditing(true, animated: true)
             cell24.contentView.frame = cell24.contentView.frame.inset(by: UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10))
             cell24.intervalName.text = rout.intervals[indexPath.row].intervalName
@@ -418,21 +414,14 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 cell24.rightLabelName.text = "Low"
                 cell24.leftLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.highInterval.duration)))
                 cell24.rightLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.lowInterval.duration)))
-//                cell24.leftLabelName.textColor = currInterval.highInterval.intervalColor
-//                cell24.leftLabelValue.textColor = currInterval.highInterval.intervalColor
-//                cell24.rightLabelName.textColor = currInterval.lowInterval.intervalColor
-//                cell24.rightLabelValue.textColor = currInterval.lowInterval.intervalColor
-                
+
             }
             else {
                 cell24.leftLabelName.text = "Low"
                 cell24.rightLabelName.text = "High"
                 cell24.leftLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.lowInterval.duration)))
                 cell24.rightLabelValue.text = globals().timeString(time: TimeInterval(Int(currInterval.highInterval.duration)))
-//                cell24.leftLabelName.textColor = currInterval.lowInterval.intervalColor
-//                cell24.leftLabelValue.textColor = currInterval.lowInterval.intervalColor
-//                cell24.rightLabelName.textColor = currInterval.highInterval.intervalColor
-//                cell24.rightLabelValue.textColor = currInterval.highInterval.intervalColor
+
             }
             cell24.leftLabelName.textColor = .none
             cell24.leftLabelValue.textColor = .none
@@ -442,29 +431,23 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         }
 
         let cell2z = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
-        if indexPath.section == totalSections - 5 && rout.intervals.count > 1 {
-            cell2z.intervalName.text = "Interval Rest Time"
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.intervalRestTime {
+            cell2z.intervalName.text = "Rest Time Between Intervals"
             cell2z.setImageColor(color: rout.intervalRestTime.intervalColor)
             cell2z.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.intervalRestTime.duration)))
             cell2z.theImage.isHidden = false
             cell2z.labelLeftContrain.constant = 10
             return cell2z
         }
-        
+
         let cell3 = tableView.dequeueReusableCell(withIdentifier: "addNewCycle") as! addNewCycleCell
-        if indexPath.section == totalSections - 4 {
-            if #available(iOS 13.0, *) {
-                cell3.addInterval.image = UIImage(systemName: "plus.circle.fill")
-            } else {
-                cell3.addInterval.image = cell3.addInterval.image?.withRenderingMode(.alwaysTemplate)
-
-
-            }
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.addNewInterval {
+            cell3.addInterval.image = UIImage(systemName: "plus.circle.fill")
 
             return cell3
         }
         let cell33 = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! switchCell
-        if indexPath.section == totalSections - 3 && indexPath.row == 0 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.repeatCycle && indexPath.row == 0 {
             cell33.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
             let theSwitch = UISwitch()
             cell33.switchSwitch = theSwitch
@@ -479,7 +462,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             return cell33
         }
         let cell2b = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
-        if indexPath.section == totalSections - 3 && indexPath.row == 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.repeatCycle && indexPath.row == 1 {
             cell2b.theImage.isHidden = true
             cell2b.totalTime.text = "2"
             cell2b.setIntervalName(intervalName: "Number of Cycles")
@@ -488,42 +471,30 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             }
             cell2b.labelLeftContrain.constant = -20
             return cell2b
-            
+
         }
         let cell2c = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
-        if indexPath.section == totalSections - 2 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.restTime {
             cell2c.setImageColor(color: rout.restTime.intervalColor)
-            cell2c.setIntervalName(intervalName: "Cycle Rest Time")
+            cell2c.setIntervalName(intervalName: "Rest Time Between Cycles")
             cell2c.totalTime.text = String(rout.numCycles)
             cell2c.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.restTime.duration)))
             return cell2c
         }
         let cell2d = tableView.dequeueReusableCell(withIdentifier: "selectIntervalCell") as! selectIntervalCell
-        if indexPath.section == totalSections - 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.coolDown {
             cell2d.setImageColor(color: rout.coolDown.intervalColor)
             cell2d.totalTime.text = globals().timeString(time: TimeInterval(Int(rout.coolDown.duration)))
             cell2d.setIntervalName(intervalName: "Cool Down")
             return cell2d
         }
-//        let cell34 = tableView.dequeueReusableCell(withIdentifier: "switchCell") as! switchCell
-//        if indexPath.section == totalSections - 1 {
-//            cell33.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: .greatestFiniteMagnitude)
-//            let theSwitch = UISwitch()
-//            cell33.switchSwitch = theSwitch
-//            cell33.selectionStyle = .none
-//            cell33.accessoryView = theSwitch
-//            cell33.switchLabel.text = "Interval Voice Enabled"
-//            theSwitch.addTarget(self, action: #selector(switchValueDidChange(_:)), for: .valueChanged)
-//            theSwitch.isOn = switchClicked
-//
-//            return cell33
-//        }
-        return cell2d
+
+        return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if indexPath.section == totalSections - 5 && self.rout.intervals.count > 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.intervalRestTime && self.rout.intervals.count > 1 {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
@@ -536,18 +507,10 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             self.navigationController?.present(navController, animated: true, completion: nil)
         }
         if indexPath.section == 0 {
-            
+
         }
         if indexPath.section == 1 {
-//            self.colorPicker = globals().createColorPopover(tableView: self.tableView, indexPath: indexPath)
-//
-//            self.present(colorPicker, animated: true, completion: nil)
-//            colorPicker.selectedColor = { color in
-//                self.rout.routineColor = color
-//                //print(color)
-//                //print(self.rout.routineColor)
-//                self.tableView.reloadData()
-//            }
+
             if let viewController = UIStoryboard(name: "Colorful", bundle: nil).instantiateViewController(withIdentifier: "Colorful") as? ColorfulVC {
                 viewController.initialColor = self.rout.routineColor
                 viewController.title = "Timer Color"
@@ -561,44 +524,17 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         }
-        
-        if indexPath.section == totalSections - 4 {
-//            if SubscribeAlert().runAlert(theView: self, theString: "add an interval") {
-//                return
-//            }
 
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.addNewInterval {
 
             presetInterval.intervalName = "Interval #\(rout.intervals.count + 1)"
 
             rout.intervals.append(presetInterval)
-
-            if #available(iOS 11.0, *) {
-                tableView.performBatchUpdates({
-                    tableView.insertRows(at: [IndexPath(row: rout.intervals.count - 1, section: indexSection)], with: .none)
-                    if rout.intervals.count > 1 && totalSections == 8 {
-                        //print("add intervals")
-                        totalSections += 1
-                        let indexSet = IndexSet(integer: totalSections - 5)
-                        tableView.insertSections(indexSet, with: .none)
-                        //self.tableView.reloadData()
-                    }
-
-                }) { (update) in
-                    print("Update SUccess1")
-                }
-            } else {
-                tableView.insertRows(at: [IndexPath(row: rout.intervals.count - 1, section: indexSection)], with: .none)
-                if rout.intervals.count > 1 && totalSections == 8 {
-                    //print("add intervals")
-                    totalSections += 1
-                    let indexSet = IndexSet(integer: totalSections - 5)
-                    tableView.insertSections(indexSet, with: .none)
-                    self.tableView.reloadData()
-                }
-            }
+            self.createTableArray()
+ 
         }
-        
-        if indexPath.section == indexSection - 1 {
+
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.warmup {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
@@ -610,7 +546,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             myVC?.delegate = self
             self.navigationController?.present(navController, animated: true, completion: nil)
         }
-        if indexPath.section == totalSections - 3 && indexPath.row == 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.repeatCycle && indexPath.row == 1 {
             let data = [Array(02...999)]
             var stringArray = Array<Array<String>>()
             for array in data {
@@ -623,14 +559,13 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             let mcPicker = McPicker(data: stringArray)
             let hoursLabel = UILabel()
             hoursLabel.text = "r"
-            //mcPicker.picker.setPickerLabels(labels: [0: hoursLabel], containedView: mcPicker)
             globals().setMcPickerDetails(mcPicker: mcPicker)
             if rout.numCycles == 2 {
             }
             else if rout.numCycles == 3 {
                 mcPicker.pickerSelectRowsForComponents = [
                     0: [rout.numCycles - 2: true],
-                    
+
                 ]
             }
             else if rout.numCycles > 3 {
@@ -646,12 +581,11 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 }, cancelHandler: {
                     print("Canceled Styled Picker")
             }, selectionChangedHandler: { (selections: [Int:String], componentThatChanged: Int) -> Void  in
-                //let newSelection = selections[componentThatChanged] ?? "Failed to get new selection!"
-                
+
             })
         }
-        
-        if indexPath.section == indexSection {
+
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.allIntervals {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
@@ -665,21 +599,21 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
             myVC?.delegate = self
             self.navigationController?.present(navController, animated: true, completion: nil)
         }
-        
-        if indexPath.section == totalSections - 2 {
+
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.restTime {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
             let navController = UINavigationController(rootViewController: myVC!)
-            myVC!.title = "Rest Time"
+            myVC!.title = "Cycle Rest Time"
             myVC!.interval = rout.restTime
             navController.presentationController?.delegate = myVC
             intervalChanged = intervalOptions.rest
             myVC?.delegate = self
             self.navigationController?.present(navController, animated: true, completion: nil)
         }
-        
-        if indexPath.section == totalSections - 1 {
+
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.coolDown {
             let storyboard = UIStoryboard(name: "IntervalEditorVC", bundle: nil)
             let myVC = storyboard.instantiateViewController(withIdentifier: "IntervalEditorVC") as? IntervalEditorVC
             myVC!.modalPresentationStyle = .fullScreen
@@ -694,18 +628,14 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
         
     }
     
-//    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-//        return 1
-//    }
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == totalSections - 3 && indexPath.row == 1 && !switchClicked && rout.numCycles < 2 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.repeatCycle && indexPath.row == 1 && !switchClicked && rout.numCycles < 2 {
             return 0
         }
-        if indexPath.section == totalSections - 2 && !switchClicked {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.restTime && !switchClicked {
             return 0
         }
-        if indexPath.section == indexSection {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.allIntervals {
             return 84.5
         }
 
@@ -714,9 +644,8 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
-        if indexPath.section == indexSection && editingStyle == .delete && rout.intervals.count > 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.allIntervals && editingStyle == .delete && rout.intervals.count > 1 {
             
-            //self.tableView.deleteRows(at: [indexPath], with: .none)
             let alert = UIAlertController(title: "Are you sure you want to delete this interval? This can't be undone", message: "", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { action in
                 switch action.style{
@@ -729,11 +658,8 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
                 case .destructive:
                     print("destructive")
                     self.rout.intervals.remove(at: indexPath.row)
-                    self.tableView.deleteRows(at: [indexPath], with: .automatic)
-                    if self.rout.intervals.count == 1 && self.totalSections != 7 {
-                        self.totalSections -= 1
-                        self.tableView.reloadData()
-                    }
+                    self.createTableArray()
+
                 @unknown default:
                     print("error")
                 }}))
@@ -758,7 +684,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
     {
-        if indexPath.section == indexSection && rout.intervals.count > 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.allIntervals  && rout.intervals.count > 1 {
             return UITableViewCell.EditingStyle.delete
         } else {
             
@@ -774,7 +700,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        if indexPath.section == indexSection && rout.intervals.count > 1 {
+        if routineTableArray[indexPath[0]].intervalType == routineIntervalType.allIntervals  && rout.intervals.count > 1 {
             return true
         }
         return false
@@ -796,14 +722,14 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if (section == totalSections - 2) && !switchClicked {
+        if (routineTableArray[section].intervalType == routineIntervalType.restTime ) && !switchClicked {
             return 0.1
         }
         return UITableView.automaticDimension
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return totalSections
+        return routineTableArray.count
     }
 
 
@@ -814,9 +740,7 @@ extension RoutineEditorController: UITableViewDataSource, UITableViewDelegate {
           return false
     }
 
-
     func tableView(_ tableView: UITableView, canPerformAction action: Selector, forRowAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-    //        print("HERE")
             return action == #selector(copy(_:))
     }
 
